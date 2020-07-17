@@ -40,6 +40,8 @@ Description
 	Package { name: "svglite" }
 	Package { name: "stringi" }
 
+	
+
 	Analysis
 	{
 		id:			footnotesEntry
@@ -100,6 +102,18 @@ Description
 		title:			"Save Load Button"
 		qml:			"testSaveLoadButton.qml"
 		func:			"testSaveLoadButton"
+	}
+
+	Separator {}
+
+	Module { name: "Descriptives" } //Example showing that you can use functions from other modules.
+
+	Analysis
+	{
+		title:			"Descriptives!"
+		qml:			"CopyOfDescriptives.qml"
+		func:			"descriptivesLink"
+		requiresData:	true
 	}
 
 
