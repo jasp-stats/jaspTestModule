@@ -1,4 +1,4 @@
-Package: TestModule
+Package: jaspTestModule
 Type: Package
 Title: Wait for it... Module for JASP
 Version: 1.0.0
