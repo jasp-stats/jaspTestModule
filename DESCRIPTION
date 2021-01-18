@@ -8,4 +8,6 @@ Website:
 Maintainer: Joris Goosen <Joris@JorisGoosen.nl>
 Description: A module to test stuff with.
 License: Whatever
-Imports: svglite, stringi
+Imports:
+  svglite,
+  stringi
