@@ -12,9 +12,16 @@ Upgrades
 	
 		ChangeRename
 		{
-			condition:	function(options) { return options['frequencyTables'] === true; } 
+			id:			chocoTime
+			condition:	function(options) { return options['scatterPlot'] === true; } 
 			from:		"frequencyTables"
 			to:			"chocolade"
+		}
+
+		ChangeRemove
+		{
+			name:		"chocolade"
+			condition:	chocoTime.condition
 		}
 		
 		ChangeCopy
@@ -26,7 +33,7 @@ Upgrades
 		ChangeSetValue
 		{
 			name:		"variables"
-			jsonVal:	["contNormal", "contExpon"] 
+			jsonValue:	["contNormal", "contExpon"] 
 		}
 		
 		ChangeJS
@@ -36,8 +43,8 @@ Upgrades
 			{
 				console.log("ChangeJS actually works!")
 				
-				if(option === "colorblind")	return "viridis";
-				else						return "colorblind";
+				if(option["colorPalette"] === "colorblind")	return "viridis";
+				else										return "colorblind";
 			}
 		}
 	}
