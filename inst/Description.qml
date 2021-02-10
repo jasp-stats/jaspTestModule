@@ -116,7 +116,6 @@ Description
 		requiresData:	true
 	}
 
-
 	Separator { debug: true; }
 
 	GroupTitle { title:		"DEBUG QML Widgets"; debug: true; }
@@ -130,5 +129,24 @@ Description
 		debug:			true
 	}
 
+	Separator {}
+	GroupTitle { title: "Upgrading Modules" }
+
+	Analysis
+	{
+		title:			"Analysis A";
+		func:			"AnalysisUpgradeA";
+		qml:			"AnalysisUpgrade.qml"
+		requiresData:	false
+	}
+
+
+	Analysis
+	{
+		title:			"Analysis B";
+		func:			"AnalysisUpgradeB";
+		qml:			"AnalysisUpgrade.qml"
+		requiresData:	false
+	}
 }
 
