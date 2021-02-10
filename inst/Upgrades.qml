@@ -5,14 +5,14 @@ Upgrades
 {
 	Upgrade
 	{
-		functionName: 		"AnalysisA"
-		newFunctionName:	"AnalysisB"
-		fromVersion:		"0.1"
-		toVersion:			"0.1"
+		functionName: 		"AnalysisUpgradeA"
+		newFunctionName:	"AnalysisUpgradeB"
+		fromVersion:		"1.0"
+		toVersion:			"1.0"
 	
 		ChangeRename
 		{
-			condition:	function(options) { return options$frequencyTables === true; } 
+			condition:	function(options) { return options['frequencyTables'] === true; } 
 			from:		"frequencyTables"
 			to:			"chocolade"
 		}

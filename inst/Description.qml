@@ -4,7 +4,6 @@ import JASP.Module 	1.0
 Description
 {
 	id:					testModuleDescription
-	name:				"TestModule"
 	title:				qsTr("Wait for it...")
 	icon: 				"test.svg"
 	description: 		qsTr("A module to test stuff with.")
@@ -36,11 +35,6 @@ Description
 		qml:	"test.qml"
 		func:	"testTransposedTableFunc"
 	}
-
-	Package { name: "svglite" }
-	Package { name: "stringi" }
-
-	
 
 	Analysis
 	{
@@ -105,8 +99,6 @@ Description
 	}
 
 	Separator {}
-
-	Module { name: "Descriptives" } //Example showing that you can use functions from other modules.
 
 	Analysis
 	{
