@@ -79,6 +79,13 @@ Description
 		func:		"testEncodingFunc"
 	}
 
+	Analysis
+	{
+		title:		qsTr("Test Qml Source")
+		qml:		"testQmlSource.qml"
+		func:		"testQmlSourceFunc"
+	}
+
 	Separator {}
 
 	GroupTitle { title:		"QML Widgets"; }
