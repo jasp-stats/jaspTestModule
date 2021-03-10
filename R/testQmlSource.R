@@ -3,5 +3,18 @@ testQmlSourceFunc <- function(jaspResults, dataset, options)
 	
 	jaspResults[["msg"]] <- createJaspHtml(text='<i>Er wordt iets naar qml source geschreven!</i>')
 
-	jaspResults[["qmlSource"]] <- createJaspQmlSource(sourceID="exampleSourceId", value=list(1, 2, 3, c(1,2,3,4), "hahaha", c("A" ,"B", "C", "?")))
+	myData <- list()
+	one <- list("z", "a")
+	two <- list("c", "d")
+	subList <- list()
+	subList[["sub"]] <- list("x", "z")
+	subList[["sub2"]] <- list("f", "g", "h")
+
+	myData[["one"]] <- one
+	myData[["two"]] <- two
+	myData[["three"]] <- c(1L,2L,3L)
+	myData[["four"]] <- subList
+
+
+	jaspResults[["qmlSource"]] <- createJaspQmlSource(sourceID="exampleSourceId", value=myData)
 }
