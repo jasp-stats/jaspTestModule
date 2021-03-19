@@ -115,6 +115,15 @@ Description
 		requiresData:	true
 	}
 
+	GroupTitle	{ title:	"Load JASP file"	}
+
+	Analysis
+	{
+		title:			"Default values with bindings"
+		qml:			"testDefaultValuesWithBindings.qml"
+		func:			"testDefaultValuesWithBindings"
+	}
+
 	Separator { debug: true; }
 
 	GroupTitle { title:		"DEBUG QML Widgets"; debug: true; }
