@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-04-15 08:46+0000\n"
+"PO-Revision-Date: 2021-04-15 11:34+0000\n"
 "Last-Translator: JASP Stats <b.boutin@uva.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/jasp/"
 "jasptestmodule-qml/nl/>\n"
@@ -18,7 +18,7 @@ msgstr "Wacht nog even..."
 
 msgctxt "Description|"
 msgid "A module to test stuff with."
-msgstr ""
+msgstr "Een module om dingen te testen."
 
 msgctxt "Description|"
 msgid ""
