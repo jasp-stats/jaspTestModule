@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-04-15 11:36+0000\n"
+"PO-Revision-Date: 2021-04-15 11:37+0000\n"
 "Last-Translator: JASP Stats <b.boutin@uva.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/jasp/"
 "jasptestmodule-qml/nl/>\n"
@@ -60,7 +60,7 @@ msgstr ""
 
 msgctxt "Description|"
 msgid "Test Qml Source"
-msgstr ""
+msgstr "Test Qml Bron"
 
 msgctxt "Description|"
 msgid "Custom Contrasts Widget"
