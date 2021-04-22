@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-04-20 13:38+0000\n"
+"PO-Revision-Date: 2021-04-22 15:55+0000\n"
 "Last-Translator: JASP Stats <b.boutin@uva.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/jasp/"
 "jasptestmodule-qml/nl/>\n"
@@ -28,7 +28,7 @@ msgstr "Dat ga ik niet vertalen."
 
 msgctxt "Description|"
 msgid "Test Module"
-msgstr ""
+msgstr "Test Moduul"
 
 msgctxt "Description|"
 msgid "Test Footnotes jaspTable"
@@ -107,7 +107,7 @@ msgstr ""
 
 msgctxt "AnalysisUpgrade|"
 msgid "Color palette"
-msgstr ""
+msgstr "Kleur palette"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Colorblind"
