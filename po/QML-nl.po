@@ -40,7 +40,7 @@ msgstr "Test Getransposeerd jaspTable"
 
 msgctxt "Description|"
 msgid "Test jaspState"
-msgstr ""
+msgstr "Test jaspStatus"
 
 msgctxt "Description|"
 msgid "Test jaspHtml"
