@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-04-26 12:40+0000\n"
+"PO-Revision-Date: 2021-04-26 12:41+0000\n"
 "Last-Translator: JASP Stats <b.boutin@uva.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/jasp/"
 "jasptestmodule-qml/nl/>\n"
@@ -123,7 +123,7 @@ msgstr "Viridis"
 
 msgctxt "AnalysisUpgrade|"
 msgid "ggplot2"
-msgstr ""
+msgstr "ggplot2"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Gray"
