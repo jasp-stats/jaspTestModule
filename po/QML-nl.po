@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-04-23 14:44+0000\n"
+"PO-Revision-Date: 2021-04-26 12:07+0000\n"
 "Last-Translator: JASP Stats <b.boutin@uva.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/jasp/"
 "jasptestmodule-qml/nl/>\n"
@@ -115,7 +115,7 @@ msgstr "Kleurblind"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Colorblind Alt."
-msgstr ""
+msgstr "Kleurblind Alt."
 
 msgctxt "AnalysisUpgrade|"
 msgid "Viridis"
