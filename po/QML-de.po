@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-04-16 15:27+0000\n"
+"PO-Revision-Date: 2021-04-25 09:32+0000\n"
 "Last-Translator: Johannes Keyser <johanneskeyser@posteo.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/jasp/"
 "jasptestmodule-qml/de/>\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.6-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 "X-Qt-Contexts: true\n"
 
 msgctxt "Description|"
@@ -281,95 +281,95 @@ msgstr ""
 
 msgctxt "AnalysisUpgrade|"
 msgid "Percentiles:"
-msgstr ""
+msgstr "Perzentile:"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Central Tendency"
-msgstr ""
+msgstr "Zentrale Tendenz"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Mean"
-msgstr ""
+msgstr "Mittelwert"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Median"
-msgstr ""
+msgstr "Median"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Mode"
-msgstr ""
+msgstr "Modus"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Sum"
-msgstr ""
+msgstr "Summe"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Dispersion"
-msgstr ""
+msgstr "Streuung"
 
 msgctxt "AnalysisUpgrade|"
 msgid "S. E. mean"
-msgstr ""
+msgstr "Std.-Fehler Mittelwert"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Std.deviation"
-msgstr ""
+msgstr "Std.-Abweichung"
 
 msgctxt "AnalysisUpgrade|"
 msgid "MAD"
-msgstr ""
+msgstr "MAD"
 
 msgctxt "AnalysisUpgrade|"
 msgid "MAD Robust"
-msgstr ""
+msgstr "MAD Robust"
 
 msgctxt "AnalysisUpgrade|"
 msgid "IQR"
-msgstr ""
+msgstr "IQA"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Variance"
-msgstr ""
+msgstr "Varianz"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Range"
-msgstr ""
+msgstr "Wertebereich"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Minimum"
-msgstr ""
+msgstr "Minimum"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Maximum"
-msgstr ""
+msgstr "Maximum"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Distribution"
-msgstr ""
+msgstr "Verteilung"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Skewness"
-msgstr ""
+msgstr "Schiefe"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Kurtosis"
-msgstr ""
+msgstr "Wölbung / Kurtosis"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Shapiro-Wilk test"
-msgstr ""
+msgstr "Shapiro-Wilk-Test"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Values are group midpoints"
-msgstr ""
+msgstr "Werte sind Gruppenmittelpunkte"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Charts"
-msgstr ""
+msgstr "Abbildungen"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Chart Type"
-msgstr ""
+msgstr "Abbildungstyp"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Bar charts"
@@ -389,7 +389,7 @@ msgstr ""
 
 msgctxt "AnalysisUpgrade|"
 msgid "Percentages"
-msgstr ""
+msgstr "Prozentwerte"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Variables"
@@ -441,7 +441,7 @@ msgstr ""
 
 msgctxt "CopyOfDescriptives|"
 msgid "Boxplot element"
-msgstr ""
+msgstr "Boxplotelement"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Violin element"
