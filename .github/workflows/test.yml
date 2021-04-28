@@ -1,15 +1,15 @@
-on:
-  #schedule:
-  #  - cron:  '*/5 * * * *'
-  #  
-  workflow_dispatch:
+name: test-action
 
-name: test-actions
+on:
+  workflow_dispatch:
+  #schedule:
+  # UTC, https://docs.github.com/en/actions/reference/events-that-trigger-workflows#scheduled-events
+  #- cron: '0/5 * * * *'
 
 jobs:
-  test-action:
+  run-test:
     runs-on: ubuntu-latest
 
-    steps:
-      - name: token
-        echo "${{ secrets.GITHUB_TOKEN }}"
+    steps:          
+      - name: Run a one-line script
+        run: echo "Hello $GITHUB_REPOSITORY"
