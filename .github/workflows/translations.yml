@@ -18,3 +18,5 @@ jobs:
           r-version: "3.6.1"
 
       - uses: jasp-stats/jasp-actions/translations@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
