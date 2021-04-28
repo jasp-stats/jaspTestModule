@@ -12,4 +12,6 @@ jobs:
 
     steps:          
       - name: Run a one-line script
-        run: echo "Hello $GITHUB_REPOSITORY and ${{ secrets.GITHUB_TOKEN }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: echo "Hello $GITHUB_REPOSITORY and ${{ secrets.GITHUB_TOKEN }} and ${github.token} and ${env.GITHUB_TOKEN}"
