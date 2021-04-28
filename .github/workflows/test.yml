@@ -1,0 +1,15 @@
+on:
+  #schedule:
+  #  - cron:  '*/5 * * * *'
+  #  
+  workflow_dispatch:
+
+name: test-actions
+
+jobs:
+  test-action:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: token
+        echo "${{ secrets.GITHUB_TOKEN }}"
