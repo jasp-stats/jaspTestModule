@@ -19,4 +19,5 @@ jobs:
 
       - uses: jasp-stats/jasp-actions/translations@master
         env:
-          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TOKEN: 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
+          # ${{ secrets.GITHUB_TOKEN }}
