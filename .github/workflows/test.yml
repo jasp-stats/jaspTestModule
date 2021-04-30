@@ -21,6 +21,6 @@ jobs:
         #run: .github/mergePR.sh
         run: |
             curl -s -X POST https://api.github.com/repos/$OWNER/$REPO/issues/$PULL_ID/comments \
-		          -d '{"body":"Hello"}' \
-        		  -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}"
+            -d '{"body":"Hello ${{ github.event.issue.user.login }}, thanks for your issue!"}' \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}"
             
