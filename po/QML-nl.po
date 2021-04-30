@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-04-30 14:24+0000\n"
+"PO-Revision-Date: 2021-04-30 14:30+0000\n"
 "Last-Translator: JASP Stats <b.boutin@uva.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/jasp/"
 "jasptestmodule-qml/nl/>\n"
@@ -163,7 +163,7 @@ msgstr "Graph boven scatter plot"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Density"
-msgstr ""
+msgstr "Density"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Histogram"
