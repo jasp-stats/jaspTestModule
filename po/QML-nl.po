@@ -159,7 +159,7 @@ msgstr "Scatter Plots"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Graph above scatter plot"
-msgstr ""
+msgstr "Graph boven scatter plot"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Density"
