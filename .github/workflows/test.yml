@@ -20,7 +20,7 @@ jobs:
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
         #run: .github/mergePR.sh
         run: |
-            curl -s -X POST https://api.github.com/repos/$OWNER/$REPO/issues/$PULL_ID/comments \
-            -d '{"body":"Hello ${{ github.event.issue.user.login }}, thanks for your issue!"}' \
+            curl -s -X PUT https://api.github.com/repos/$OWNER/$REPO/pulls/$PULL_ID/merge \
+            -d '{"commit_title":"myCommit", "merge_method": "squash"}' \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}"
             
