@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-04-26 12:56+0000\n"
+"PO-Revision-Date: 2021-04-29 16:25+0000\n"
 "Last-Translator: JASP Stats <b.boutin@uva.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/jasp/"
 "jasptestmodule-qml/nl/>\n"
@@ -143,7 +143,7 @@ msgstr "Violin element"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Jitter element"
-msgstr ""
+msgstr "Jitter element"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Use color palette"
