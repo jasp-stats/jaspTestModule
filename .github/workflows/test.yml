@@ -22,5 +22,5 @@ jobs:
         run: |
             curl -s -X PUT https://api.github.com/repos/$OWNER/$REPO/pulls/$PULL_ID/merge \
             -d '{"commit_title":"myCommit", "merge_method": "squash"}' \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}"
+            -H "Authorization: Bearer ${{ secrets.TEST_SECRET }}"
             
