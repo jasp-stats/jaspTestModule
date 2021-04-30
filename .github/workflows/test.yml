@@ -18,8 +18,8 @@ jobs:
           OWNER: jasp-stats #${{ github.event.repository.owner.login }}
           PULL_ID: 21
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh pr merge --squash 21
-        #run: .github/mergePR.sh
+        #run: gh pr merge --squash 21
+        run: .github/mergePR.sh $GITHUB_REPOSITORY
         #run: |
         #    curl -s -X PUT https://api.github.com/repos/$OWNER/$REPO/pulls/$PULL_ID/merge \
         #    -d '{"commit_title":"myCommit", "merge_method": "squash"}' \
