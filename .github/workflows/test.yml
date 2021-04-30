@@ -18,7 +18,7 @@ jobs:
           OWNER: jasp-stats #${{ github.event.repository.owner.login }}
           PULL_ID: 23
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh pr merge 23
+        run: gh pr merge --squash 23
         #run: .github/mergePR.sh
         #run: |
         #    curl -s -X PUT https://api.github.com/repos/$OWNER/$REPO/pulls/$PULL_ID/merge \
