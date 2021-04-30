@@ -15,7 +15,7 @@ jobs:
 
       - uses: r-lib/actions/setup-r@master
         with:
-          r-version: "3.6.1"
+          r-version: "4.0.5"
 
       - uses: jasp-stats/jasp-actions/translations@master
         env:
