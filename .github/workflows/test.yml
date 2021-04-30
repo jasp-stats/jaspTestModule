@@ -12,10 +12,15 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Run a one-line script
-        shell: bash
+        #shell: bash
         env:
           REPO: jaspTestModule #${{ github.event.repository.name }}
           OWNER: jasp-stats #${{ github.event.repository.owner.login }}
           PULL_ID: 21
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: .github/mergePR.sh
+        #run: .github/mergePR.sh
+        run: |
+            curl -s -X POST https://api.github.com/repos/$OWNER/$REPO/issues/$PULL_ID/comments \
+		          -d '{"body":"Hello"}' \
+        		  -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}"
+            
