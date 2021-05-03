@@ -10,7 +10,7 @@ Form
 		{
 			name: "fromR"
 			source: [
-				{ values: ["one", "two"] },
+				{ values: [qsTr("one"), "two"] },
 				{ rSource: ["exampleSourceId.four.sub", "exampleSourceId.four.sub2"] }
 			]
 		}
