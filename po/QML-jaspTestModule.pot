@@ -657,3 +657,7 @@ msgstr ""
 msgctxt "testEncoding|"
 msgid "Selected"
 msgstr ""
+
+msgctxt "testQmlSource|"
+msgid "one"
+msgstr ""
