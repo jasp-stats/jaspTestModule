@@ -38,6 +38,13 @@ Description
 
 	Analysis
 	{
+		title:	qsTr("Test jaspTable with crappy data")
+		qml:	"testCrapDataTable.qml"
+		func:	"testCrapDataTable"
+	}
+
+	Analysis
+	{
 		id:			footnotesEntry
 		title:		qsTr("Wait for it...")
 		qml:		"test.qml"
