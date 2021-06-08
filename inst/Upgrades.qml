@@ -33,15 +33,18 @@ Upgrades
 		ChangeSetValue
 		{
 			name:		"variables"
-			jsonValue:	["contNormal", "contExpon"] 
+			jsonValue:	[qmlUtils.encodeAllColumnNames("contNormal"), "contExpon"] 
 		}
 		
 		ChangeJS
 		{
+			id:			me
 			name:		"colorPalette"
 			jsFunction: function(option)
 			{
 				console.log("ChangeJS actually works!")
+
+				qmlUtils.encodeJson({"hahaha": "V1"}, me);
 				
 				if(option["colorPalette"] === "colorblind")	return "viridis";
 				else										return "colorblind";
