@@ -1,15 +1,31 @@
 testFootnotesTableFunc <- function(jaspResults, dataset, options)
 {
   jaspResults[['table0']] <- createFootnotesTable(options=options)
-  jaspResults[['table2']] <- createFootnotesTable(options=options, notUnique=TRUE)
-  #jaspResults[['table1']] <- createFootnotesTable(options=options, rowNames=c("b", "c", "a"), colNames=c("c", "a", "c"))
-
-
-  emptyData <- data.frame(list(a=c(NA, NA), b=c('a', 'b')))
-  rownames(emptyData) <- letters[3:4]
+  jaspResults[['table1']] <- createFootnotesTable(options=options, notUnique=TRUE)
   
+	createEmptiesTable(jaspResults)
+  createCombinations(jaspResults) 
+}
 
-  #for https://github.com/jasp-stats/INTERNAL-jasp/issues/538 (footnotes mess)
+createCombinations <- function(jaspResults)
+{
+  binary           <- data.frame(list(a=c("00", "01"), b=c("10", "11")))
+  rownames(binary) <- c('c', 'd')
+  tab              <- createJaspTable("Combining row- with col-names or not!")
+  
+  tab$setData(binary)
+  
+  tab$addFootnote(message="nothing!")
+  tab$addFootnote(message="just row", rowNames='c')
+  tab$addFootnote(message="just col", colNames='a')
+  tab$addFootnote(message="row&&col", rowNames='d', colNames='b')
+
+  jaspResults[["cartesianFootnotes"]] <- tab
+}
+
+createEmptiesTable <- function(jaspResults)
+{
+ 	#for https://github.com/jasp-stats/INTERNAL-jasp/issues/538 (footnotes mess)
 
   tab  <- createJaspTable(paste0("Table with Footnotes at empty cell"))
   jaspResults[["tableEmptyCell"]] <- tab
@@ -27,9 +43,6 @@ testFootnotesTableFunc <- function(jaspResults, dataset, options)
   tab$addRows(list(a=NA, b=NA, c=NA))
   tab$addFootnote(message="NA!", rowNames='b', colNames='b')
 }
-
-
-
 
 createFootnotesTable <- function(numFootnotes=3, rowNames=c("b", "c", "c"), colNames=c("a", "a", "b"), options, notUnique=FALSE)
 {
