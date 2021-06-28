@@ -4,7 +4,7 @@ testQmlSourceFunc <- function(jaspResults, dataset, options)
 	jaspResults[["msg"]] <- createJaspHtml(text=gettext('<i>Something is written to a R source</i>'))
 
 	myData <- list()
-	one <- list("z", "a")
+	one <- list(gettext("this"), gettext("that"))
 	two <- list("c", "d")
 	subList <- list()
 	subList[["sub"]] <- list("x", "z")
