@@ -665,3 +665,7 @@ msgstr ""
 msgctxt "testQmlSource|"
 msgid "two"
 msgstr ""
+
+msgctxt "Description|"
+msgid "Test jaspTable with crappy data"
+msgstr ""
