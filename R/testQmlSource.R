@@ -1,7 +1,7 @@
 testQmlSourceFunc <- function(jaspResults, dataset, options)
 {
 	
-	jaspResults[["msg"]] <- createJaspHtml(text='<i>Er wordt iets naar qml source geschreven!</i>')
+	jaspResults[["msg"]] <- createJaspHtml(text=gettext('<i>Something is written to a R source</i>'))
 
 	myData <- list()
 	one <- list("z", "a")

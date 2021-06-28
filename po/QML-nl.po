@@ -685,7 +685,7 @@ msgstr ""
 
 msgctxt "testQmlSource|"
 msgid "one"
-msgstr ""
+msgstr "een"
 
 msgctxt "testQmlSource|"
 msgid "two"
