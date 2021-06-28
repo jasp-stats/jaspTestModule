@@ -1,16 +1,10 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-05-07 08:58+0000\n"
-"Last-Translator: JASP Stats <b.boutin@uva.nl>\n"
-"Language-Team: Dutch <https://hosted.weblate.org/projects/jasp/"
-"jasptestmodule-qml/nl/>\n"
-"Language: nl\n"
-"X-Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Language: nl\n"
 "X-Qt-Contexts: true\n"
 
 msgctxt "Description|"
@@ -390,89 +384,108 @@ msgctxt "AnalysisUpgrade|"
 msgid "Percentages"
 msgstr ""
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Variables"
-msgstr ""
+msgstr "Variabellen"
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Split"
-msgstr ""
+msgstr "Split"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Frequency tables (nominal and ordinal variables)"
 msgstr ""
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Plots"
-msgstr ""
+msgstr "Plots"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Customizable plots"
 msgstr ""
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Color palette"
-msgstr ""
+msgstr "Kleur palette"
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Colorblind"
-msgstr ""
+msgstr "Kleurblind"
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Colorblind Alt."
-msgstr ""
+msgstr "Kleurblind Alt."
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Viridis"
-msgstr ""
+msgstr "Viridis"
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "ggplot2"
-msgstr ""
+msgstr "ggplot2"
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Gray"
-msgstr ""
+msgstr "Grijs"
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Boxplots"
-msgstr ""
+msgstr "Boxplots"
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Boxplot element"
-msgstr ""
+msgstr "Boxplot element"
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Violin element"
-msgstr ""
+msgstr "Violin element"
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Jitter element"
-msgstr ""
+msgstr "Jitter element"
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Use color palette"
-msgstr ""
+msgstr "Gebruik kleur palette"
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Label outliers"
-msgstr ""
+msgstr "Label outliers"
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Scatter Plots"
-msgstr ""
+msgstr "Scatter Plots"
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Graph above scatter plot"
-msgstr ""
+msgstr "Graph boven scatter plot"
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Density"
-msgstr ""
+msgstr "Density"
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Histogram"
-msgstr ""
+msgstr "Histogram"
 
 msgctxt "CopyOfDescriptives|"
 msgid "None"
@@ -665,3 +678,15 @@ msgstr "Geselecteerd"
 msgctxt "testEncoding|"
 msgid "Selected"
 msgstr "Geselecteerd"
+
+msgctxt "Description|"
+msgid "Test jaspTable with crappy data"
+msgstr ""
+
+msgctxt "testQmlSource|"
+msgid "one"
+msgstr ""
+
+msgctxt "testQmlSource|"
+msgid "two"
+msgstr ""

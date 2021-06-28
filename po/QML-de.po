@@ -1,16 +1,10 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-04-25 09:32+0000\n"
-"Last-Translator: Johannes Keyser <johanneskeyser@posteo.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/jasp/"
-"jasptestmodule-qml/de/>\n"
-"Language: de\n"
-"X-Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Language: de\n"
 "X-Qt-Contexts: true\n"
 
 msgctxt "Description|"
@@ -136,9 +130,10 @@ msgctxt "AnalysisUpgrade|"
 msgid "Boxplots"
 msgstr ""
 
+#, fuzzy
 msgctxt "AnalysisUpgrade|"
 msgid "Boxplot element"
-msgstr ""
+msgstr "Boxplotelement"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Violin element"
@@ -548,97 +543,120 @@ msgctxt "CopyOfDescriptives|"
 msgid " equal groups"
 msgstr ""
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Percentiles:"
-msgstr ""
+msgstr "Perzentile:"
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Central Tendency"
-msgstr ""
+msgstr "Zentrale Tendenz"
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Mean"
-msgstr ""
+msgstr "Mittelwert"
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Median"
-msgstr ""
+msgstr "Median"
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Mode"
-msgstr ""
+msgstr "Modus"
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Sum"
-msgstr ""
+msgstr "Summe"
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Dispersion"
-msgstr ""
+msgstr "Streuung"
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "S. E. mean"
-msgstr ""
+msgstr "Std.-Fehler Mittelwert"
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Std.deviation"
-msgstr ""
+msgstr "Std.-Abweichung"
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "MAD"
-msgstr ""
+msgstr "MAD"
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "MAD Robust"
-msgstr ""
+msgstr "MAD Robust"
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "IQR"
-msgstr ""
+msgstr "IQA"
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Variance"
-msgstr ""
+msgstr "Varianz"
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Range"
-msgstr ""
+msgstr "Wertebereich"
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Minimum"
-msgstr ""
+msgstr "Minimum"
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Maximum"
-msgstr ""
+msgstr "Maximum"
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Distribution"
-msgstr ""
+msgstr "Verteilung"
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Skewness"
-msgstr ""
+msgstr "Schiefe"
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Kurtosis"
-msgstr ""
+msgstr "Wölbung / Kurtosis"
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Shapiro-Wilk test"
-msgstr ""
+msgstr "Shapiro-Wilk-Test"
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Values are group midpoints"
-msgstr ""
+msgstr "Werte sind Gruppenmittelpunkte"
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Charts"
-msgstr ""
+msgstr "Abbildungen"
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Chart Type"
-msgstr ""
+msgstr "Abbildungstyp"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Bar charts"
@@ -656,9 +674,10 @@ msgctxt "CopyOfDescriptives|"
 msgid "Frequencies"
 msgstr ""
 
+#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Percentages"
-msgstr ""
+msgstr "Prozentwerte"
 
 msgctxt "customContrasts|"
 msgid "Selected"
@@ -666,4 +685,16 @@ msgstr ""
 
 msgctxt "testEncoding|"
 msgid "Selected"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Test jaspTable with crappy data"
+msgstr ""
+
+msgctxt "testQmlSource|"
+msgid "one"
+msgstr ""
+
+msgctxt "testQmlSource|"
+msgid "two"
 msgstr ""
