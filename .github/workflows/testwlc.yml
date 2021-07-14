@@ -1,0 +1,18 @@
+name: test-wlc
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install wlc
+        run: pip3 install wlc
+        shell: bash
+        
+      - name: Lock jasptestmodule
+        run: wlc --key ${{ secrets.WEBLATE_KEY }} --url https://hosted.weblate.org/api/ lock jasp/jasptestmodule-qml
+        shell: bash
