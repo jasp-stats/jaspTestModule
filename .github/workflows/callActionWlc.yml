@@ -9,4 +9,6 @@ jobs:
 
     steps:
       - uses: jasp-stats/jasp-actions/testwlc@master
+        env:
+          WEBLATE_KEY: ${{ secrets.WEBLATE_KEY }}
  
