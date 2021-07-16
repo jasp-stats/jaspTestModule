@@ -8,5 +8,5 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: boutinb/jasp-actions/testwtc@master
+      - uses: jasp-stats/jasp-actions/testwlc@master
  
