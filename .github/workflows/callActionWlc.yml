@@ -11,4 +11,6 @@ jobs:
       - uses: jasp-stats/jasp-actions/testwlc@master
         env:
           WEBLATE_KEY: ${{ secrets.WEBLATE_KEY }}
+          QML_REPO: jasptestmodule-qml
+          R_REPO: jasptestmodule-r
  
