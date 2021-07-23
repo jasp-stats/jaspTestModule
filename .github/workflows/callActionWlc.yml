@@ -3,14 +3,15 @@ on:
 
 name: Call Action Wlc
 
-jobs:
+jobs:    
   call-action-wlc:
     runs-on: ubuntu-latest
+    env:
+      WEBLATE_KEY: ${{ secrets.WEBLATE_KEY }}
+      QML_REPO: jasptestmodule-qml
+      R_REPO: jasptestmodule-r
 
     steps:
       - uses: jasp-stats/jasp-actions/testwlc@master
-        env:
-          WEBLATE_KEY: ${{ secrets.WEBLATE_KEY }}
-          QML_REPO: jasptestmodule-qml
-          R_REPO: jasptestmodule-r
+
  
