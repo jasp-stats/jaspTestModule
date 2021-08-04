@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-07-31 19:52+0000\n"
+"PO-Revision-Date: 2021-08-05 12:32+0000\n"
 "Last-Translator: Johannes Keyser <joke@fsfe.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/jasp/"
 "jasptestmodule-qml/de/>\n"
@@ -83,15 +83,15 @@ msgstr "Häufigkeitstabellen"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Maximum distinct values"
-msgstr ""
+msgstr "Maximale Anzahl verschiedener Werte"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Stem and leaf tables"
-msgstr ""
+msgstr "Stamm-Blatt-Diagramm"
 
 msgctxt "AnalysisUpgrade|"
 msgid "scale"
-msgstr ""
+msgstr "Skalenparameter"
 
 msgctxt "AnalysisUpgrade|"
 msgid ""
@@ -99,42 +99,45 @@ msgid ""
 "scale = 2 will cause the table to be roughly twice as long as the default "
 "(scale = 1)."
 msgstr ""
+"Der Skalenparameter steuert, wie stark die Tabelle expandiert. Zum Beispiel "
+"wird bei Wert 2 die Tabelle etwa doppelt so lang wie die Standardeinstellung "
+"(Wert 1)."
 
 msgctxt "AnalysisUpgrade|"
 msgid "Create a Stem and leaf table."
-msgstr ""
+msgstr "Erstelle ein Stamm-Blatt-Diagramm."
 
 msgctxt "AnalysisUpgrade|"
 msgid "Plots"
-msgstr ""
+msgstr "Abbildungen"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Color palette"
-msgstr ""
+msgstr "Farbpalette"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Colorblind"
-msgstr ""
+msgstr "Farbenblind"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Colorblind Alt."
-msgstr ""
+msgstr "Farbenblind Alt."
 
 msgctxt "AnalysisUpgrade|"
 msgid "Viridis"
-msgstr ""
+msgstr "Viridis"
 
 msgctxt "AnalysisUpgrade|"
 msgid "ggplot2"
-msgstr ""
+msgstr "ggplot2"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Gray"
-msgstr ""
+msgstr "Grau"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Boxplots"
-msgstr ""
+msgstr "Boxplots"
 
 #, fuzzy
 msgctxt "AnalysisUpgrade|"
