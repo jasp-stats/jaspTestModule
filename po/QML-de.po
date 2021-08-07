@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-08-05 12:32+0000\n"
+"PO-Revision-Date: 2021-08-08 21:32+0000\n"
 "Last-Translator: Johannes Keyser <joke@fsfe.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/jasp/"
 "jasptestmodule-qml/de/>\n"
@@ -139,150 +139,149 @@ msgctxt "AnalysisUpgrade|"
 msgid "Boxplots"
 msgstr "Boxplots"
 
-#, fuzzy
 msgctxt "AnalysisUpgrade|"
 msgid "Boxplot element"
 msgstr "Boxplotelement"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Violin element"
-msgstr ""
+msgstr "Violinenelement"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Jitter element"
-msgstr ""
+msgstr "Jitterelement"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Use color palette"
-msgstr ""
+msgstr "Farbpalette nutzen"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Label outliers"
-msgstr ""
+msgstr "Ausreißer beschriften"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Scatter Plots"
-msgstr ""
+msgstr "Streudiagramme"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Graph above scatter plot"
-msgstr ""
+msgstr "Abbildung über Streudiagramm"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Density"
-msgstr ""
+msgstr "Dichte"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Histogram"
-msgstr ""
+msgstr "Histogramm"
 
 msgctxt "AnalysisUpgrade|"
 msgid "None"
-msgstr ""
+msgstr "Keine"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Graph right of scatter plot"
-msgstr ""
+msgstr "Abbildung rechts von Streudiagramm"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Add regression line"
-msgstr ""
+msgstr "Regressionsgerade hinzufügen"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Smooth"
-msgstr ""
+msgstr "Glättung"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Linear"
-msgstr ""
+msgstr "Linear"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Show confidence interval"
-msgstr ""
+msgstr "Konfidenzintervall anzeigen"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Show legend"
-msgstr ""
+msgstr "Legende anzeigen"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Basic plots"
-msgstr ""
+msgstr "Einfache Abbildungen"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Distribution plots"
-msgstr ""
+msgstr "Verteilungsdiagramme"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Display density"
-msgstr ""
+msgstr "Dichte anzeigen"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Display rug marks"
-msgstr ""
+msgstr "Fransenspuren anzeigen"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Bin Width Type"
-msgstr ""
+msgstr "Typ der Klassenbreite"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Sturges"
-msgstr ""
+msgstr "Sturges"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Scott"
-msgstr ""
+msgstr "Scott"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Doane"
-msgstr ""
+msgstr "Doane"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Freedman-Diaconis"
-msgstr ""
+msgstr "Freedman-Diaconis"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Manual"
-msgstr ""
+msgstr "Manuell"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Number of Bins"
-msgstr ""
+msgstr "Anzahl von Klassen"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Correlation plots"
-msgstr ""
+msgstr "Korrelationsdiagramme"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Interval plots"
-msgstr ""
+msgstr "Intervalldiagramme"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Q-Q plots"
-msgstr ""
+msgstr "Q-Q-Diagramme"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Pie charts"
-msgstr ""
+msgstr "Tortendiagramme"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Statistics"
-msgstr ""
+msgstr "Statistiken"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Percentile Values"
-msgstr ""
+msgstr "Perzentilwerte"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Quartiles"
-msgstr ""
+msgstr "Quartile"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Cut points for: "
-msgstr ""
+msgstr "Schnittpunkte für: "
 
 msgctxt "AnalysisUpgrade|"
 msgid " equal groups"
-msgstr ""
+msgstr " gleiche Gruppen"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Percentiles:"
@@ -378,19 +377,19 @@ msgstr "Abbildungstyp"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Bar charts"
-msgstr ""
+msgstr "Balkendiagramme"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Histograms"
-msgstr ""
+msgstr "Histogramme"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Chart Values"
-msgstr ""
+msgstr "Abbildungswerte"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Frequencies"
-msgstr ""
+msgstr "Häufigkeiten"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Percentages"
@@ -398,51 +397,51 @@ msgstr "Prozentwerte"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Variables"
-msgstr ""
+msgstr "Variablen"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Split"
-msgstr ""
+msgstr "Aufteilung"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Frequency tables (nominal and ordinal variables)"
-msgstr ""
+msgstr "Häufigkeitstabellen (nur für nominale und ordinale Variablen)"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Plots"
-msgstr ""
+msgstr "Abbildungen"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Customizable plots"
-msgstr ""
+msgstr "Einstellbare Abbildungen"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Color palette"
-msgstr ""
+msgstr "Farbpalette"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Colorblind"
-msgstr ""
+msgstr "Farbenenblind"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Colorblind Alt."
-msgstr ""
+msgstr "Farbenblind Alt."
 
 msgctxt "CopyOfDescriptives|"
 msgid "Viridis"
-msgstr ""
+msgstr "Viridis"
 
 msgctxt "CopyOfDescriptives|"
 msgid "ggplot2"
-msgstr ""
+msgstr "ggplot2"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Gray"
-msgstr ""
+msgstr "Grau"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Boxplots"
-msgstr ""
+msgstr "Boxplots"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Boxplot element"
@@ -450,154 +449,144 @@ msgstr "Boxplotelement"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Violin element"
-msgstr ""
+msgstr "Violinenelement"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Jitter element"
-msgstr ""
+msgstr "Jitterelement"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Use color palette"
-msgstr ""
+msgstr "Farbpalette nutzen"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Label outliers"
-msgstr ""
+msgstr "Ausreißer beschriften"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Scatter Plots"
-msgstr ""
+msgstr "Streudiagramme"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Graph above scatter plot"
-msgstr ""
+msgstr "Abbildung über Streudiagramm"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Density"
-msgstr ""
+msgstr "Dichte"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Histogram"
-msgstr ""
+msgstr "Histogramm"
 
 msgctxt "CopyOfDescriptives|"
 msgid "None"
-msgstr ""
+msgstr "Keine"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Graph right of scatter plot"
-msgstr ""
+msgstr "Abbildung rechts von Streudiagramm"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Add regression line"
-msgstr ""
+msgstr "Regressionsgerade hinzufügen"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Smooth"
-msgstr ""
+msgstr "Glättung"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Linear"
-msgstr ""
+msgstr "Linear"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Show confidence interval"
-msgstr ""
+msgstr "Konfidenzintervall anzeigen"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Show legend"
-msgstr ""
+msgstr "Legende anzeigen"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Basic plots"
-msgstr ""
+msgstr "Einfache Abbildungen"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Distribution plots"
-msgstr ""
+msgstr "Verteilungsdiagramme"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Display density"
-msgstr ""
+msgstr "Dichte anzeigen"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Correlation plots"
-msgstr ""
+msgstr "Korrelationsdiagramme"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Q-Q plots"
-msgstr ""
+msgstr "Q-Q-Diagramme"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Pie charts"
-msgstr ""
+msgstr "Tortendiagramme"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Statistics"
-msgstr ""
+msgstr "Statistiken"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Percentile Values"
-msgstr ""
+msgstr "Perzentilwerte"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Quartiles"
-msgstr ""
+msgstr "Quartile"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Cut points for: "
-msgstr ""
+msgstr "Schnittpunkte für: "
 
 msgctxt "CopyOfDescriptives|"
 msgid " equal groups"
-msgstr ""
+msgstr " gleiche Gruppen"
 
-#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Percentiles:"
 msgstr "Perzentile:"
 
-#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Central Tendency"
 msgstr "Zentrale Tendenz"
 
-#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Mean"
 msgstr "Mittelwert"
 
-#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Median"
 msgstr "Median"
 
-#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Mode"
 msgstr "Modus"
 
-#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Sum"
 msgstr "Summe"
 
-#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Dispersion"
 msgstr "Streuung"
 
-#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "S. E. mean"
 msgstr "Std.-Fehler Mittelwert"
 
-#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Std.deviation"
 msgstr "Std.-Abweichung"
 
-#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "MAD"
 msgstr "MAD"
@@ -606,103 +595,90 @@ msgctxt "CopyOfDescriptives|"
 msgid "MAD Robust"
 msgstr "MAD Robust"
 
-#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "IQR"
-msgstr "IQA"
+msgstr "IQR"
 
-#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Variance"
 msgstr "Varianz"
 
-#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Range"
 msgstr "Wertebereich"
 
-#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Minimum"
 msgstr "Minimum"
 
-#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Maximum"
 msgstr "Maximum"
 
-#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Distribution"
 msgstr "Verteilung"
 
-#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Skewness"
 msgstr "Schiefe"
 
-#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Kurtosis"
-msgstr "Wölbung / Kurtosis"
+msgstr "Kurtosis (Wölbung)"
 
-#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Shapiro-Wilk test"
 msgstr "Shapiro-Wilk-Test"
 
-#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Values are group midpoints"
 msgstr "Werte sind Gruppenmittelpunkte"
 
-#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Charts"
 msgstr "Abbildungen"
 
-#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Chart Type"
 msgstr "Abbildungstyp"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Bar charts"
-msgstr ""
+msgstr "Balkendiagramme"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Histograms"
-msgstr ""
+msgstr "Histogramme"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Chart Values"
-msgstr ""
+msgstr "Abbildungswerte"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Frequencies"
-msgstr ""
+msgstr "Häufigkeiten"
 
-#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Percentages"
 msgstr "Prozentwerte"
 
 msgctxt "customContrasts|"
 msgid "Selected"
-msgstr ""
+msgstr "Ausgewählt"
 
 msgctxt "testEncoding|"
 msgid "Selected"
-msgstr ""
+msgstr "Ausgewählt"
 
 msgctxt "Description|"
 msgid "Test jaspTable with crappy data"
-msgstr ""
+msgstr "Teste jaspTable mit schlechten Daten"
 
 msgctxt "testQmlSource|"
 msgid "one"
-msgstr ""
+msgstr "Eins"
 
 msgctxt "testQmlSource|"
 msgid "two"
-msgstr ""
+msgstr "Zwei"
