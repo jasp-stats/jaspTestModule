@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-08-22 13:34+0000\n"
+"PO-Revision-Date: 2021-08-23 14:32+0000\n"
 "Last-Translator: D.J. Dekker <dj_dekker@hotmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/jasp/"
 "jasptestmodule-qml/nl/>\n"
@@ -83,9 +83,10 @@ msgctxt "AnalysisUpgrade|"
 msgid "Maximum distinct values"
 msgstr "Maximaal distinct waarden"
 
+#, fuzzy
 msgctxt "AnalysisUpgrade|"
 msgid "Stem and leaf tables"
-msgstr "Stem en leaf tabellen"
+msgstr "Steelbladdiagram"
 
 msgctxt "AnalysisUpgrade|"
 msgid "scale"
@@ -96,11 +97,13 @@ msgid ""
 "The scale parameter controls how much the table is expanded. For example, "
 "scale = 2 will cause the table to be roughly twice as long as the default "
 "(scale = 1)."
-msgstr "De schaal bla bla."
+msgstr ""
+"De schaalparameter stuurt hoe sterk de tabel uitbreidt. Bijvoorbeeld bij "
+"scale = 2 wordt de schaal ongeveer dubbel zo lang als standaard (scale = 1)."
 
 msgctxt "AnalysisUpgrade|"
 msgid "Create a Stem and leaf table."
-msgstr "Maak een Stem en leaf tabel"
+msgstr "Maak een steelbladdiagram."
 
 msgctxt "AnalysisUpgrade|"
 msgid "Plots"
@@ -136,7 +139,7 @@ msgstr "Boxplots"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Boxplot element"
-msgstr "Boxplot element"
+msgstr "Boxplotelement"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Violin element"
@@ -144,7 +147,7 @@ msgstr "Vioolelement"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Jitter element"
-msgstr "Jitter element"
+msgstr "Jitterelement"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Use color palette"
@@ -152,11 +155,11 @@ msgstr "Gebruik kleur palette"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Label outliers"
-msgstr "Label outliers"
+msgstr "Outliers labelen"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Scatter Plots"
-msgstr "Scatter Plots"
+msgstr "Spreidingsdiagrammen"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Graph above scatter plot"
@@ -164,7 +167,7 @@ msgstr "Graph boven scatter plot"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Density"
-msgstr "Density"
+msgstr "Dichtheid"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Histogram"
@@ -395,19 +398,17 @@ msgctxt "CopyOfDescriptives|"
 msgid "Variables"
 msgstr "Variabellen"
 
-#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Split"
-msgstr "Split"
+msgstr "Splits"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Frequency tables (nominal and ordinal variables)"
 msgstr ""
 
-#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Plots"
-msgstr "Plots"
+msgstr "Grafieken"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Customizable plots"
@@ -428,12 +429,10 @@ msgctxt "CopyOfDescriptives|"
 msgid "Colorblind Alt."
 msgstr "Kleurblind Alt."
 
-#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Viridis"
 msgstr "Viridis"
 
-#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "ggplot2"
 msgstr "ggplot2"
@@ -443,50 +442,43 @@ msgctxt "CopyOfDescriptives|"
 msgid "Gray"
 msgstr "Grijs"
 
-#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Boxplots"
 msgstr "Boxplots"
 
-#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Boxplot element"
-msgstr "Boxplot element"
+msgstr "Boxplotelement"
 
-#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Violin element"
-msgstr "Violin element"
+msgstr "Vioolelement"
 
-#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Jitter element"
-msgstr "Jitter element"
+msgstr "Jitterelement"
 
 #, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Use color palette"
 msgstr "Gebruik kleur palette"
 
-#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Label outliers"
-msgstr "Label outliers"
+msgstr "Label uitschieters"
 
-#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Scatter Plots"
-msgstr "Scatter Plots"
+msgstr "Spreidingsdiagrammen"
 
 #, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Graph above scatter plot"
 msgstr "Graph boven scatter plot"
 
-#, fuzzy
 msgctxt "CopyOfDescriptives|"
 msgid "Density"
-msgstr "Density"
+msgstr "Dichtheid"
 
 #, fuzzy
 msgctxt "CopyOfDescriptives|"
