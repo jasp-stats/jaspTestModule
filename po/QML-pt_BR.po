@@ -1,0 +1,672 @@
+msgid ""
+msgstr ""
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Qt-Contexts: true\n"
+
+msgctxt "Description|"
+msgid "Wait for it..."
+msgstr ""
+
+msgctxt "Description|"
+msgid "A module to test stuff with."
+msgstr ""
+
+msgctxt "Description|"
+msgid ""
+"Timer that displays the fact that updating Description.qml from live "
+"javascript code works fine."
+msgstr ""
+
+msgctxt "Description|"
+msgid "Test Module"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Test Footnotes jaspTable"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Test Transposed jaspTable"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Test jaspState"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Test jaspHtml"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Test jaspContainer"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Test Plot Status"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Test encoding"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Test Qml Source"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Custom Contrasts Widget"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Variables"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Split"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Frequency tables"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Maximum distinct values"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Stem and leaf tables"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "scale"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid ""
+"The scale parameter controls how much the table is expanded. For example, "
+"scale = 2 will cause the table to be roughly twice as long as the default "
+"(scale = 1)."
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Create a Stem and leaf table."
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Plots"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Color palette"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Colorblind"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Colorblind Alt."
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Viridis"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "ggplot2"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Gray"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Boxplots"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Boxplot element"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Violin element"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Jitter element"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Use color palette"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Label outliers"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Scatter Plots"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Graph above scatter plot"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Density"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Histogram"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "None"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Graph right of scatter plot"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Add regression line"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Smooth"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Linear"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Show confidence interval"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Show legend"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Basic plots"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Distribution plots"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Display density"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Display rug marks"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Bin Width Type"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Sturges"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Scott"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Doane"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Freedman-Diaconis"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Manual"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Number of Bins"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Correlation plots"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Interval plots"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Q-Q plots"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Pie charts"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Statistics"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Percentile Values"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Quartiles"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Cut points for: "
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid " equal groups"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Percentiles:"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Central Tendency"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Mean"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Median"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Mode"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Sum"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Dispersion"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "S. E. mean"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Std.deviation"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "MAD"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "MAD Robust"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "IQR"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Variance"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Range"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Minimum"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Maximum"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Distribution"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Skewness"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Kurtosis"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Shapiro-Wilk test"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Values are group midpoints"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Charts"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Chart Type"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Bar charts"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Histograms"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Chart Values"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Frequencies"
+msgstr ""
+
+msgctxt "AnalysisUpgrade|"
+msgid "Percentages"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Variables"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Split"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Frequency tables (nominal and ordinal variables)"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Plots"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Customizable plots"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Color palette"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Colorblind"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Colorblind Alt."
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Viridis"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "ggplot2"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Gray"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Boxplots"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Boxplot element"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Violin element"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Jitter element"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Use color palette"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Label outliers"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Scatter Plots"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Graph above scatter plot"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Density"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Histogram"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "None"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Graph right of scatter plot"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Add regression line"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Smooth"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Linear"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Show confidence interval"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Show legend"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Basic plots"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Distribution plots"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Display density"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Correlation plots"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Q-Q plots"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Pie charts"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Statistics"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Percentile Values"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Quartiles"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Cut points for: "
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid " equal groups"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Percentiles:"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Central Tendency"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Mean"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Median"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Mode"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Sum"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Dispersion"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "S. E. mean"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Std.deviation"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "MAD"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "MAD Robust"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "IQR"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Variance"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Range"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Minimum"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Maximum"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Distribution"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Skewness"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Kurtosis"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Shapiro-Wilk test"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Values are group midpoints"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Charts"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Chart Type"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Bar charts"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Histograms"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Chart Values"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Frequencies"
+msgstr ""
+
+msgctxt "CopyOfDescriptives|"
+msgid "Percentages"
+msgstr ""
+
+msgctxt "customContrasts|"
+msgid "Selected"
+msgstr ""
+
+msgctxt "testEncoding|"
+msgid "Selected"
+msgstr ""
+
+msgctxt "testQmlSource|"
+msgid "one"
+msgstr ""
+
+msgctxt "testQmlSource|"
+msgid "two"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Test jaspTable with crappy data"
+msgstr ""
