@@ -93,6 +93,13 @@ Description
 		func:		"testQmlSourceFunc"
 	}
 
+	Analysis
+	{
+		title:		qsTr("Test optionContainsValue")
+		qml:		"testOptionContainsValue.qml"
+		func:		"testOptionContainsValue"
+	}
+
 	Separator {}
 
 	GroupTitle { title:		"QML Widgets"; }
