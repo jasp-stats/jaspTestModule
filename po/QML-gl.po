@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-07-22 18:33+0000\n"
+"PO-Revision-Date: 2021-08-27 20:21+0000\n"
 "Last-Translator: ecadrian <ecadrian@hotmail.com>\n"
 "Language-Team: Galician <https://hosted.weblate.org/projects/jasp/"
 "jasptestmodule-qml/gl/>\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7.2-dev\n"
+"X-Generator: Weblate 4.8.1-dev\n"
 "X-Qt-Contexts: true\n"
 
 msgctxt "Description|"
@@ -86,7 +86,7 @@ msgstr "Táboas de frecuencias"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Maximum distinct values"
-msgstr "Valores distintos máximos"
+msgstr "Máximo número de valores distintos"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Stem and leaf tables"
@@ -120,19 +120,19 @@ msgstr "Paleta de cores"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Colorblind"
-msgstr "Daltonismo"
+msgstr "Daltónica"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Colorblind Alt."
-msgstr "Alternativa Daltonismo"
+msgstr "Daltónica Alternativa"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Viridis"
-msgstr "Verde"
+msgstr "Violeta"
 
 msgctxt "AnalysisUpgrade|"
 msgid "ggplot2"
-msgstr "ggplot2"
+msgstr "GGplot2"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Gray"
@@ -144,23 +144,23 @@ msgstr "Gráficas de caixa"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Boxplot element"
-msgstr "Elemento da gráfica de caixa"
+msgstr "Gráfica de caixa"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Violin element"
-msgstr "Elemento violín"
+msgstr "Violín"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Jitter element"
-msgstr "Elemento de dispersión"
+msgstr "Dispersión"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Use color palette"
-msgstr "Utilizar a paleta de cores"
+msgstr "Usar paleta de cores"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Label outliers"
-msgstr "Etiquetar os valores atípicos"
+msgstr "Etiquetar val. atípicos"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Scatter Plots"
@@ -168,7 +168,7 @@ msgstr "Gráficas de Dispersión"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Graph above scatter plot"
-msgstr "Representar sobre a gráfica de dispersión"
+msgstr "Representar na gráfica de dispersión"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Density"
@@ -264,7 +264,7 @@ msgstr "Gráficas Q-Q"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Pie charts"
-msgstr "Gráficos circulares"
+msgstr "Gráficas circulares"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Statistics"
@@ -328,11 +328,11 @@ msgstr "DAM (MAD)"
 
 msgctxt "AnalysisUpgrade|"
 msgid "MAD Robust"
-msgstr "DAM (MAD) Robusta"
+msgstr "DAM (MAD) robusta"
 
 msgctxt "AnalysisUpgrade|"
 msgid "IQR"
-msgstr "IQR"
+msgstr "RIC(IQR)"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Variance"
@@ -372,11 +372,11 @@ msgstr "Os valores son os puntos medios dos grupos"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Charts"
-msgstr "Gráficos"
+msgstr "Diagramas"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Chart Type"
-msgstr "Tipo de Gráfico"
+msgstr "Tipo de Diagrama"
 
 msgctxt "AnalysisUpgrade|"
 msgid "Bar charts"
@@ -424,19 +424,19 @@ msgstr "Paleta de cores"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Colorblind"
-msgstr "Daltonismo"
+msgstr "Daltónica"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Colorblind Alt."
-msgstr "Alternativa Daltonismo"
+msgstr "Daltónica Alternativa"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Viridis"
-msgstr "Verde"
+msgstr "Violeta"
 
 msgctxt "CopyOfDescriptives|"
 msgid "ggplot2"
-msgstr "ggplot2"
+msgstr "GGplot2"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Gray"
@@ -448,23 +448,23 @@ msgstr "Gráficas de caixa"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Boxplot element"
-msgstr "Elemento da gráfica de caixa"
+msgstr "Gráfica de caixa"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Violin element"
-msgstr "Elemento violín"
+msgstr "Violín"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Jitter element"
-msgstr "Elemento de dispersión"
+msgstr "Dispersión"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Use color palette"
-msgstr "Utilizar a paleta de cores"
+msgstr "Usar paleta de cores"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Label outliers"
-msgstr "Etiquetar os valores atípicos"
+msgstr "Etiquetar val. atípicos"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Scatter Plots"
@@ -472,7 +472,7 @@ msgstr "Gráficas de Dispersión"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Graph above scatter plot"
-msgstr "Representar sobre a gráfica de dispersión"
+msgstr "Representar na gráfica de dispersión"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Density"
@@ -532,7 +532,7 @@ msgstr "Gráficas Q-Q"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Pie charts"
-msgstr "Gráficos circulares"
+msgstr "Gráficas circulares"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Statistics"
@@ -596,11 +596,11 @@ msgstr "DAM (MAD)"
 
 msgctxt "CopyOfDescriptives|"
 msgid "MAD Robust"
-msgstr "DAM (MAD) Robusta"
+msgstr "DAM (MAD) robusta"
 
 msgctxt "CopyOfDescriptives|"
 msgid "IQR"
-msgstr "IQR"
+msgstr "RIC(IQR)"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Variance"
@@ -640,11 +640,11 @@ msgstr "Os valores son os puntos medios dos grupos"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Charts"
-msgstr "Gráficos"
+msgstr "Diagramas"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Chart Type"
-msgstr "Tipo de Gráfico"
+msgstr "Tipo de Diagrama"
 
 msgctxt "CopyOfDescriptives|"
 msgid "Bar charts"
