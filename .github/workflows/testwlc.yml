@@ -13,5 +13,5 @@ jobs:
         shell: bash
         
       - name: Lock jasptestmodule
-        run: wlc --key ${{ secrets.WEBLATE_KEY }} --url https://hosted.weblate.org/api/ lock jasp/jasptestmodule-qml
+        run: wlc --key ${{ secrets.WEBLATE_KEY }} --url https://hosted.weblate.org/api/ lock jasp/jasptestmodule-r
         shell: bash
