@@ -5,7 +5,7 @@ on:
 
 jobs:
   run-test:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Install wlc
