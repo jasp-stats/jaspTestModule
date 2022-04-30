@@ -170,5 +170,18 @@ Description
 		qml:			"AnalysisUpgrade.qml"
 		requiresData:	false
 	}
+
+	
+	Separator {}
+	GroupTitle { title: "Features" }
+
+	Analysis
+	{
+		title:			"Reporting"
+		func:			"JaspReportTest"
+		qml:			"JaspReportTest.qml"
+		requiresData:	true
+	}
+
 }
 
