@@ -24,6 +24,7 @@ Form
 {
     CheckBox
     {
+		qsTr("One check")
         name: "checkbox_0"
         checked: false
     }
