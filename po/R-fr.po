@@ -17,7 +17,7 @@ msgid "<i>Something is written to a R source</i>"
 msgstr "<i>Quelque chose est écrit dans une R source</i>"
 
 msgid "this"
-msgstr "cecizzz"
+msgstr "ceci"
 
 msgid "that"
 msgstr "celaaa"
