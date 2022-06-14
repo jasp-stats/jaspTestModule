@@ -662,10 +662,34 @@ msgctxt "testQmlSource|"
 msgid "one"
 msgstr ""
 
-msgctxt "testQmlSource|"
-msgid "two"
+msgctxt "Description|"
+msgid "Test jaspTable with crappy data"
 msgstr ""
 
 msgctxt "Description|"
-msgid "Test jaspTable with crappy data"
+msgid "Test optionContainsValue"
+msgstr ""
+
+msgctxt "JaspReportTest|"
+msgid "Report on this"
+msgstr ""
+
+msgctxt "testOptionContainsValue|"
+msgid "This option is irrelevant"
+msgstr ""
+
+msgctxt "testOptionContainsValue|"
+msgid "Model 1"
+msgstr ""
+
+msgctxt "testOptionContainsValue|"
+msgid "This option should reset the state"
+msgstr ""
+
+msgctxt "testOptionContainsValue|"
+msgid "This option should not reset the state"
+msgstr ""
+
+msgctxt "testQmlSource|"
+msgid "three"
 msgstr ""

@@ -3,8 +3,6 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Language: tr\n"
 "X-Qt-Contexts: true\n"
 
 msgctxt "Description|"
@@ -34,6 +32,10 @@ msgid "Test Transposed jaspTable"
 msgstr ""
 
 msgctxt "Description|"
+msgid "Test jaspTable with crappy data"
+msgstr ""
+
+msgctxt "Description|"
 msgid "Test jaspState"
 msgstr ""
 
@@ -55,6 +57,10 @@ msgstr ""
 
 msgctxt "Description|"
 msgid "Test Qml Source"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Test optionContainsValue"
 msgstr ""
 
 msgctxt "Description|"
@@ -656,24 +662,12 @@ msgctxt "customContrasts|"
 msgid "Selected"
 msgstr ""
 
-msgctxt "testEncoding|"
-msgid "Selected"
-msgstr ""
-
-msgctxt "testQmlSource|"
-msgid "one"
-msgstr ""
-
-msgctxt "Description|"
-msgid "Test jaspTable with crappy data"
-msgstr ""
-
-msgctxt "Description|"
-msgid "Test optionContainsValue"
-msgstr ""
-
 msgctxt "JaspReportTest|"
 msgid "Report on this"
+msgstr ""
+
+msgctxt "testEncoding|"
+msgid "Selected"
 msgstr ""
 
 msgctxt "testOptionContainsValue|"
@@ -690,6 +684,10 @@ msgstr ""
 
 msgctxt "testOptionContainsValue|"
 msgid "This option should not reset the state"
+msgstr ""
+
+msgctxt "testQmlSource|"
+msgid "one"
 msgstr ""
 
 msgctxt "testQmlSource|"
