@@ -695,3 +695,7 @@ msgstr ""
 msgctxt "testQmlSource|"
 msgid "three"
 msgstr ""
+
+msgctxt "test|"
+msgid "One check"
+msgstr ""
