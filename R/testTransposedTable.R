@@ -1,6 +1,6 @@
 testTransposedTableFunc <- function(jaspResults, dataset, options)
 {
-	
+
 	# the correlation table stored here
 	mainTable <- createJaspTable(title = "Transposed Table")
 	mainTable$showSpecifiedColumnsOnly <- TRUE
@@ -48,4 +48,5 @@ testTransposedTableFunc <- function(jaspResults, dataset, options)
 
 	#mainTable$print()
 	jaspResults[['transposeMe']] <- mainTable
+
 }
