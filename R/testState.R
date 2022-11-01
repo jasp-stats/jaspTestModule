@@ -27,7 +27,7 @@ testStateFunc <- function(jaspResults, dataset, options) {
   remade <- FALSE
   if (is.null(jaspResults[['nestedDepends']])) {
     remade <- TRUE
-    obj <- createJaspState(options$saveMe)
+    obj <- createJaspState(options$saveMe, dependencies = "saveMe")
     obj$dependOn(nestedOptions = c("tabview", 1, "checkbox_2"))
     jaspResults[['nestedDepends']] <- obj
   }
