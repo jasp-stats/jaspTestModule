@@ -90,8 +90,8 @@ testStateFunc <- function(jaspResults, dataset, options) {
 
       if(length(variablesOrder) > 1)
         variablesOrder <- variablesOrder[-1]
-        
-      obj$dependOn(nestedOptionsContainsValue = list(key = c("tabview", i, "variables"), value = variablesOrder))
+
+      obj$dependOn(nestedOptionsContainsValue = list(key = c("tabview", i, "variablesForState"), value = variablesOrder))
       jaspResults[[jaspKey]] <- obj
     }
     text <- if (remade)
