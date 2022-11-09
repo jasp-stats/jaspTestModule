@@ -119,6 +119,13 @@ Description
 		func:			"testSaveLoadButton"
 	}
 
+	Analysis
+	{
+		title:			"Test Variables Form"
+		qml:			"testVariablesForm.qml"
+		func:			"testVariablesForm"
+	}
+
 	Separator {}
 
 	Analysis
