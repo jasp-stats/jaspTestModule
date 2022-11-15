@@ -1,3 +1,4 @@
+#' @export
 JaspReportTest <- function(jaspResults, dataset, options)
 {
 	if(options[["selectedVariable"]] == "" || options[["reportMe"]] == "") {
