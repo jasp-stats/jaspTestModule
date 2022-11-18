@@ -16,19 +16,19 @@
 // <http://www.gnu.org/licenses/>.
 //
 
-import QtQuick 			2.8
+import QtQuick 			2.15
 import QtQuick.Layouts 	1.3
+import JASP				1.0
 import JASP.Controls 	1.0
 import JASP.Widgets 	1.0
-import JASP.Theme 		1.0
 
 
 Form
 {
 	Group
 	{
-		IntegerField { id: numberOfContinuous; label: qsTr("Number of continuous factors"); name: "numberOfContinuous"; min: 0; defaultValue: 2; max: 20    }
 
+		IntegerField { id: numberOfContinuous; label: qsTr("Number of continuous factors"); name: "numberOfContinuous"; min: 0; defaultValue: 2; max: 20    }
 
 		TableView
 		{
@@ -39,8 +39,8 @@ Form
 			id: continuousVariablesTable
 			modelType			: JASP.Simple
 
-			width				: implicitWidth
-			height				: implicitHeight
+			width				: 400
+			height				: 300
 
 			initialRowCount		: numberOfContinuous.value
 			initialColumnCount	: 3
@@ -48,28 +48,14 @@ Form
 			rowCount			: numberOfContinuous.value
 			columnCount			: 3
 
-
 			name				: "continuousVariables"
 			cornerText			: qsTr("Factor")
 			columnNames			: [qsTr("Name"), qsTr("Low"), qsTr("High")]
-			isFirstColEditable	: true
-//			itemType			: JASP.String // required?
-			itemTypePerColumn	: [JASP.String].concat(Array(19).fill(JASP.Double)) // at most 20 items anyway
+			isFirstColEditable	: JASP.Double
+			itemTypePerColumn	: [JASP.String]
 
-			function getRowHeaderText(headerText, rowIndex)				{ return String.fromCharCode(65 + rowIndex);	}
-			function getDefaultValue(columnIndex, rowIndex)
-			{
-				if (columnIndex === 0)
-				{
-					console.log("getDefaultValue( " + columnIndex + ", " + rowIndex + ") = " + String.fromCharCode(65 + rowIndex));
-					return String.fromCharCode(65 + rowIndex)
-				}
-				else
-				{
-					console.log("getDefaultValue( " + columnIndex + ", " + rowIndex + ") = " + (2 * columnIndex - 3));
-					return 2 * columnIndex - 3;
-				}
-			}
+			function getRowHeaderText(headerText, rowIndex)				{ return String.fromCharCode(65 + rowIndex);											}
+			function getDefaultValue(columnIndex, rowIndex)				{ return columnIndex === 0 ? String.fromCharCode(65 + rowIndex) : 2 * columnIndex - 3; 	}
 			function getValidator(columnIndex, rowIndex)				{ return columnIndex === 0 ? stringValidator : doubleValidator							}
 		}
 
@@ -81,13 +67,17 @@ Form
 			id: categoricalVariables
 			modelType			: JASP.Simple
 
+			width				: 400
+			height				: 300
+
 			isFirstColEditable	: true
 
 			initialRowCount		: numberOfCategorical.value
-			initialColumnCount	: 1 + parseInt(numberOfLevels.value)
+			initialColumnCount	: 1 + (numberOfLevels.value ? parseInt(numberOfLevels.value) : 0)
 
 			rowCount			: numberOfCategorical.value
-			columnCount			: 1 + parseInt(numberOfLevels.value)
+			// if you give a table 0 rows and columns it becomes very ugly, so check if numberOfLevels.value is defined first
+			columnCount			: 1 + (numberOfLevels.value ? parseInt(numberOfLevels.value) : 0)
 			name				: "categoricalVariables"
 			cornerText			: qsTr("Factor")
 			itemType			: JASP.String
@@ -97,8 +87,8 @@ Form
 			function getDefaultValue(columnIndex, rowIndex)
 			{
 				return columnIndex === 0 ? String.fromCharCode(65 + rowIndex + parseInt(numberOfContinuous.value))
-										 : columnIndex <= 2 ? String.fromCharCode(97 + columnIndex - 1)
-															: "";
+										 : columnIndex === 1 ? 'a'
+															 : columnIndex === 2 ? 'b' : "";
 			}
 		}
 	}
