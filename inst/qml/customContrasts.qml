@@ -27,18 +27,18 @@ Form
 {
 	VariablesForm
 	{
-		AvailableVariablesList 	
-		{	
-			name: "allVariablesList" 
+		AvailableVariablesList
+		{
+			name: "allVariablesList"
 		}
 
-		AssignedVariablesList 	
-		{	
+		AssignedVariablesList
+		{
 			id:				selected
 			name: 			"selected"
 			title: 			qsTr("Selected")
 			singleVariable:	true
-			allowedColumns:	["ordinal", "nominal", "nominalText"]	
+			allowedColumns:	["ordinal", "nominal", "nominalText"]
 		}
 	}
 

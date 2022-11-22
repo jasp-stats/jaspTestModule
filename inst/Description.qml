@@ -126,6 +126,13 @@ Description
 		func:			"testVariablesForm"
 	}
 
+	Analysis
+	{
+		title:			"tableView Widget"
+		qml:			"tableView.qml"
+		func:			"tableView"
+	}
+
 	Separator {}
 
 	Analysis
