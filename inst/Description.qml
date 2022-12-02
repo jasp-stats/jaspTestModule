@@ -133,6 +133,14 @@ Description
 		func:			"tableView"
 	}
 
+	Analysis
+	{
+		title:			"info testing"
+		qml:			"TestInfo.qml"
+		func:			"infoTestFunc"
+		requiresData:	false
+	}
+
 	Separator {}
 
 	Analysis
