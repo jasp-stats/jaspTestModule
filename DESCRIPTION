@@ -1,12 +1,18 @@
 Package: jaspTestModule
 Type: Package
 Title: Wait for it... Module for JASP
-Version: 1.0.0
-Date: 2020-07-17
+Version: 1.0.1
+Date: 2022-12-12
 Author: Joris Goosen
-Website: 
+Website: jasp-stats.org
 Maintainer: Joris Goosen <Joris@JorisGoosen.nl>
 Description: A module to test stuff with.
-License: Whatever
-Imports: jaspBase, jaspGraphs, svglite, stringi
-Remotes: jasp-stats/jaspBase, jasp-stats/jaspGraphs
+License: GPL (>= 2)
+Imports: 
+    jaspBase,
+    jaspGraphs, 
+    svglite,
+    stringi
+Remotes: 
+    jasp-stats/jaspBase,
+    jasp-stats/jaspGraphs

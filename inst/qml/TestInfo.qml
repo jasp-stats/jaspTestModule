@@ -6,6 +6,8 @@ Form
 {
 	columns: 1
 
+	info: "This is a bunch of info on a form!"
+
 	CheckBox
 	{
 		id:		checkbox
@@ -78,60 +80,65 @@ Form
 		label:		"sliding: "
 	}
 
-	TabView
+	Section
 	{
-		id:					tabview
-		name:				"tabview"
-		maximumItems:		10
-		newItemName:		qsTr("NEW ITEM")
-		optionKey:			"name"
-		
-		info:				"This is an info field on a tabview"
+		info: "another section just for shows"
+		//name:	"aSection"
 
-		content: Group
+		TabView
 		{
-			TextArea
-			{
-				name:				"syntax"
-				width:				models.width
-				textType:			JASP.TextTypeModel
-				trim:				true
-				applyScriptInfo:	qsTr("Ctrl + Enter to apply. Click on the blue button above for help on the restriction syntax")
-				info:				"TextArea inside tabview"
-			}
+			id:					tabview
+			name:				"tabview"
+			maximumItems:		10
+			newItemName:		qsTr("NEW ITEM")
+			optionKey:			"name"
+			
+			info:				"This is an info field on a tabview"
 
-			Group
+			content: Group
 			{
-				columns: 2
-				CheckBox
+				TextArea
 				{
-					name:		"summary"
-					label:		qsTr("Summary for %1").arg(rowValue)
-					info:		"a checkbox whether you want a summary"
+					name:				"syntax"
+					width:				parent.width
+					//textType:			JASP.TextTypeModel
+					trim:				true
+					applyScriptInfo:	qsTr("Ctrl + Enter to apply. Click on the blue button above for help on the restriction syntax")
+					info:				"TextArea inside tabview"
 				}
 
-				CheckBox
+				Group
 				{
-					name:		"marginalMean"
-					label:		qsTr("Marginal means for %1").arg(rowValue)
-					info:		"a checkbox whether you want a marginalMean"
-				}
+					columns: 2
+					CheckBox
+					{
+						name:		"summary"
+						label:		qsTr("Summary for %1").arg(rowValue)
+						info:		"a checkbox whether you want a summary"
+					}
 
+					CheckBox
+					{
+						name:		"marginalMean"
+						label:		qsTr("Marginal means for %1").arg(rowValue)
+						info:		"a checkbox whether you want a marginalMean"
+					}
+
+				}
 			}
 		}
+
+
+		VariablesForm
+		{
+			info:	"I am a variablesForm"
+			AvailableVariablesList			{ info: "All variables info"; 					name: "allVariablesList"										}
+			AssignedVariablesList			{ info: "assigned variables scale suggested"; 	name: "varS";			title: qsTr("With suggest")				; id: varS ;	suggestedColumns:	["scale"]							}
+			AssignedVariablesList			{ info: "assigned variables nominal allowed"; 	name: "varA";			title: qsTr("With allowed")				; id: varA ;	allowedColumns: 	["nominal"]	}
+			AssignedRepeatedMeasuresCells	{ info: "assigned RM"; 							name: "cells";			title: qsTr("RM!")	}
+			AssignedPairsVariablesList		{ info: "assigned pairs"; 						name: "paairs";			title: qsTr("PAIRS!")	}
+			FactorLevelList					{ info:	"FactorLevelList";						name: "repeatedMeasuresFactors";	title: qsTr("Repeated Measures Factors");	factorName: qsTr("RM Factor")	}
+		}
 	}
-
-
-	VariablesForm
-	{
-		info:	"I am a variablesForm"
-		AvailableVariablesList			{ info: "All variables info"; 					name: "allVariablesList"										}
-		AssignedVariablesList			{ info: "assigned variables scale suggested"; 	name: "varS";			title: qsTr("With suggest")				; id: varS ;	suggestedColumns:	["scale"]							}
-		AssignedVariablesList			{ info: "assigned variables nominal allowed"; 	name: "varA";			title: qsTr("With allowed")				; id: varA ;	allowedColumns: 	["nominal"]	}
-		AssignedRepeatedMeasuresCells	{ info: "assigned RM"; 							name: "cells";			title: qsTr("RM!")	}
-		AssignedPairsVariablesList		{ info: "assigned pairs"; 						name: "paairs";			title: qsTr("PAIRS!")	}
-		FactorLevelList					{ info:	"FactorLevelList";						name: "repeatedMeasuresFactors";	title: qsTr("Repeated Measures Factors");	factorName: qsTr("RM Factor")	}
-	}
-
 
 }
