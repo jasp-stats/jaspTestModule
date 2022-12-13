@@ -119,12 +119,19 @@ Description
 		func:			"testSaveLoadButton"
 	}
 
-	Analysis
-	{
-		title:			"Test Variables Form"
-		qml:			"testVariablesForm.qml"
-		func:			"testVariablesForm"
-	}
+    Analysis
+    {
+        title:			"Test Variables Form"
+        qml:			"testVariablesForm.qml"
+        func:			"testVariablesForm"
+    }
+
+    Analysis
+    {
+        title:			"Test Option Names"
+        qml:			"testOptionNames.qml"
+        func:			"testOptionNames"
+    }
 
 	Analysis
 	{
