@@ -57,14 +57,14 @@ Form
 
 			VariablesForm
 			{
-				AvailableVariablesList	{ name: "allVariablesList1"													}
-				AssignedVariablesList	{ name: "variables";		title: "All Variables in data";					}
+				AvailableVariablesList	{ name: "allVariablesListTab1"													}
+				AssignedVariablesList	{ name: "variablesTab1";		title: "All Variables in data";					}
 			}
 
 			VariablesForm
 			{
-				AvailableVariablesList	{ name: "allVariablesList2";												}
-				AssignedVariablesList	{ name: "variablesForState"; title: "State must contain"					}
+				AvailableVariablesList	{ name: "allVariablesListTab2";												}
+				AssignedVariablesList	{ name: "variablesForStateTab2"; title: "State must contain"					}
 			}
 		}
 	}
