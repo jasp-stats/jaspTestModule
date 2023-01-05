@@ -148,6 +148,14 @@ Description
 		requiresData:	false
 	}
 
+	Analysis
+	{
+		title:			"Radio Button"
+		qml:			"RadioButtonTest.qml"
+		func:			"radioButtonFunc"
+		requiresData:	false
+	}
+
 	Separator {}
 
 	Analysis
