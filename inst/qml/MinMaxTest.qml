@@ -22,33 +22,70 @@ import JASP.Controls 	1.0
 
 Form 
 {
-	columns: 1
-	DoubleField
+	columns: 2
+	Group
 	{
-		id: defaultLower
-		label: "Set lower default"
-		name: "lowerDefault"
-		value: 0.1
+		title: "Double TextFields"
+		DoubleField
+		{
+			id: defaultDoubleLower
+			label: "Set lower integer default"
+			name: "lowerIntegerDefault"
+			value: 0.1
+		}
+
+		DoubleField
+		{
+			id:		doubleLower
+			name:	"doubleLower"
+			label:  "Double Lower"
+			max:	doubleUpper.value
+			defaultValue: defaultDoubleLower.value
+			min:	0
+		}
+
+		DoubleField
+		{
+			id:		doubleUpper
+			name:	"doubleUpper"
+			label:  "Upper Double Exclusive"
+			min:	doubleLower.value
+			defaultValue: 0.50
+			max:	1
+			inclusive: JASP.MinOnly
+		}
+	}
+	Group
+	{
+		title: "Integer TextFields"
+		IntegerField
+		{
+			id: defaultIntegerLower
+			label: "Set lower Integer default"
+			name: "lowerDefault"
+			value: 1
+		}
+
+		IntegerField
+		{
+			id:		integerLower
+			name:	"integerLower"
+			label:  "Integer Lower"
+			max:	integerUpper.value
+			defaultValue: defaultIntegerLower.value
+			min:	0
+		}
+
+		IntegerField
+		{
+			id:		integerUpper
+			name:	"integerUpper"
+			label:  "Integer Upper Exclusive"
+			min:	integerLower.value
+			defaultValue: 5
+			max:	10
+			inclusive: JASP.MinOnly
+		}
 	}
 
-	DoubleField
-	{
-		id:		lower
-		name:	"lower"
-		label:  "Lower"
-		max:	upper.value
-		defaultValue: defaultLower.value
-		min:	0
-	}
-
-	DoubleField
-	{
-		id:		upper
-		name:	"upper"
-		label:  "Upper Exclusive"
-		min:	lower.value
-		defaultValue: 0.50
-		max:	1
-		inclusive: JASP.MinOnly
-	}
 }
