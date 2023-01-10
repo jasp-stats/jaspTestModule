@@ -156,6 +156,14 @@ Description
 		requiresData:	false
 	}
 
+	Analysis
+	{
+		title:			"Min Max"
+		qml:			"MinMaxTest.qml"
+		func:			"minMaxFunc"
+		requiresData:	false
+	}
+
 	Separator {}
 
 	Analysis
