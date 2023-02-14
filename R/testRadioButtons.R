@@ -1,9 +1,6 @@
 radioButtonFunc <- function(jaspResults, dataset, options)
 {
-	elementType <- 'p'
-
-	jaspResults[['boodschap']] 		 <- createJaspHtml(text=paste0(options), info="some info on a jaspHtml")
-	jaspResults[['tafel']]     		 <- createJaspTable(title="Glory", colTitles=c('hallo', 'wereld'), info="some info on a table")
-	jaspResults[['nested']]    		 <- createJaspContainer("Chairs", info='this is a container you know')
-	jaspResults[['nested']][['egg']] <- createJaspHtml(text="This is nested within a container", info="some info on a nested jaspHtml")
+    jaspResults[['dynamic']] <- createJaspHtml(text=jsonlite::toJSON(options["dynamic"], auto_unbox = TRUE, digits = NA, null="null", force = TRUE))
+    jaspResults[['firstGroup']] <- createJaspHtml(text=jsonlite::toJSON(options["firstGroup"], auto_unbox = TRUE, digits = NA, null="null", force = TRUE))
+    jaspResults[['secondGroup']] <- createJaspHtml(text=jsonlite::toJSON(options["secondGroup"], auto_unbox = TRUE, digits = NA, null="null", force = TRUE))
 }

@@ -15,21 +15,43 @@
 // License along with this program.  If not, see
 // <http://www.gnu.org/licenses/>.
 //
-import QtQuick 			2.8
-import QtQuick.Layouts 	1.3
+import QtQuick
 import JASP
-import JASP.Controls 	1.0
+import JASP.Controls
+import "./common"
 
 Form 
 {
 	columns: 2
+
+	ExplanationText
+	{
+		text:
+			"This analysis checks default values of Integer & Double Fields with min/max constraints<br>" +
+			"A default value can be set for Integer & Double Fields. This default value can have a binding with another value: in this case, if the binding value changes, and the Integer/Double fields has still the default value, then the value of the Integer/Double fields should change accordingly.<br>" +
+			"Also an Integer/Double Fields can have min/max constraints. To simulate range value, 2 fields set the lower and upper values of each other: the first field sets the min of the second field, and the second field sets the max of the first field<br>" +
+			"Moreover there can be a min constraint of the lower bound, and a max constraint of the upper bound.<br>" +
+			"It is then important that warning/error constraint messages are clear for the user.<br>" +
+			"Here the min lower bound is 0, and the max upper bound is 1 (exclusive) for the double field and 10 (exclusive) for the integer field." +
+			"<ul>" +
+			"<li>Change the default value of the Default Double/Integer Lower Bound fields (between 0 and the upper bound) and check that the Double/Integer Lower Bound changes accordingly.</li>" +
+			"<li>Change the Double/Integer Bound fields (between 0 and the upper bound) so that it gets another value than its default value. Change the default value: check that the Upper Bound values do not change</li>" +
+			"<li>Check that you cannot set a negative value to the Lower bound fields</li>" +
+			"<li>Check that if you set 1 for the Double Upper Bound (and 10 for the Integer Upper Bound) then you get a temporary error message, and the last valid value is set back automatically</li>" +
+			"<li>Check that if you set the Lower Bound values to a higher value that the one in Upper Bound, then you get a temporary error message, and the last valid value is set back automatically</li>" +
+			"<li>Set the Default Lower Bound values and the Lower Bound values equal again. Change then the Default Lower Bound values to a higher value than the Upper Bound value: check that you get 1 or 2 error messages for the Lower and Upper bound fields</li>" +
+			"<li>Duplicate the analysis, and check that the values are the same even if the lower value is the same as the default value or not.</li>" +
+			"</ul>"
+	}
+
+
 	Group
 	{
-		title: "Double TextFields"
+		title: "Double Range TextFields"
 		DoubleField
 		{
 			id: defaultDoubleLower
-			label: "Set lower integer default"
+			label: "Default Double Lower Bound"
 			name: "lowerIntegerDefault"
 			value: 0.1
 		}
@@ -38,7 +60,7 @@ Form
 		{
 			id:		doubleLower
 			name:	"doubleLower"
-			label:  "Double Lower"
+			label:  "Double Lower Bound"
 			max:	doubleUpper.value
 			defaultValue: defaultDoubleLower.value
 			min:	0
@@ -48,7 +70,7 @@ Form
 		{
 			id:		doubleUpper
 			name:	"doubleUpper"
-			label:  "Upper Double Exclusive"
+			label:  "Double Upper Bound (Exclusive)"
 			min:	doubleLower.value
 			defaultValue: 0.50
 			max:	1
@@ -57,11 +79,11 @@ Form
 	}
 	Group
 	{
-		title: "Integer TextFields"
+		title: "Integer Range TextFields"
 		IntegerField
 		{
 			id: defaultIntegerLower
-			label: "Set lower Integer default"
+			label: "Default Integer Lower Bound"
 			name: "lowerDefault"
 			value: 1
 		}
@@ -70,7 +92,7 @@ Form
 		{
 			id:		integerLower
 			name:	"integerLower"
-			label:  "Integer Lower"
+			label:  "Integer Lower Bound"
 			max:	integerUpper.value
 			defaultValue: defaultIntegerLower.value
 			min:	0
@@ -80,7 +102,7 @@ Form
 		{
 			id:		integerUpper
 			name:	"integerUpper"
-			label:  "Integer Upper Exclusive"
+			label:  "Integer Upper Bound (Exclusive)"
 			min:	integerLower.value
 			defaultValue: 5
 			max:	10
