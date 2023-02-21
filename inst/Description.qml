@@ -88,9 +88,9 @@ Description
 
 	Analysis
 	{
-		title:		qsTr("Test Qml Source")
-		qml:		"testQmlSource.qml"
-		func:		"testQmlSourceFunc"
+		title:		qsTr("Test R Source")
+		qml:		"testRSource.qml"
+		func:		"testRSourceFunc"
 	}
 
 	Analysis
