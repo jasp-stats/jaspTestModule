@@ -15,8 +15,100 @@ Form
 
 	Section
 	{
-		title: "Dynamic created Radio Buttons (needs dataset)"
-		enabled: available.count > 0 || assigned.count > 0.
+		title	: "Dynamic created Radio Buttons"
+		columns	: 1
+
+		ExplanationText
+		{
+			text:
+				"Radio Button group can be created statically or dynamically, as their Radio Button can be also created statically and dynamically<br>" +
+				"For each case, check:" +
+				"<ul>" +
+				"<li>The group should have one Radio Button checked. If there is a default Radio Button, this one should be checked</li>" +
+				"<li>The value of the group should get the value of the Button checked.</li>" +
+				"<li>Change the checked Radio Button, and check that the value of the group change also</li>" +
+				"<li>Duplicate the analysis, and check that the same RadioButtons are checked, and that the groups have the same value</li>" +
+				"</ul>"
+		}
+
+		RadioButtonGroup
+		{
+			name	: "staticGroupWithDynamicButtons"
+			title	: "Static group with only dynamic buttons. <b>Value: " + value + "</b>"
+
+			ComponentsList
+			{
+				name		: "buttons1"
+				values		: ["button1", "button2"]
+				width		: form.width - jaspTheme.groupContentPadding
+				newItemName	: "Added Button "
+				rowComponent: RadioButton { name: label; label: "Dynamic " + rowValue }
+			}
+		}
+
+		RadioButtonGroup
+		{
+			name	: "staticGroupWithStaticAndDynamicButtons"
+			title	: "Static group with static & dynamic buttons. <b>Value: " + value + "</b>"
+
+			ComponentsList
+			{
+				name			: "buttons2"
+				values			: ["button1", "button2"]
+				addItemManually	: false
+				addBorder		: false
+				width			: form.width - jaspTheme.groupContentPadding
+				rowComponent	: RadioButton { value: label; label: "Dynamic " + rowValue }
+			}
+
+			RadioButton { value: label; label: "Static button" }
+		}
+
+		ComponentsList
+		{
+			name			: "dynamicGroupWithStaticButtons"
+			title			: "Dynamic group with static buttons"
+			values			: ["grouo1", "group2"]
+			addItemManually	: false
+			rowComponent	: RadioButtonGroup
+			{
+				property int index: rowIndex
+				name		: "Dynamic " + rowValue
+				title		: name + ". <b>Value: " + value + "</b>"
+
+				RadioButton { value: label; label: group.name + " Button1 " + (group.index == 0 ? "(default)" : ""); checked: group.index == 0 }
+				RadioButton { value: label; label: group.name + " Button2 " + (group.index == 1 ? "(default)" : ""); checked: group.index == 1 }
+			}
+		}
+
+		ComponentsList
+		{
+			name			: "dynamicGroupWithDynamicButtons"
+			title			: "Dynamic group with dynamic buttons"
+			values			: ["grouo1", "group2"]
+			addItemManually	: false
+			rowComponent	:  RadioButtonGroup
+			{
+				name	: "Dynamic " + rowValue
+				title	: name + ". <b>Value: " + value + "</b>"
+
+				ComponentsList
+				{
+					values			: ["button1", "button2"]
+					name			: "dynamicbuttons " + rowValue
+					width			: form.width - jaspTheme.groupContentPadding
+					addItemManually	: false
+					addBorder		: false
+					rowComponent	: RadioButton { name: rowValue; label: group.name + " " + rowValue }
+				}
+			}
+		}
+	}
+
+	Section
+	{
+		title	: "Dynamic created Radio Buttons from dataset"
+		enabled	: available.count > 0 || assigned.count > 0.
 		VariablesForm
 		{
 			AvailableVariablesList { id: available; name: "available" }
@@ -26,29 +118,31 @@ Form
 		ExplanationText
 		{
 			text:
-				"Dynamic created Radio Buttons: a ComponentsList creates a RadioButtonGrouo per available variable.<br>" +
-				"Each RadioButtonGroup has a single 'Static RadioButton' and dynamicly created RadioButtons created by sub ComponentsList: one RadioButton is created per assigned variable" +
+				"Here a ComponentsList creates a RadioButtonGrouo per available variable.<br>" +
+				"Each RadioButtonGroup has a single 'Static RadioButton' and dynamicly created RadioButtons (via a sub ComponentsList) for each assigned variable" +
 				"<ul>" +
 				"<li>Check that a RadioButtonGroup is created per available variable, and that a RadioButton is created per assigned variable</li>" +
+				"<li>Check that each RadioButtonGroup has a checked RadioButton and that the RadioButtonGroup gets the right value</li>" +
 				"<li>Check that by clicking on the RadioButtons, the RadioButtonGroup gets the right value</li>"  +
+				"<li>If Radio Buttons can be removed, remove the checked one, and check that another becomes checked.</li>" +
 				"<li>Duplicate the analysis: check that the same radio buttons are displayed, and the same ones are checked</li>" +
 				"</ul>"
 		}
 
 		ComponentsList
 		{
-			name: "dynamic"
-			source: "available"
+			name	: "dynamic"
+			source	: "available"
 
 			rowComponent: RadioButtonGroup
 			{
-				name: "group"
-				title: "RadioButtonGroup for " + rowValue + ", Value: " + value
+				name	: "group"
+				title	: "RadioButtonGroup for " + rowValue + ", Value: " + value
 
 				RadioButton
 				{
-					name: "Static RadioButton"
-					label: name
+					name	: "Static RadioButton"
+					label	: name
 				}
 
 				ComponentsList
@@ -74,7 +168,7 @@ Form
 
 	Section
 	{
-		title: "Test Prgramatically click and checked"
+		title: "Test Programatically click and checked"
 
 
 		ExplanationText
@@ -92,22 +186,27 @@ Form
 				"<li>Click on a 'Second Group' Radio Button so that both groups have different values. Duplicate the analysis: check that the right buttons are checked, and the groups have the right values</li>" +
 				"</ul>"
 		}
-		Button
+
+		Column
 		{
-			label: "Use click() to set 'one'"
-			onClicked: one.click()
-		}
-		Button
-		{
-			label: "Use checked to set 'two'"
-			onClicked: two.checked = true
+			Layout.columnSpan: 2
+			Button
+			{
+				label		: "Use click() to set 'one'"
+				onClicked	: one.click()
+			}
+			Button
+			{
+				label		: "Use checked to set 'two'"
+				onClicked	: two.checked = true
+			}
 		}
 
 		RadioButtonGroup
 		{
-			id: test
-			title: "First Group: " + value
-			name: "firstGroup"
+			id			: test
+			title		: "First Group: " + value
+			name		: "firstGroup"
 
 			RadioButton { name: "one"; label: "one"; id: one }
 			RadioButton { name: "two"; label: "two"; id: two }
@@ -116,8 +215,8 @@ Form
 
 		RadioButtonGroup
 		{
-			title: "Second Group: " + value
-			name: "secondGroup"
+			title		: "Second Group: " + value
+			name		: "secondGroup"
 
 			RadioButton { name: "one"; label: "one"; checked: one.checked }
 			RadioButton { name: "two"; label: "two"; checked: two.checked }
