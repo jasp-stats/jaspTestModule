@@ -29,6 +29,7 @@ Form
 			"	<li>Check that if the current value of the dropdown is removed from the Available items, then then Dropdown gets a new value</li>" +
 			"	<li>In the ComponentsList, check that there are as many CheckBoxes added as the number of items in the Assigned list</li>" +
 			"	</uL>" +
+			"<li>Duplicate the analysis, and check that the same items are in the Assigned list, that the same values are in DropDown, and the same checkboxes are checked.</li>" +
 			"</ul>"
 	}
 

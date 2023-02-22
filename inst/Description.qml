@@ -88,13 +88,6 @@ Description
 
 	Analysis
 	{
-		title:		qsTr("Test R Source")
-		qml:		"testRSource.qml"
-		func:		"testRSourceFunc"
-	}
-
-	Analysis
-	{
 		title:		qsTr("Test optionContainsValue")
 		qml:		"testOptionContainsValue.qml"
 		func:		"testOptionContainsValue"
@@ -103,6 +96,36 @@ Description
 	Separator {}
 
 	GroupTitle { title:		"QML Widgets"; }
+
+	Analysis
+	{
+		title:			"Test R Source"
+		qml:			"testRSource.qml"
+		func:			"testRSourceFunc"
+	}
+
+	Analysis
+	{
+		title:			"Test Sources with special attributes"
+		qml:			"testSpecialSources.qml"
+		func:			"testSpecialSourcesFunc"
+	}
+
+	Analysis
+	{
+		title:			"Radio Button"
+		qml:			"RadioButtonTest.qml"
+		func:			"radioButtonFunc"
+		requiresData:	false
+	}
+
+	Analysis
+	{
+		title:			"Min Max"
+		qml:			"MinMaxTest.qml"
+		func:			"minMaxFunc"
+		requiresData:	false
+	}
 
 	Analysis
 	{
@@ -145,22 +168,6 @@ Description
 		title:			"info testing"
 		qml:			"TestInfo.qml"
 		func:			"infoTestFunc"
-		requiresData:	false
-	}
-
-	Analysis
-	{
-		title:			"Radio Button"
-		qml:			"RadioButtonTest.qml"
-		func:			"radioButtonFunc"
-		requiresData:	false
-	}
-
-	Analysis
-	{
-		title:			"Min Max"
-		qml:			"MinMaxTest.qml"
-		func:			"minMaxFunc"
 		requiresData:	false
 	}
 
