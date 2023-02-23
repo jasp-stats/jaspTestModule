@@ -21,7 +21,7 @@ Form
 		ExplanationText
 		{
 			text:
-				"Radio Button group can be created statically or dynamically, as their Radio Button can be also created statically and dynamically<br>" +
+				"Radio Button group can be created statically or dynamically, as their Radio Buttons can be also created statically and dynamically<br>" +
 				"For each case, check:" +
 				"<ul>" +
 				"<li>The group should have one Radio Button checked. If there is a default Radio Button, this one should be checked</li>" +

@@ -246,7 +246,7 @@ Form
 		{
 			name: "controlVariables"
 			label: "Dropdown values of selected variables"
-			source: [ {name: "selectedVariablesWithControls", use: "control=extra"} ]
+			source: "selectedVariablesWithControls.extra"
 		}
 
 	}
