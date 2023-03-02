@@ -10,7 +10,7 @@ Form
 	{
 		text:
 			"This analysis check Radio Buttons inside a form." +
-			"<ul><li>Check also Radio Buttons outside a form: in Preferences/Interface, click the Dark Theme/Light Theme to check whether it stll works.</li></ul>"
+			"<ul><li>Check also Radio Buttons outside a form: in Preferences/Interface, click the Dark Theme/Light Theme to check whether it still works. Check if theme sticks upon closing the menu.</li></ul>"
 	}
 
 	Section
