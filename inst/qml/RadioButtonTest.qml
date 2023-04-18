@@ -125,6 +125,7 @@ Form
 				"<li>Check that each RadioButtonGroup has a checked RadioButton and that the RadioButtonGroup gets the right value</li>" +
 				"<li>Check that by clicking on the RadioButtons, the RadioButtonGroup gets the right value</li>"  +
 				"<li>If Radio Buttons can be removed, remove the checked one, and check that another becomes checked.</li>" +
+				"<li>Add the removed button again (by adding again the column to the assigned variables list), and check that this Radio Button is checked again (and that the other Radio Buttons are unchecked).</li>" +
 				"<li>Duplicate the analysis: check that the same radio buttons are displayed, and the same ones are checked</li>" +
 				"</ul>"
 		}
