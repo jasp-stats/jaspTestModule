@@ -56,10 +56,6 @@ msgid "Test encoding"
 msgstr ""
 
 msgctxt "Description|"
-msgid "Test Qml Source"
-msgstr ""
-
-msgctxt "Description|"
 msgid "Custom Contrasts Widget"
 msgstr ""
 
@@ -662,10 +658,6 @@ msgctxt "testEncoding|"
 msgid "Selected"
 msgstr ""
 
-msgctxt "testQmlSource|"
-msgid "one"
-msgstr ""
-
 msgctxt "Description|"
 msgid "Test optionContainsValue"
 msgstr ""
@@ -690,10 +682,143 @@ msgctxt "testOptionContainsValue|"
 msgid "This option should not reset the state"
 msgstr ""
 
-msgctxt "testQmlSource|"
-msgid "three"
-msgstr ""
-
 msgctxt "test|"
 msgid "One check"
+msgstr ""
+
+msgctxt "tableView|"
+msgid "Number of continuous factors"
+msgstr ""
+
+msgctxt "tableView|"
+msgid "Factor"
+msgstr ""
+
+msgctxt "tableView|"
+msgid "Name"
+msgstr ""
+
+msgctxt "tableView|"
+msgid "Low"
+msgstr ""
+
+msgctxt "tableView|"
+msgid "High"
+msgstr ""
+
+msgctxt "tableView|"
+msgid "Number of categorical factors"
+msgstr ""
+
+msgctxt "tableView|"
+msgid "Maximum levels"
+msgstr ""
+
+#, qt-format
+msgctxt "tableView|"
+msgid "Level %1"
+msgstr ""
+
+msgctxt "TestInfo|"
+msgid "Inherent risk"
+msgstr ""
+
+msgctxt "TestInfo|"
+msgid "High"
+msgstr ""
+
+msgctxt "TestInfo|"
+msgid "Medium"
+msgstr ""
+
+msgctxt "TestInfo|"
+msgid "Low"
+msgstr ""
+
+msgctxt "TestInfo|"
+msgid "Manual"
+msgstr ""
+
+msgctxt "TestInfo|"
+msgid "NEW ITEM"
+msgstr ""
+
+msgctxt "TestInfo|"
+msgid ""
+"Ctrl + Enter to apply. Click on the blue button above for help on the "
+"restriction syntax"
+msgstr ""
+
+#, qt-format
+msgctxt "TestInfo|"
+msgid "Summary for %1"
+msgstr ""
+
+#, qt-format
+msgctxt "TestInfo|"
+msgid "Marginal means for %1"
+msgstr ""
+
+msgctxt "TestInfo|"
+msgid "With suggest"
+msgstr ""
+
+msgctxt "TestInfo|"
+msgid "With allowed"
+msgstr ""
+
+msgctxt "TestInfo|"
+msgid "RM!"
+msgstr ""
+
+msgctxt "TestInfo|"
+msgid "PAIRS!"
+msgstr ""
+
+msgctxt "TestInfo|"
+msgid "Repeated Measures Factors"
+msgstr ""
+
+msgctxt "TestInfo|"
+msgid "RM Factor"
+msgstr ""
+
+msgctxt "testSpecialSources|"
+msgid "Variables"
+msgstr ""
+
+msgctxt "testSpecialSources|"
+msgid "No Mediation"
+msgstr ""
+
+msgctxt "testSpecialSources|"
+msgid "One variable with labels"
+msgstr ""
+
+msgctxt "testSpecialSources|"
+msgid "Several variables with labels"
+msgstr ""
+
+msgctxt "testSpecialSources|"
+msgid "Several variable"
+msgstr ""
+
+msgctxt "testSpecialSources|"
+msgid "Variable with controls"
+msgstr ""
+
+msgctxt "testState|"
+msgid "Tab 1"
+msgstr ""
+
+msgctxt "testVariablesForm|"
+msgid "With suggest"
+msgstr ""
+
+msgctxt "testVariablesForm|"
+msgid "With allowed"
+msgstr ""
+
+msgctxt "testVariablesForm|"
+msgid "With suggest and allow"
 msgstr ""

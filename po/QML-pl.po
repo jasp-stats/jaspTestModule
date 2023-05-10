@@ -3,8 +3,6 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Language: tr\n"
 "X-Qt-Contexts: true\n"
 
 msgctxt "Description|"
@@ -34,6 +32,10 @@ msgid "Test Transposed jaspTable"
 msgstr ""
 
 msgctxt "Description|"
+msgid "Test jaspTable with crappy data"
+msgstr ""
+
+msgctxt "Description|"
 msgid "Test jaspState"
 msgstr ""
 
@@ -51,6 +53,10 @@ msgstr ""
 
 msgctxt "Description|"
 msgid "Test encoding"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Test optionContainsValue"
 msgstr ""
 
 msgctxt "Description|"
@@ -652,40 +658,8 @@ msgctxt "customContrasts|"
 msgid "Selected"
 msgstr ""
 
-msgctxt "testEncoding|"
-msgid "Selected"
-msgstr ""
-
-msgctxt "Description|"
-msgid "Test jaspTable with crappy data"
-msgstr ""
-
-msgctxt "Description|"
-msgid "Test optionContainsValue"
-msgstr ""
-
 msgctxt "JaspReportTest|"
 msgid "Report on this"
-msgstr ""
-
-msgctxt "testOptionContainsValue|"
-msgid "This option is irrelevant"
-msgstr ""
-
-msgctxt "testOptionContainsValue|"
-msgid "Model 1"
-msgstr ""
-
-msgctxt "testOptionContainsValue|"
-msgid "This option should reset the state"
-msgstr ""
-
-msgctxt "testOptionContainsValue|"
-msgid "This option should not reset the state"
-msgstr ""
-
-msgctxt "test|"
-msgid "One check"
 msgstr ""
 
 msgctxt "tableView|"
@@ -719,6 +693,14 @@ msgstr ""
 #, qt-format
 msgctxt "tableView|"
 msgid "Level %1"
+msgstr ""
+
+msgctxt "test|"
+msgid "One check"
+msgstr ""
+
+msgctxt "testEncoding|"
+msgid "Selected"
 msgstr ""
 
 msgctxt "TestInfo|"
@@ -783,6 +765,22 @@ msgstr ""
 
 msgctxt "TestInfo|"
 msgid "RM Factor"
+msgstr ""
+
+msgctxt "testOptionContainsValue|"
+msgid "This option is irrelevant"
+msgstr ""
+
+msgctxt "testOptionContainsValue|"
+msgid "Model 1"
+msgstr ""
+
+msgctxt "testOptionContainsValue|"
+msgid "This option should reset the state"
+msgstr ""
+
+msgctxt "testOptionContainsValue|"
+msgid "This option should not reset the state"
 msgstr ""
 
 msgctxt "testSpecialSources|"
