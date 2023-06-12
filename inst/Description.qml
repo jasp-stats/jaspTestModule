@@ -67,6 +67,13 @@ Description
 
 	Analysis
 	{
+		title:		qsTr("Test latex")
+		qml:		"testHtml.qml"
+		func:		"testLatexFunc"
+	}
+
+	Analysis
+	{
 		title:		qsTr("Test jaspContainer")
 		qml:		"test.qml"
 		func:		"testContainerFunc"

@@ -11,7 +11,7 @@ createCombinations <- function(jaspResults)
 {
   binary           <- data.frame(list(a=c("00", "01"), b=c("10", "11")))
   rownames(binary) <- c('c', 'd')
-  tab              <- createJaspTable("Combining row- with col-names or not!")
+  tab              <- createJaspTable("Combining <b>row</b>- with <i>col</i>-names or not!")
   
   tab$setData(binary)
   
@@ -27,7 +27,7 @@ createEmptiesTable <- function(jaspResults)
 {
  	#for https://github.com/jasp-stats/INTERNAL-jasp/issues/538 (footnotes mess)
 
-  tab  <- createJaspTable(paste0("Table with Footnotes at empty cell"))
+  tab  <- createJaspTable(paste0("<b>Table with Footnotes at empty cell</b>"))
   jaspResults[["tableEmptyCell"]] <- tab
 
   tab$setExpectedSize(rows=3, cols=3)
@@ -57,9 +57,9 @@ createFootnotesTable <- function(numFootnotes=3, rowNames=c("b", "c", "c"), colN
   {
     msgNum <- msgNum + 1
 
-    if(options$checkbox_0 == notUnique)       tableFootnotes$addFootnote(message = paste0("msg", as.character(msgNum)), rowNames = rowNames[[msgNum]], colNames = colNames[[msgNum]])
-    else if(options$checkbox_1 != notUnique)  tableFootnotes$addFootnote(message = "Identical Twins!",                  rowNames = rowNames[[msgNum]], colNames = colNames[[msgNum]])
-    else                                      tableFootnotes$addFootnote(message = "Identical Symbols!",                rowNames = rowNames[[msgNum]], colNames = colNames[[msgNum]], symbol="?")
+    if(options$checkbox_0 == notUnique)       tableFootnotes$addFootnote(message = paste0("msg", as.character(msgNum)),  rowNames = rowNames[[msgNum]], colNames = colNames[[msgNum]])
+    else if(options$checkbox_1 != notUnique)  tableFootnotes$addFootnote(message = "Identical <b>Twins<sup>!</sup></b>", rowNames = rowNames[[msgNum]], colNames = colNames[[msgNum]])
+    else                                      tableFootnotes$addFootnote(message = "Identical <i>Symbols!</i>",          rowNames = rowNames[[msgNum]], colNames = colNames[[msgNum]], symbol="?")
   }
 
   return(tableFootnotes);
