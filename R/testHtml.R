@@ -1,4 +1,8 @@
-jaspResults[["html"]] <- createJaspHtml(title = gettextf("Formula for %s", jaspBase::mathExpression(r"{\mathcal{M}_{1}}")))
+testHtmlFunc <- function(jaspResults, dataset, options)
+{
+	elementType <- 'p'
+  
+  jaspResults[["html"]] <- createJaspHtml(title = gettextf("Formula for %s", jaspBase::mathExpression(r"{\mathcal{M}_{1}}")))
   jaspResults[["html"]]$text <- gettextf(
     "Under %s, we have %s where %s",
     jaspBase::mathExpression(r"{\mathcal{M}_1}"),
@@ -26,3 +30,4 @@ jaspResults[["html"]] <- createJaspHtml(title = gettextf("Formula for %s", jaspB
     symbol = jaspBase::mathExpression("\\ast"),
     colNames = "estimate"
   )
+  }
