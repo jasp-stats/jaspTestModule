@@ -40,20 +40,7 @@ Form
 		Group
 		{
             title: qsTr("Customizable plots")
-            DropDown
-            {
-                name: "colorPalette"
-                label: qsTr("Color palette")
-                indexDefaultValue: 0
-                values:
-                [
-                    { label: qsTr("Colorblind"),		value: "colorblind"		},
-                    { label: qsTr("Colorblind Alt."),	value: "colorblind3"	},
-                    { label: qsTr("Viridis"),			value: "viridis"		},
-                    { label: qsTr("ggplot2"),			value: "ggplot2"		},
-                    { label: qsTr("Gray"),				value: "gray"			}
-                ]
-            }
+            ColorPalette{}
 
 			CheckBox
 			{
