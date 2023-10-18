@@ -404,34 +404,6 @@ msgctxt "CopyOfDescriptives|"
 msgid "Customizable plots"
 msgstr ""
 
-#, fuzzy
-msgctxt "CopyOfDescriptives|"
-msgid "Color palette"
-msgstr "Kleur palette"
-
-#, fuzzy
-msgctxt "CopyOfDescriptives|"
-msgid "Colorblind"
-msgstr "Kleurblind"
-
-#, fuzzy
-msgctxt "CopyOfDescriptives|"
-msgid "Colorblind Alt."
-msgstr "Kleurblind Alt."
-
-msgctxt "CopyOfDescriptives|"
-msgid "Viridis"
-msgstr "Viridis"
-
-msgctxt "CopyOfDescriptives|"
-msgid "ggplot2"
-msgstr "ggplot2"
-
-#, fuzzy
-msgctxt "CopyOfDescriptives|"
-msgid "Gray"
-msgstr "Grijs"
-
 msgctxt "CopyOfDescriptives|"
 msgid "Boxplots"
 msgstr "Boxplots"
@@ -840,4 +812,8 @@ msgstr ""
 
 msgctxt "testVariablesForm|"
 msgid "With suggest and allow"
+msgstr ""
+
+msgctxt "Description|"
+msgid "Test latex"
 msgstr ""

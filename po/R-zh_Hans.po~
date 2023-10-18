@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: jaspTestModule 1.0.1\n"
-"POT-Creation-Date: 2023-10-18 11:12\n"
+"POT-Creation-Date: 2023-05-10 10:09\n"
 "PO-Revision-Date: 2023-05-13 07:52+0000\n"
 "Last-Translator: Shun Wang <shuonwang@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
@@ -13,32 +13,14 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 4.18-dev\n"
 
-msgid "Formula for %s"
+msgid "<p> Hello world! this is a formula \n$$e=mc^2$$ $$\\tilde{a}$$ $$\\Overrightarrow{AB}$$ $$\\begin{vmatrix}a & b \\\\ c & d \\end{vmatrix}$$</p>"
 msgstr ""
-
-msgid "Under %s, we have %s where %s"
-msgstr ""
-
-msgid "Summary for %s"
-msgstr ""
-
-msgid "Parameter"
-msgstr ""
-
-msgid "Posterior expectation for parameter %s is computed as %s"
-msgstr ""
+"<p> 你好世界! 这是一个公式 \n"
+"$$e=mc^2$$ $$\\tilde{a}$$ $$\\Overrightarrow{AB}$$ $$\\begin{vmatrix}a & b \\"
+"\\ c & d \\end{vmatrix}$$</p>"
 
 msgid "<i>Something is written to a R source</i>"
 msgstr "<i>某些内容写入 R 源码</i>"
 
 msgid "<i>Nothing special</i>"
 msgstr "<i>测试字符</i>"
-
-#~ msgid ""
-#~ "<p> Hello world! this is a formula \n"
-#~ "$$e=mc^2$$ $$\\tilde{a}$$ $$\\Overrightarrow{AB}$$ $$\\begin{vmatrix}a & "
-#~ "b \\\\ c & d \\end{vmatrix}$$</p>"
-#~ msgstr ""
-#~ "<p> 你好世界! 这是一个公式 \n"
-#~ "$$e=mc^2$$ $$\\tilde{a}$$ $$\\Overrightarrow{AB}$$ $$\\begin{vmatrix}a & "
-#~ "b \\\\ c & d \\end{vmatrix}$$</p>"

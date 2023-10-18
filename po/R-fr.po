@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: jaspTestModule 1.0.0\n"
-"POT-Creation-Date: 2023-05-10 10:09\n"
+"POT-Creation-Date: 2023-10-18 11:12\n"
 "PO-Revision-Date: 2022-04-04 14:14+0000\n"
 "Last-Translator: JASP Stats <b.boutin@uva.nl>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/jasp/"
@@ -13,10 +13,19 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Generator: Weblate 4.12-dev\n"
 
-msgid ""
-"<p> Hello world! this is a formula \n"
-"$$e=mc^2$$ $$\\tilde{a}$$ $$\\Overrightarrow{AB}$$ $$\\begin{vmatrix}a & b \\"
-"\\ c & d \\end{vmatrix}$$</p>"
+msgid "Formula for %s"
+msgstr ""
+
+msgid "Under %s, we have %s where %s"
+msgstr ""
+
+msgid "Summary for %s"
+msgstr ""
+
+msgid "Parameter"
+msgstr ""
+
+msgid "Posterior expectation for parameter %s is computed as %s"
 msgstr ""
 
 msgid "<i>Something is written to a R source</i>"
