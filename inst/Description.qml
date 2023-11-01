@@ -165,7 +165,7 @@ Description
 
 	Analysis
 	{
-		title:			"tableView Widget"
+		title:			"Test TableView Widget"
 		qml:			"tableView.qml"
 		func:			"tableView"
 	}
