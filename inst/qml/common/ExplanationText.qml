@@ -11,7 +11,7 @@ Rectangle
 
 	Layout.columnSpan			: (parent && parent.hasOwnProperty('columns')) ? parent.columns : 1
 
-	implicitWidth	: form.width
+	implicitWidth	: parent.width
 	implicitHeight	: explanation.height
 	border.color	: jaspTheme.blue
 	border.width	: 1
@@ -20,7 +20,7 @@ Rectangle
 	{
 		id			: explanation
 		padding		: 5
-		width		: form.width
+		width		: parent.width
 		wrapMode	: Text.Wrap
 		textFormat	: Text.RichText
 	}
