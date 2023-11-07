@@ -102,6 +102,19 @@ Description
 
 	Separator {}
 
+	GroupTitle { title:		"Data and columns"; }
+
+	Analysis
+	{
+		title:		qsTr("Test (comp) columns from analyses")
+		qml:		"testAnalysisColumnFunc.qml"
+		func:		"testAnalysisColumnFunc"
+	}
+
+	
+
+	Separator {}
+
 	GroupTitle { title:		"QML Widgets"; }
 
 	Analysis
