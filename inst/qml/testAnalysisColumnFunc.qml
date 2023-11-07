@@ -37,22 +37,4 @@ Form
             max:    100
         }
     }
-
-    RowLayout
-    {
-        TextField
-        {
-            name:               "AddComputedColumnsPattern"
-            text:               "Add computed columns from analysis: "
-            Layout.fillWidth:   true
-        }
-
-        IntegerField
-        {
-            name:   "AddThisManyComputedColumns"
-            value:  3
-            min:    1
-            max:    100
-        }
-    }
 }

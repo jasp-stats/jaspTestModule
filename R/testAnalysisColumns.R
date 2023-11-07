@@ -1,63 +1,57 @@
 testAnalysisColumnFunc <- function(jaspResults, dataset, options)
-{
-    dataset <- .readFullDatasetToEnd()
-    print("testAnalysisColumnFunc")
-    print(dataset)
-    print(nrow(dataset))
-
-    
+{   
     if( options[["AddColumnField"]]             == "" &
         options[["ComputedColumnField"]]        == "" &
-        options[["AddColumnsPattern"]]          == "" &
-        options[["AddComputedColumnsPattern"]]  == "")
+        options[["AddColumnsPattern"]]          == "")
     {
         jaspResults[["typeSomethingPlease"]] <- createJaspHtml("Please enter something in one of the textfields to create some columns", dependencies=c('AddColumnField', 'ComputedColumnField', 'AddColumnsPattern', 'AddComputedColumnsPattern'))
-    } else {
+    } 
+    else 
+    {
         jaspResults[["typeSomethingPlease"]] <- createJaspHtml("Columns should be created now, check your data ;)", dependencies=c('AddColumnField', 'ComputedColumnField', 'AddColumnsPattern', 'AddComputedColumnsPattern'))
 
-        if( options[["AddColumnField"]]             != "") {
-            createAndFillAColumn(dataset, jaspResults, options[["AddColumnField"]], dependencies="AddColumnField")
+        if( options[["AddColumnField"]]             != "") 
+        {
+            createAndFillAJaspColumn(jaspResults, options[["AddColumnField"]], dependencies="AddColumnField")
         }
 
-        if( options[["ComputedColumnField"]]        != "") {
-            createAndFillAColumn(dataset, jaspResults, options[["ComputedColumnField"]], dependencies="ComputedColumnField")
+        if( options[["ComputedColumnField"]]        != "") 
+        {
+            createAndFillAJaspColumn(jaspResults, options[["ComputedColumnField"]], dependencies="ComputedColumnField")
         }
 
         if( options[["AddColumnsPattern"]]          != "") 
         {
-            container <- createJaspContainer(dependencies=c("AddColumnsPattern", "addThisManyColumns"))
+            container    <- createJaspContainer(dependencies=c("AddColumnsPattern", "AddThisManyColumns"))
+            baseNames    <- paste0(options$AddColumnsPattern, 1:options$AddThisManyColumns)
+            encodedNames <- jaspBase::createColumns(baseNames)
 
-            for(colNum in range(options[["addThisManyColumns"]]))
-                createAndFillAColumn(dataset, container, paste0(options[["AddColumnsPattern"]], "_", colNum), dependencies=c("AddColumnsPattern"))
+            #createColumns returns a list of the encoded columnnames, but if it returns only one and only one was requested it might be empty?
+            if(length(encodedNames) == length(baseNames))
+            {
+                for(col in encodedNames)
+                    createAndFillAJaspColumn(container, col, dependencies=c("AddColumnsPattern"))
 
-            jaspResults[["AddColumnsPatternContainer"]] <- container
-        }
-
-        if( options[["AddComputedColumnsPattern"]]  != "")
-        {
-            container <- createJaspContainer(dependencies=c("AddComputedColumnsPattern", "addThisManyComputedColumns"))
-
-            for(colNum in range(options[["addThisManyComputedColumns"]]))
-                createAndFillAColumn(dataset, container, paste0(options[["AddComputedColumnsPattern"]], "_", colNum), dependencies=c("AddComputedColumnsPattern"))
-
-            jaspResults[["AddComputedColumnsPatternContainer"]] <- container
+                jaspResults[["AddColumnsPatternContainer"]] <- container
+            }
+            else 
+            {
+                nameString <- paste0(baseNames, collapse=", ")
+                jaspResults[["AddColumnsPatternProblem"]] <- createJaspHtml(paste0("A column this analysis tried to add already exists, change the pattern.\nGenerated names are: '", nameString,"'"), dependencies="AddColumnsPattern", elementType="errorMsg")
+            }
         }
     }
 }
 
-generateDataForColumn <- function(dataset)
+generateDataForColumn <- function()
 {
-    rows <- nrow(dataset)
-    print("generateDataForColumn")
-    print(rows)
-
-    return(rnorm(rows))
+    return(rnorm(.dataSetRowCount()))
 }
 
-createAndFillAColumn <- function(dataset, container, name, dependencies)
+createAndFillAJaspColumn <- function(container, name, dependencies)
 {
     col <- createJaspColumn(name, dependencies=dependencies)
-    col$setScale(generateDataForColumn(dataset))
+    col$setScale(generateDataForColumn())
 
     container[[name]] <- col
 }
