@@ -14,10 +14,10 @@ Description
 	license:			"Whatever"
 	requiresData: 		false
 
-	Timer 
+	Timer
 	{
 		interval: 5000
-		onTriggered: 
+		onTriggered:
 		{
 			console.log(qsTr("Timer that displays the fact that updating Description.qml from live javascript code works fine."))
 			testModuleDescription.title = qsTr("Test Module")
@@ -79,7 +79,7 @@ Description
 		func:		"testContainerFunc"
 	}
 
-	Analysis 
+	Analysis
 	{
 		title:		qsTr("Test Plot Status")
 		qml:		"TestPlotStatus.qml"
@@ -98,6 +98,13 @@ Description
 		title:		qsTr("Test optionContainsValue")
 		qml:		"testOptionContainsValue.qml"
 		func:		"testOptionContainsValue"
+	}
+
+		Analysis
+	{
+		title:	qsTr("Test Mixed Columns jaspTable")
+		qml:	"test.qml"
+		func:	"testMixedColumnsTableFunc"
 	}
 
 	Separator {}
@@ -265,7 +272,7 @@ Description
 		requiresData:	false
 	}
 
-	
+
 	Separator {}
 	GroupTitle { title: "Features" }
 
