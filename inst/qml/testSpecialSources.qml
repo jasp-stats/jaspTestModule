@@ -4,7 +4,7 @@ import JASP.Controls
 import QtQuick.Layouts
 import "./common"
 
-Form 
+Form
 {
 	Section
 	{
@@ -219,8 +219,10 @@ Form
 				"If a source has some sontrols, it is posible to specify to fetch the value of a control (and not the values of the source self)<br>" +
 				"<ul>" +
 				"<li>Select some variables, they should all get the value 'one': check that the dropdown get only the value 'one'</li>" +
+				"<li>Set the checkbox for some variables: the dropdown should get the values of these variables dropdown values</li>" +
 				"<li>Change some values for the variables: the dropdown should get the new values</li>" +
 				"<li>If 2 variables have the same value, the dropdown should remove the duplicates</li>" +
+				"<li>If 2 variables have the same value, but only one is checked, then the dropdown value should be added</li>" +
 				"<li>If all variables have different values than 'one' (the default), then the dropdown should not have 'one' as value. Add a new variable (that gets the default 'one' as value): the dropdown should get this value.</li>" +
 				"<li>Set the dropdown to some value and remove all variables that are set to this value: the dropdown should get automtically another value.</li>" +
 				"<li>Duplicate the analysis and check that the controls have the same values.</li>" +
@@ -237,7 +239,11 @@ Form
 				name			: "selectedVariablesWithControls"
 				title			: qsTr("Variable with controls")
 
-				rowComponent	: DropDown { name: "extra"; values: ["one", "two", "three", "four", "five"] }
+				rowComponent	: Row
+				{
+					DropDown { name: "extra"; values: ["one", "two", "three", "four", "five"] }
+					CheckBox { name: "check" }
+				}
 			}
 
 		}
@@ -246,7 +252,7 @@ Form
 		{
 			name: "controlVariables"
 			label: "Dropdown values of selected variables"
-			source: "selectedVariablesWithControls.extra"
+			source: [{ name: "selectedVariablesWithControls.extra", condition: "check" }]
 		}
 
 	}
