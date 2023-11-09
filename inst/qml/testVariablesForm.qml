@@ -88,11 +88,12 @@ Form
 			The suggested property is less strict:
 			<ul>
 				<li>if suggested contains the scale type, then nomincal & ordinal types are then also allowed.</li>
-				<li>if suggestedType contains the nomincal type, then nominalText & ordinal types are also allowed.</li>
+				<li>if suggested contains the nomincal type, then nominalText & ordinal types are also allowed.</li>
 			</ul>
 			For the tests:
 			<ul>
 				<li>Check whether the Variables list allows the right variables</li>
+				<li>Check that allowed property (if set) overrules the suggested property</li>
 				<li>Check when a Variables list allowed type changes, that the variables that are not anymore allowed are automatically removed from the list.</li>
 			</ul>
 			"
