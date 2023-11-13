@@ -1,7 +1,7 @@
 Package: jaspTestModule
 Type: Package
 Title: Wait for it... Module for JASP
-Version: 1.0.1
+Version: 0.18.2
 Date: 2022-12-12
 Author: Joris Goosen
 Website: jasp-stats.org

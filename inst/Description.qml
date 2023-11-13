@@ -7,7 +7,7 @@ Description
 	title:				qsTr("Wait for it...")
 	icon: 				"test.svg"
 	description: 		qsTr("A module to test stuff with.")
-	version:			"1.0"
+	version			: "0.18.2"
 	author:				"Joris Goosen"
 	maintainer:			"Joris Goosen <Joris@JorisGoosen.nl>"
 	website:			""
