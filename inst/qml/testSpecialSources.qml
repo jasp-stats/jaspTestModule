@@ -309,5 +309,58 @@ Form
 		}
 
 	}
+
+	Section
+	{
+		title	: "Source in a dynamic created control"
+		columns	: 1
+
+		ExplanationText
+		{
+			text:
+				"If a dynamically created control has a source outside its parent control (ComponentsList, TabView or VariablesList), " +
+				"then the parent control should not be created before the source control is initialized.<br>" +
+				"This is particularly important when a JASP file is loaded: the values set to the controls should be done in a certain order," +
+				"if not, the dynamically created control could throw an error. For example if the option values of a DropDown depend on the values of a VariablesList outside a ComponentsList," +
+				"then the current value of this DropDown could get a value from the JASP file, which is not in its option values." +
+				"<ul>" +
+				"<li>Select some variables, and check that the DropDown get the values of the Assigned VariablesList.</li>" +
+				"<li>Add more DropDowns, cand check that they have already the right option values.</li>" +
+				"<li>Set some values for the DropDowns and save the JASP file.</li>" +
+				"<li>Open the JASP file: check that no error is thrown and that the Dropdowns get the right values.</li>" +
+				"<li>Duplicate the analysis and check that the controls have the same values.</li>" +
+				"</ul>"
+		}
+
+		VariablesForm
+		{
+
+			AvailableVariablesList { name: "allVariablesList6" }
+
+			AssignedVariablesList
+			{
+				name:			"assigned"
+				title:			qsTr("Assigned")
+			}
+
+		}
+
+		ComponentsList
+		{
+			name: 					"compList"
+			depends:				"assigned"
+			minimumItems:			1
+			rowComponent: 			RowLayout
+			{
+				DropDown
+				{
+					name: 				    'dropDownValuesa'
+					source: 			    'assigned'
+					addEmptyValue: 		    true
+				}
+			}
+		}
+	}
+
 }
 
