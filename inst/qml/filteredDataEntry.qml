@@ -24,47 +24,30 @@ import JASP.Widgets
 
 Form
 {
-	VariablesForm
-	{
-		AvailableVariablesList
-		{
-			name: "allVariablesList"
-		}
+	VariablesForm 
+	{ 
+		id: 				variablesFormPlanning
+		implicitHeight: 	110
+		AvailableVariablesList 	{ name: "variablesFormPlanning" }
+		AssignedVariablesList 	{ name: "recordNumberVariable"; title: qsTr("Record numbers"); id: recordNumberVariable }
 
-		AssignedVariablesList
-		{
-			id:				selectedA
-			name: 			"selectedA"
-			title: 			qsTr("Selected A")
-			singleVariable:	true
-		}
-
-        AssignedVariablesList
-		{
-			id:				selectedB
-			name: 			"selectedB"
-			title: 			qsTr("Selected B")
-			singleVariable:	true
-		}
 	}
-
-    TextField
-    {
-        id:     filterField
-        name:   "filter"
-        title:  "Filter"
-    }
 
     TableView
     {
-        id:									testFilteredDataEntry
-        name:								"testFilteredDataEntry"
-        Layout.fillWidth: 					true
-        modelType:							JASP.FilteredDataEntryModel
-        source:     						["selectedA", "selectedB"]
-        colName:    						"Filter"
-        filter:                             filterField.value
-        defaultValue:						0
-        decimals:							10
+        id:         table
+        name:       "filteredData"
+        modelType:  "FilteredDataEntryModel"
+        filter:     filterID.value
+        source:     "recordNumberVariable"
+        colName:    "auditResult"
+    }
+
+    TextField
+    {
+        id:     filterID
+        name:   "aFilter"
+        value:  table.filter
+
     }
 }
