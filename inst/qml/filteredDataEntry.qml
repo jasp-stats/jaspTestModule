@@ -35,24 +35,28 @@ Form
 		{
 			id:				selectedA
 			name: 			"selectedA"
-			title: 			qsTr("Selected A")
+			title: 			("Selected A")
 			singleVariable:	true
+			allowedColumns:	["scale"]
 		}
 
-        AssignedVariablesList
-		{
-			id:				selectedB
-			name: 			"selectedB"
-			title: 			qsTr("Selected B")
-			singleVariable:	true
-		}
+	}
+
+	ComputedColumnField
+	{
+		id: 		extraCol
+		name: 		"extraCol"
+		text: 		"extraCol:"
+		fieldWidth: 120 * preferencesModel.uiScale
+		value: 		("extraCol")
 	}
 
     TextField
     {
-        id:     filterField
-        name:   "filter"
-        title:  "Filter"
+        id:     		filterField
+        name:   		"filter"
+        title:  		"Filter"
+		defaultValue:	"TRUE"
     }
 
     TableView
@@ -61,10 +65,12 @@ Form
         name:								"testFilteredDataEntry"
         Layout.fillWidth: 					true
         modelType:							JASP.FilteredDataEntryModel
-        source:     						["selectedA", "selectedB"]
-        colName:    						"Filter"
+        source:     						["selectedA"]
+        colName:    						"Fill me" 
+        extraCol:                           extraCol.value
         filter:                             filterField.value
         defaultValue:						0
         decimals:							10
+		initialValuesSource:				"selectedA"
     }
 }
