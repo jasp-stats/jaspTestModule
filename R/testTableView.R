@@ -1,4 +1,6 @@
 tableView <- function(jaspResults, dataset, options) {
+  tableOfOptions(jaspResults, options)
+  
 
   testTypeData <- data.frame(String = options$testTypes[[1L]]$values,
                              Integer  = options$testTypes[[2L]]$values,

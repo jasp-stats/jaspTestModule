@@ -1,5 +1,7 @@
 testHtmlFunc <- function(jaspResults, dataset, options)
 {
+  tableOfOptions(jaspResults, options)
+  
 	elementType <- 'p'
   
   jaspResults[["html"]] <- createJaspHtml(title = gettextf("Formula for %s", jaspBase::mathExpression(r"{\mathcal{M}_{1}}")))

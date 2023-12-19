@@ -1,5 +1,7 @@
 testDefaultValuesWithBindings <- function(jaspResults, dataset, options)
 {
+  tableOfOptions(jaspResults, options)
+  
 	checked <- paste("Checked: ", options[["check"]])
 	radio <- paste("Radio: ", options[["radio"]])
 	drop <- paste("Drop: ", options[["drop"]])

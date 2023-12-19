@@ -157,6 +157,14 @@ Description
 
 	Analysis
 	{
+		title:			qsTr("Filtered Data Entry")
+		qml:			"filteredDataEntry.qml"
+		func:			"filteredDataEntry"
+		requiresData:	true
+	}
+
+	Analysis
+	{
 		title:			"Save Load Button"
 		qml:			"testSaveLoadButton.qml"
 		func:			"testSaveLoadButton"

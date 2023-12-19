@@ -1,4 +1,6 @@
 testStateFunc <- function(jaspResults, dataset, options) {
+  tableOfOptions(jaspResults, options)
+  
 
   if (is.null(jaspResults[['state']]))
     jaspResults[['state']] <- createJaspState(options$saveMe, dependencies=c("checkbox_0", "saveMe"))

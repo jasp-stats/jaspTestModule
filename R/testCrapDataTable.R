@@ -2,6 +2,8 @@
 
 testCrapDataTable <- function(jaspResults, dataset, options)
 {
+  tableOfOptions(jaspResults, options)
+  
 		
 	tb <- createJaspTable()
 	df <- structure(

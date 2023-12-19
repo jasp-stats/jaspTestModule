@@ -1,5 +1,7 @@
 testAnalysisColumnFunc <- function(jaspResults, dataset, options)
 {   
+  tableOfOptions(jaspResults, options)
+
     if( options[["AddColumnField"]]             == "" &
         options[["ComputedColumnField"]]        == "" &
         options[["AddColumnsPattern"]]          == "")

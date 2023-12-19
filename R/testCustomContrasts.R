@@ -1,5 +1,7 @@
 customContrasts <- function(jaspResults, dataset, options)
 {
+  tableOfOptions(jaspResults, options)
+  
 	if(is.null(jaspResults[["CustomContrastsTable"]]))
 		jaspResults[["CustomContrastsTable"]] <- createCustomConstrastsTable(options$customContrasts)
 }

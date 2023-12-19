@@ -1,5 +1,7 @@
 testOptionContainsValue <- function(jaspResults, dataset, options)
 {
+  tableOfOptions(jaspResults, options)
+  
 
   if(is.null(jaspResults[['state']])) {
     state <- "empty"

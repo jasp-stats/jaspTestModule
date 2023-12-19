@@ -1,5 +1,7 @@
 testTransposedTableFunc <- function(jaspResults, dataset, options)
 {
+  tableOfOptions(jaspResults, options)
+  
 
 	# the correlation table stored here
 	mainTable <- createJaspTable(title = "Transposed Table")

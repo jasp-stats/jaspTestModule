@@ -1,5 +1,7 @@
 testInfoFunc <- function(jaspResults, dataset, options)
 {
+  tableOfOptions(jaspResults, options)
+  
 	elementType <- 'p'
 
 	jaspResults[['boodschap']] 		 <- createJaspHtml(text=paste0(options), info="some info on a jaspHtml")

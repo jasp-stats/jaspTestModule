@@ -1,5 +1,7 @@
 testFootnotesTableFunc <- function(jaspResults, dataset, options)
 {
+  tableOfOptions(jaspResults, options)
+  
   jaspResults[['table0']] <- createFootnotesTable(options=options)
   jaspResults[['table1']] <- createFootnotesTable(options=options, notUnique=TRUE)
   

@@ -1,5 +1,7 @@
 testRSourceFunc <- function(jaspResults, dataset, options)
 {
+  tableOfOptions(jaspResults, options)
+  
 	
 	jaspResults[["msg"]] <- createJaspHtml(text=gettext('<i>Something is written to a R source</i>'))
 
