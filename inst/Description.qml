@@ -193,6 +193,13 @@ Description
 
 	Analysis
 	{
+		title:			"Test ComponentsList & TableView layout"
+		qml:			"testComponentsListLayout.qml"
+		func:			"testComponentsListLayout"
+	}
+
+	Analysis
+	{
 		title:			"info testing"
 		qml:			"TestInfo.qml"
 		func:			"infoTestFunc"
