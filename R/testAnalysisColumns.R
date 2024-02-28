@@ -2,6 +2,17 @@ testAnalysisColumnFunc <- function(jaspResults, dataset, options)
 {   
   tableOfOptions(jaspResults, options)
 
+  
+  if(is.null(jaspResults[["columnCreatedFromR"]]))
+    jaspResults[["columnCreatedFromR"]] <- createJaspColumn("A column created in R", dependencies="createColumnInR")
+
+  if( options[["createColumnInR"]]){
+    jaspResults[["columnCreatedFromR"]]$setScale(generateDataForColumn())
+  }else{
+    jaspResults[["columnCreatedFromR"]]$removeFromData()
+  }
+
+
     if( options[["AddColumnField"]]             == "" &
         options[["ComputedColumnField"]]        == "" &
         options[["AddColumnsPattern"]]          == "")

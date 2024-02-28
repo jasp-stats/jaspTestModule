@@ -8,6 +8,12 @@ Form
 {
     columns:        1
 
+    CheckBox
+    {
+        name:       "createColumnInR"
+        checked:    true
+    }
+
     AddColumnField
     {
         name: "AddColumnField"
