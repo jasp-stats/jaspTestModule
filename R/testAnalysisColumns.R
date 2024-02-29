@@ -3,13 +3,22 @@ testAnalysisColumnFunc <- function(jaspResults, dataset, options)
   tableOfOptions(jaspResults, options)
 
   
-  if(is.null(jaspResults[["columnCreatedFromR"]]))
-    jaspResults[["columnCreatedFromR"]] <- createJaspColumn("A column created in R", dependencies="createColumnInR")
+  
+  colNameR   <- "A column created in R"
+  optionName <- "createColumnInR"
+  if(options[[optionName]])
+  {
+    if(is.null(jaspResults[[optionName]]))
+      jaspResults[[optionName]] <- createJaspColumn(colNameR, dependencies=optionName)
+    
+    jaspResults[[optionName]]$setScale(generateDataForColumn())
 
-  if( options[["createColumnInR"]]){
-    jaspResults[["columnCreatedFromR"]]$setScale(generateDataForColumn())
-  }else{
-    jaspResults[["columnCreatedFromR"]]$removeFromData()
+  }else if(jaspBase:::columnExists(colNameR)){  
+    if(jaspBase:::columnIsMine(colNameR)){
+      jaspBase:::columnDelete(colNameR)
+    }else{
+      stop(paste0(colNameR, " exists but it is not created by this analysis!"))
+    }
   }
 
 
