@@ -6,7 +6,7 @@ Form
 {
 	property var suggested: 	["ordinal"]
 	property var allowed: 		[]
-	
+
 	onSuggestedChanged:	 {console.log("suggested is now " + suggested) }
 	onAllowedChanged:	 {console.log("allowed is now " + allowed) }
 
@@ -18,7 +18,7 @@ Form
 		AvailableVariablesList	{ name: "allVariablesList"										}
 		AssignedVariablesList	{ name: "varS";			title: qsTr("With suggest")				; id: varS ;	suggestedColumns:	suggested							}
 		AssignedVariablesList	{ name: "varA";			title: qsTr("With allowed")				; id: varA ;									allowedColumns: allowed	}
-		AssignedVariablesList	{ name: "varSA";		title: qsTr("With suggest and allow")	; id: varSA;	suggestedColumns:	suggested;	allowedColumns:	allowed	}
+		AssignedVariablesList	{ name: "varSA";		title: qsTr("With suggest and allow")	; id: varSA;	suggestedColumns:	suggested;	allowedColumns:	allowed }
 	}
 
 	function toggleColList(list, toggleThis)
@@ -148,4 +148,63 @@ Form
 			}
 		}
 	}
+
+	Section
+	{
+		title: "Row controls"
+
+		ExplanationText
+		{
+			text:
+			"
+			This tests how the row controls can be set visibled and/or enabled.<br>
+			Add some variables, and add or remoce a CheckBox or a DropDown per variable.<br>
+			Moreover you can set the CheckBox enabled by allowing only variables with some type.
+			"
+		}
+
+		VariablesForm
+		{
+			AvailableVariablesList	{ name: "allVariablesList2"	}
+			AssignedVariablesList
+			{
+				id:		variablesWithControls
+				name:	"variablesWithControls"
+				title:	"Variables With Controls"
+				rowComponent:  Row
+				{
+					CheckBox
+					{
+						name: "aCheckBox"
+						visible: addCheckBox.checked
+						enabled: setType.value == -1 ? true : variablesWithControls.getVariableType(rowValue) == setType.value
+					}
+					DropDown { name: "aDropDown"; visible: addDropDown.checked; values: ["one", "two"] }
+				}
+			}
+
+		}
+
+		CheckBox
+		{
+			id: addCheckBox; name: "addCheckBox"; label: "Add CheckBox"
+			DropDown
+			{
+				id: setType
+				name: "setType"
+				label: "Enable CheckBox only for type: "
+				values:
+				[
+					{label: "all", value: -1},
+					{label: "scale", value: columnTypeScale},
+					{label: "nominal", value: columnTypeNominal}
+				]
+			}
+		}
+		CheckBox { id: addDropDown; name: "addDropDown"; label: "Add DropDown" }
+
+
+	}
+
+
 }
