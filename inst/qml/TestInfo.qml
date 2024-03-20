@@ -7,6 +7,7 @@ Form
 	columns: 1
 
 	info: "This is a bunch of info on a form!"
+	infoBottom: "This is a bunch of info on the bottom of a form!"
 
 	CheckBox
 	{
@@ -50,6 +51,7 @@ Form
 		DoubleField
 		{
 			name: "doubleFieldWithAfterLabel"
+			infoLabel:	"Double field with after-label"
 			label:		"this is a label"
 			afterLabel: "this is an afterLabel"
 			info:		"this is in doublefield that has a label and an afterLabel"
