@@ -206,6 +206,13 @@ Description
 		requiresData:	false
 	}
 
+	Analysis
+	{
+		title:			"Test Factors Form"
+		qml:			"testFactorsForm.qml"
+		func:			"testFactorsFormFunc"
+	}
+
 	Separator {}
 
 	Analysis
