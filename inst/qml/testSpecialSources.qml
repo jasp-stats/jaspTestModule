@@ -130,7 +130,7 @@ Form
 				name			: "variableWithLabels"
 				title			: qsTr("One variable with labels")
 				singleVariable	: true
-				allowedColumns	: ["nominal", "nominalText", "ordinal"]
+				allowedColumns	: ["nominal", "ordinal"]
 			}
 
 			AssignedVariablesList
@@ -138,7 +138,7 @@ Form
 				id				: severalVariablesWithLabels
 				name			: "severalVariablesWithLabels"
 				title			: qsTr("Several variables with labels")
-				allowedColumns	: ["nominal", "nominalText", "ordinal"]
+				allowedColumns	: ["nominal", "ordinal"]
 			}
 
 		}

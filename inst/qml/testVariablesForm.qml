@@ -87,8 +87,8 @@ Form
 			The allowed property is strict: only the specisifed types are allowed.<br>
 			The suggested property is less strict:
 			<ul>
-				<li>if suggested contains the scale type, then nomincal & ordinal types are then also allowed.</li>
-				<li>if suggested contains the nomincal type, then nominalText & ordinal types are also allowed.</li>
+				<li>if suggested contains the scale type, then nomincal &amp; ordinal types are then also allowed.</li>
+				<li>if suggested contains the nominal type, then ordinal types are also allowed.</li>
 			</ul>
 			For the tests:
 			<ul>
@@ -134,17 +134,6 @@ Form
 			{
 				text: 			"Toggle nominal in allowed"
 				onClicked:		allowed = toggleColList(allowed, "nominal")
-			}
-			Button
-			{
-				text: 			"Toggle nominalText in suggested"
-				onClicked:		suggested = toggleColList(suggested, "nominalText")
-			}
-
-			Button
-			{
-				text: 			"Toggle nominalText in allowed"
-				onClicked:		allowed = toggleColList(allowed, "nominalText")
 			}
 		}
 	}

@@ -38,7 +38,7 @@ Form
 			name: 			"selected"
 			title: 			qsTr("Selected")
 			singleVariable:	true
-			allowedColumns:	["ordinal", "nominal", "nominalText"]
+			allowedColumns:	["ordinal", "nominal"]
 		}
 	}
 
