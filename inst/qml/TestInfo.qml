@@ -43,9 +43,22 @@ Form
 		RadioButton	{	label:	"label button duo"; info: "and more info on the other button"; 	name: "rButton2"	}
 	}
 
+	SimpleTableView
+	{
+		name:	"simpleTableView"
+		info:	"a tableview with some info"
+	}
+
+	Slider
+	{
+		name:		"slideOnOuttaHere"
+		info:		"slip and slide suicide"
+		label:		"sliding: "
+	}
+
 	Section
 	{
-		info: "some fields in a section"
+		title: "some fields in a section"
 		//name:	"aSection"
 
 		DoubleField
@@ -69,22 +82,9 @@ Form
 		}
 	}
 
-	SimpleTableView
-	{
-		name:	"simpleTableView"
-		info:	"a tableview with some info"
-	}
-
-	Slider
-	{
-		name:		"slideOnOuttaHere"
-		info:		"slip and slide suicide"
-		label:		"sliding: "
-	}
-
 	Section
 	{
-		info: "another section just for shows"
+		title: "another section just for shows"
 		//name:	"aSection"
 
 		TabView
@@ -94,7 +94,7 @@ Form
 			maximumItems:		10
 			newItemName:		qsTr("NEW ITEM")
 			optionKey:			"name"
-			
+
 			info:				"This is an info field on a tabview"
 
 			content: Group
