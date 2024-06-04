@@ -103,7 +103,7 @@ Description
 		Analysis
 	{
 		title:	qsTr("Test Mixed Columns jaspTable")
-		qml:	"test.qml"
+		qml:	"testMixedColumns.qml"
 		func:	"testMixedColumnsTableFunc"
 	}
 
