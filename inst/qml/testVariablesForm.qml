@@ -4,10 +4,9 @@ import "./common"
 
 Form
 {
-	property var suggested: 	["ordinal"]
 	property var allowed: 		[]
 
-	onSuggestedChanged:	 {console.log("suggested is now " + suggested) }
+	
 	onAllowedChanged:	 {console.log("allowed is now " + allowed) }
 
 	columns: 1
@@ -16,9 +15,9 @@ Form
 	{
 		id: varForm
 		AvailableVariablesList	{ name: "allVariablesList"										}
-		AssignedVariablesList	{ name: "varS";			title: qsTr("With suggest")				; id: varS ;	suggestedColumns:	suggested							}
+		AssignedVariablesList	{ name: "varS";			title: qsTr("With suggest")				; id: varS ;							}
 		AssignedVariablesList	{ name: "varA";			title: qsTr("With allowed")				; id: varA ;									allowedColumns: allowed	}
-		AssignedVariablesList	{ name: "varSA";		title: qsTr("With suggest and allow")	; id: varSA;	suggestedColumns:	suggested;	allowedColumns:	allowed }
+		AssignedVariablesList	{ name: "varSA";		title: qsTr("With suggest and allow")	; id: varSA;	allowedColumns:	allowed }
 	}
 
 	function toggleColList(list, toggleThis)
@@ -47,7 +46,7 @@ Form
 				Some of the Variables list can become invisible (due to some settings in the analysis). In this case, the place occupied of the invisble
 				Variables lists can be left empty, or it can be used by the other Variables lists. This depends on the 'removeInvisibles' property.
 				<ul>
-					<li>Make the 'With suggest' and 'With allowed' Variables lists invisible: see that the visible Variables lists keeps their height.</li>
+					<li>Make the 'With allowed' Variables lists invisible: see that the visible Variables lists keeps their height.</li>
 					<li>Toggle the removeInvisibles property (to set is to true): check that the visible Variables lists use all the space left</li>
 					<li>Make the Variables lists visible again: see that the Variables lists adjust their heights to use all the space.</li>
 				</ul>
@@ -56,12 +55,7 @@ Form
 
 		Group
 		{
-			columns: 2
-			Button
-			{
-				text:		"Toggle visiblility of 'With suggest'"
-				onClicked:	varS.visible = !varS.visible
-			}
+			columns: 1
 			Button
 			{
 				text:		"Toggle visiblility of 'With allowed'"
@@ -78,38 +72,20 @@ Form
 
 	Section
 	{
-		title: "Suggested vs allowed"
+		title: "Allowed"
 
 		ExplanationText
 		{
 			text:
-			"2 properties set which variable types are allowed in a Variables list: suggested & allowed.<br>
-			The allowed property is strict: only the specisifed types are allowed.<br>
-			The suggested property is less strict:
-			<ul>
-				<li>if suggested contains the scale type, then nomincal &amp; ordinal types are then also allowed.</li>
-				<li>if suggested contains the nominal type, then ordinal types are also allowed.</li>
-			</ul>
-			For the tests:
-			<ul>
-				<li>Check whether the Variables list allows the right variables</li>
-				<li>Check that allowed property (if set) overrules the suggested property</li>
-				<li>Check when a Variables list allowed type changes, that the variables that are not anymore allowed are automatically removed from the list.</li>
-			</ul>
+			"This has been modified and this explanation could probably be more informative than this
 			"
 		}
 
 		Group
 		{
-			columns: 2
+			columns: 1
 
-			Text { text: "<b>Current suggested: " + suggested.toString() + "</b>"}
-			Text { text: "<b>Current sllowed: " + allowed.toString() + "</b>" }
-			Button
-			{
-				text: 			"Toggle scale in suggested"
-				onClicked:		suggested = toggleColList(suggested, "scale")
-			}
+			Text { text: "<b>Current allowed: " + allowed.toString() + "</b>" }
 			Button
 			{
 				text: 			"Toggle scale in allowed"
@@ -117,18 +93,8 @@ Form
 			}
 			Button
 			{
-				text: 			"Toggle ordinal in suggested"
-				onClicked:		suggested = toggleColList(suggested, "ordinal")
-			}
-			Button
-			{
 				text: 			"Toggle ordinal in allowed"
 				onClicked:		allowed = toggleColList(allowed, "ordinal")
-			}
-			Button
-			{
-				text: 			"Toggle nominal in suggested"
-				onClicked:		suggested = toggleColList(suggested, "nominal")
 			}
 			Button
 			{
