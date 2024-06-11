@@ -24,13 +24,13 @@ testMixedColumnsTableFunc <- function(jaspResults, dataset, options) {
   tb$addColumns(cols = df)
   jaspResults[["addColumnsWithList"]] <- tb
 
-  # BROKEN, Test 3, addColumns pass one by one ----
-  # tb <- createJaspTable("addColumns one by one")
-  #
-  # for (i in seq_len(ncol(df)))
-  #   tb$addColumns(cols = df[i])
-  #
-  # jaspResults[["addColumnsOneByOne"]] <- tb
+  # Test 3, addColumns pass one by one ----
+   tb <- createJaspTable("addColumns one by one")
+
+   for (i in seq_len(ncol(df)))
+     tb$addColumns(cols = df[i])
+
+   jaspResults[["addColumnsOneByOne"]] <- tb
 
   # Test 4, setData ----
   tb <- createJaspTable(title = "use setData(df)")
