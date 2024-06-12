@@ -4,7 +4,7 @@ import "./common"
 
 Form
 {
-	property var allowed: 		[]
+	property var allowed: 		[ "ordinal" ]
 
 	
 	onAllowedChanged:	 {console.log("allowed is now " + allowed) }
@@ -15,9 +15,27 @@ Form
 	{
 		id: varForm
 		AvailableVariablesList	{ name: "allVariablesList"										}
-		AssignedVariablesList	{ name: "varS";			title: qsTr("With suggest")				; id: varS ;							}
-		AssignedVariablesList	{ name: "varA";			title: qsTr("With allowed")				; id: varA ;									allowedColumns: allowed	}
-		AssignedVariablesList	{ name: "varSA";		title: qsTr("With suggest and allow")	; id: varSA;	allowedColumns:	allowed }
+		AssignedVariablesList	
+		{ 
+			id: 				varS
+			name: 				"varS"
+			title: 				qsTr("With min max levels")
+
+		
+		}
+
+		AssignedVariablesList	
+		{
+			id: 				varA
+			name: 				"varA"
+			title: 				qsTr("With allowed and min/max(num)levels")				; 
+			allowedColumns: 	allowed	
+			minNumericLevels:	minNumLevel.value
+			maxNumericLevels:	maxNumLevel.value
+			minLevels:			minLevel.value
+			maxLevels:			maxLevel.value
+		}
+
 	}
 
 	function toggleColList(list, toggleThis)
@@ -76,30 +94,72 @@ Form
 
 		ExplanationText
 		{
-			text:
-			"This has been modified and this explanation could probably be more informative than this
-			"
+			text:	"This has been modified and this explanation could probably be more informative than this"
 		}
 
 		Group
 		{
-			columns: 1
+			columns: 2
+			Group
+			{
+				columns: 1
+				IntegerField
+				{
+					id:				minNumLevel
+					name:			"minNumLevel"
+					text: 			"How many numeric level minimum"
+					defaultValue:	-1
+					min:			-1
+				}
 
-			Text { text: "<b>Current allowed: " + allowed.toString() + "</b>" }
-			Button
-			{
-				text: 			"Toggle scale in allowed"
-				onClicked:		allowed = toggleColList(allowed, "scale")
+				IntegerField
+				{
+					id:				maxNumLevel
+					name:			"maxNumLevel"
+					text: 			"How many numeric level maximum"
+					defaultValue:	-1
+					min:			-1
+				}
+
+				IntegerField
+				{
+					id:				minLevel
+					name:			"minLevel"
+					text: 			"How many level minimum"
+					defaultValue:	-1
+					min:			-1
+				}
+
+				IntegerField
+				{
+					id:				maxLevel
+					name:			"maxLevel"
+					text: 			"How many level maximum"
+					defaultValue:	-1
+					min:			-1
+				}
 			}
-			Button
+
+			Group
 			{
-				text: 			"Toggle ordinal in allowed"
-				onClicked:		allowed = toggleColList(allowed, "ordinal")
-			}
-			Button
-			{
-				text: 			"Toggle nominal in allowed"
-				onClicked:		allowed = toggleColList(allowed, "nominal")
+				columns: 1
+
+				Text { text: "<b>Current allowed: " + allowed.toString() + "</b>" }
+				Button
+				{
+					text: 			"Toggle scale in allowed"
+					onClicked:		allowed = toggleColList(allowed, "scale")
+				}
+				Button
+				{
+					text: 			"Toggle ordinal in allowed"
+					onClicked:		allowed = toggleColList(allowed, "ordinal")
+				}
+				Button
+				{
+					text: 			"Toggle nominal in allowed"
+					onClicked:		allowed = toggleColList(allowed, "nominal")
+				}
 			}
 		}
 	}
