@@ -21,7 +21,10 @@ Form
 			name: 				"varS"
 			title: 				qsTr("With min max levels")
 
-		
+			minNumericLevels:	minNumLevel.value
+			maxNumericLevels:	maxNumLevel.value
+			minLevels:			minLevel.value
+			maxLevels:			maxLevel.value
 		}
 
 		AssignedVariablesList	
