@@ -57,7 +57,6 @@ Form
 		{
 			id:					factors
 			name:				"nestedFactors"
-			allowAll:			true
 			nested:				nested.checked
 			allowInteraction:	true
 			initNumberFactors:	2
@@ -93,7 +92,6 @@ Form
 		{
 			name: "factors"
 			initNumberFactors: 1
-			allowAll: true
 		}
 	}
 
