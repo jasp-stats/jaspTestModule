@@ -1,6 +1,6 @@
 radioButtonFunc <- function(jaspResults, dataset, options)
 {
-  tableOfOptions(jaspResults, options)
+  tableOfOptions(jaspResults, options, dataset)
   
     jaspResults[['dynamic']] <- createJaspHtml(text=jsonlite::toJSON(options["dynamic"], auto_unbox = TRUE, digits = NA, null="null", force = TRUE))
     jaspResults[['firstGroup']] <- createJaspHtml(text=jsonlite::toJSON(options["firstGroup"], auto_unbox = TRUE, digits = NA, null="null", force = TRUE))

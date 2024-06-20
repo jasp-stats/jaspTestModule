@@ -1,7 +1,7 @@
 #' @export
 JaspReportTest <- function(jaspResults, dataset, options)
 {
-  tableOfOptions(jaspResults, options)
+  tableOfOptions(jaspResults, options, dataset)
   
 	if(options[["selectedVariable"]] == "" || options[["reportMe"]] == "") {
     jaspResults[["msg"]] <- createJaspHtml("Select a variable and enter a formula please", dependencies=c("reportMe", "selectedVariable"))

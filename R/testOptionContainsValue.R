@@ -1,6 +1,6 @@
 testOptionContainsValue <- function(jaspResults, dataset, options)
 {
-  tableOfOptions(jaspResults, options)
+  tableOfOptions(jaspResults, options, dataset)
   
 
   if(is.null(jaspResults[['state']])) {

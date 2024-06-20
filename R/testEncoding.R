@@ -1,6 +1,6 @@
 testEncodingFunc <- function(jaspResults, dataset, options)
 {
-  tableOfOptions(jaspResults, options)
+  tableOfOptions(jaspResults, options, dataset)
   
   cols <- unlist(options$selected)
   dat  <- .readDataSetToEnd(columns=cols)

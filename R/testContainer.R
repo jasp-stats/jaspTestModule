@@ -1,6 +1,6 @@
 testContainerFunc <- function(jaspResults, dataset, options)
 {
-  tableOfOptions(jaspResults, options)
+  tableOfOptions(jaspResults, options, dataset)
   
   cnt <- addContainer(addContainer(addContainer(addContainer(jaspResults, name="c0"))))
   testFootnotesTableFunc(cnt, dataset, options)

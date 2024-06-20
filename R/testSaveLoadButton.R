@@ -1,6 +1,6 @@
 testSaveLoadButton <- function(jaspResults, dataset, options)
 {
-  tableOfOptions(jaspResults, options)
+  tableOfOptions(jaspResults, options, dataset)
   
 	watts <-  "I mean here we are, and isn’t that odd? Of course it is odd, but what do you mean by odd?
 	Well, it is what is different from even, and what is odd stands out. 

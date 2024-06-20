@@ -2,7 +2,7 @@
 
 testCrapDataTable <- function(jaspResults, dataset, options)
 {
-  tableOfOptions(jaspResults, options)
+  tableOfOptions(jaspResults, options, dataset)
   
 		
 	tb <- createJaspTable()
