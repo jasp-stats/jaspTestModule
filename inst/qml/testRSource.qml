@@ -3,7 +3,7 @@ import JASP.Controls
 import QtQuick.Layouts
 import "./common"
 
-Form 
+Form
 {
 	ExplanationText
 	{
@@ -64,18 +64,17 @@ Form
 
 	ComponentsList
 	{
+		id			: compList
 		label		: "ComponentsList"
 		name		: "ComponentsList"
 		rSource		: "exampleSourceId"
-		rowComponent: Item
+		rowComponent: Column
 		{
-			height	: textLable.height + comp.height
-			width	: parent.width
 			Text { id: textLable; text: rowValue }
 			ComponentsList
 			{
 				id: comp
-				anchors.top	: textLable.bottom
+				width		: compList.width - 2 * jaspTheme.contentMargin
 				name		: "subvalues"
 				source		:
 				[
