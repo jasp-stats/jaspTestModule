@@ -135,7 +135,6 @@ Form
 		{
 			info:	"I am a variablesForm"
 			AvailableVariablesList			{ info: "All variables info"; 					name: "allVariablesList"										}
-			AssignedVariablesList			{ info: "assigned variables scale suggested"; 	name: "varS";			title: qsTr("With suggest")				; id: varS ;	suggestedColumns:	["scale"]							}
 			AssignedVariablesList			{ info: "assigned variables nominal allowed"; 	name: "varA";			title: qsTr("With allowed")				; id: varA ;	allowedColumns: 	["nominal"]	}
 			AssignedRepeatedMeasuresCells	{ info: "assigned RM"; 							name: "cells";			title: qsTr("RM!")	}
 			AssignedPairsVariablesList		{ info: "assigned pairs"; 						name: "paairs";			title: qsTr("PAIRS!")	}

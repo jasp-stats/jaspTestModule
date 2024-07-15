@@ -253,7 +253,7 @@ Form
 			{
 				name							: "fixedFactors"
 				title							: qsTr("Fixed Factors")
-				suggestedColumns				: ["ordinal", "nominal"]
+				allowedColumns					: ["nominal"]
 				listViewType					: JASP.Interaction
 				addAvailableVariablesToAssigned	: false
 			}
