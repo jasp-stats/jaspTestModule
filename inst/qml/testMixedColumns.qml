@@ -24,13 +24,14 @@ Form
 {
     CheckBox
     {
-		label: qsTr("One check")
+		label: qsTr("Set Seed")
         name: "checkbox_0"
         checked: false
     }
 
     CheckBox
     {
+		label: qsTr("Trigger R Code")
         name: "checkbox_1"
         checked: false
     }
