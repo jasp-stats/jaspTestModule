@@ -1,6 +1,6 @@
 {
   "R": {
-    "Version": "4.4.0",
+    "Version": "4.4.1",
     "Repositories": [
       {
         "Name": "CRAN",
@@ -14,9 +14,24 @@
       "Version": "1.2-5",
       "Source": "Repository"
     },
+    "GPArotation": {
+      "Package": "GPArotation",
+      "Version": "2024.3-1",
+      "Source": "Repository"
+    },
     "Hmisc": {
       "Package": "Hmisc",
       "Version": "5.1-3",
+      "Source": "Repository"
+    },
+    "MASS": {
+      "Package": "MASS",
+      "Version": "7.3-61",
+      "Source": "Repository"
+    },
+    "Matrix": {
+      "Package": "Matrix",
+      "Version": "1.7-0",
       "Source": "Repository"
     },
     "R6": {
@@ -31,7 +46,7 @@
     },
     "Rcpp": {
       "Package": "Rcpp",
-      "Version": "1.0.12",
+      "Version": "1.0.13",
       "Source": "Repository"
     },
     "abind": {
@@ -56,7 +71,7 @@
     },
     "bslib": {
       "Package": "bslib",
-      "Version": "0.7.0",
+      "Version": "0.8.0",
       "Source": "Repository"
     },
     "cachem": {
@@ -71,22 +86,27 @@
     },
     "checkmate": {
       "Package": "checkmate",
-      "Version": "2.3.1",
+      "Version": "2.3.2",
       "Source": "Repository"
     },
     "cli": {
       "Package": "cli",
-      "Version": "3.6.2",
+      "Version": "3.6.3",
+      "Source": "Repository"
+    },
+    "cluster": {
+      "Package": "cluster",
+      "Version": "2.1.6",
+      "Source": "Repository"
+    },
+    "codetools": {
+      "Package": "codetools",
+      "Version": "0.2-20",
       "Source": "Repository"
     },
     "colorspace": {
       "Package": "colorspace",
-      "Version": "2.1-0",
-      "Source": "Repository"
-    },
-    "commonmark": {
-      "Package": "commonmark",
-      "Version": "1.9.1",
+      "Version": "2.1-1",
       "Source": "Repository"
     },
     "corpcor": {
@@ -96,27 +116,12 @@
     },
     "cpp11": {
       "Package": "cpp11",
-      "Version": "0.4.7",
-      "Source": "Repository"
-    },
-    "crayon": {
-      "Package": "crayon",
-      "Version": "1.5.2",
-      "Source": "Repository"
-    },
-    "crul": {
-      "Package": "crul",
-      "Version": "1.4.2",
-      "Source": "Repository"
-    },
-    "curl": {
-      "Package": "curl",
-      "Version": "5.2.1",
+      "Version": "0.5.0",
       "Source": "Repository"
     },
     "data.table": {
       "Package": "data.table",
-      "Version": "1.15.4",
+      "Version": "1.16.0",
       "Source": "Repository"
     },
     "desc": {
@@ -126,7 +131,7 @@
     },
     "digest": {
       "Package": "digest",
-      "Version": "0.6.35",
+      "Version": "0.6.37",
       "Source": "Repository"
     },
     "evaluate": {
@@ -151,7 +156,7 @@
     },
     "fdrtool": {
       "Package": "fdrtool",
-      "Version": "1.2.17",
+      "Version": "1.2.18",
       "Source": "Repository"
     },
     "fontBitstreamVera": {
@@ -174,6 +179,11 @@
       "Version": "0.2.1",
       "Source": "Repository"
     },
+    "foreign": {
+      "Package": "foreign",
+      "Version": "0.8-87",
+      "Source": "Repository"
+    },
     "fs": {
       "Package": "fs",
       "Version": "1.6.4",
@@ -181,12 +191,7 @@
     },
     "gdtools": {
       "Package": "gdtools",
-      "Version": "0.3.7",
-      "Source": "Repository"
-    },
-    "gfonts": {
-      "Package": "gfonts",
-      "Version": "0.2.0",
+      "Version": "0.4.0",
       "Source": "Repository"
     },
     "ggplot2": {
@@ -231,7 +236,7 @@
     },
     "htmlTable": {
       "Package": "htmlTable",
-      "Version": "2.4.2",
+      "Version": "2.4.3",
       "Source": "Repository"
     },
     "htmltools": {
@@ -242,16 +247,6 @@
     "htmlwidgets": {
       "Package": "htmlwidgets",
       "Version": "1.6.4",
-      "Source": "Repository"
-    },
-    "httpcode": {
-      "Package": "httpcode",
-      "Version": "0.3.0",
-      "Source": "Repository"
-    },
-    "httpuv": {
-      "Package": "httpuv",
-      "Version": "1.6.15",
       "Source": "Repository"
     },
     "igraph": {
@@ -272,8 +267,7 @@
       "RemoteHost": "api.github.com",
       "RemoteUsername": "jasp-stats",
       "RemoteRepo": "jaspBase",
-      "RemoteRef": "HEAD",
-      "RemoteSha": "b89e24ee72bc63e66655f30f5bb00650d5f22cde"
+      "RemoteSha": "7de02c442478e028fe2036e3b906059bf504c13e"
     },
     "jaspGraphs": {
       "Package": "jaspGraphs",
@@ -283,8 +277,7 @@
       "RemoteHost": "api.github.com",
       "RemoteUsername": "jasp-stats",
       "RemoteRepo": "jaspGraphs",
-      "RemoteRef": "HEAD",
-      "RemoteSha": "c4c345c1195a43f69d03dea7d65feae3b12a2a47"
+      "RemoteSha": "e439c080e3841e0719c00ce35c376b34c833b546"
     },
     "jpeg": {
       "Package": "jpeg",
@@ -303,7 +296,7 @@
     },
     "knitr": {
       "Package": "knitr",
-      "Version": "1.47",
+      "Version": "1.48",
       "Source": "Repository"
     },
     "labeling": {
@@ -311,9 +304,9 @@
       "Version": "0.4.3",
       "Source": "Repository"
     },
-    "later": {
-      "Package": "later",
-      "Version": "1.3.2",
+    "lattice": {
+      "Package": "lattice",
+      "Version": "0.22-6",
       "Source": "Repository"
     },
     "lavaan": {
@@ -336,6 +329,11 @@
       "Version": "2.0.1",
       "Source": "Repository"
     },
+    "mgcv": {
+      "Package": "mgcv",
+      "Version": "1.9-1",
+      "Source": "Repository"
+    },
     "mime": {
       "Package": "mime",
       "Version": "0.12",
@@ -356,6 +354,16 @@
       "Version": "0.5.1",
       "Source": "Repository"
     },
+    "nlme": {
+      "Package": "nlme",
+      "Version": "3.1-166",
+      "Source": "Repository"
+    },
+    "nnet": {
+      "Package": "nnet",
+      "Version": "7.3-19",
+      "Source": "Repository"
+    },
     "numDeriv": {
       "Package": "numDeriv",
       "Version": "2016.8-1.1",
@@ -368,7 +376,7 @@
     },
     "openssl": {
       "Package": "openssl",
-      "Version": "2.2.0",
+      "Version": "2.2.1",
       "Source": "Repository"
     },
     "pbapply": {
@@ -411,19 +419,14 @@
       "Version": "3.8.4",
       "Source": "Repository"
     },
-    "promises": {
-      "Package": "promises",
-      "Version": "1.3.0",
-      "Source": "Repository"
-    },
     "ps": {
       "Package": "ps",
-      "Version": "1.7.6",
+      "Version": "1.7.7",
       "Source": "Repository"
     },
     "psych": {
       "Package": "psych",
-      "Version": "2.4.3",
+      "Version": "2.4.6.26",
       "Source": "Repository"
     },
     "qgraph": {
@@ -458,7 +461,7 @@
     },
     "rjson": {
       "Package": "rjson",
-      "Version": "0.2.21",
+      "Version": "0.2.22",
       "Source": "Repository"
     },
     "rlang": {
@@ -468,7 +471,12 @@
     },
     "rmarkdown": {
       "Package": "rmarkdown",
-      "Version": "2.27",
+      "Version": "2.28",
+      "Source": "Repository"
+    },
+    "rpart": {
+      "Package": "rpart",
+      "Version": "4.1.23",
       "Source": "Repository"
     },
     "rstudioapi": {
@@ -478,7 +486,7 @@
     },
     "rvg": {
       "Package": "rvg",
-      "Version": "0.3.3",
+      "Version": "0.3.4",
       "Source": "Repository"
     },
     "sass": {
@@ -489,16 +497,6 @@
     "scales": {
       "Package": "scales",
       "Version": "1.3.0",
-      "Source": "Repository"
-    },
-    "shiny": {
-      "Package": "shiny",
-      "Version": "1.8.1.1",
-      "Source": "Repository"
-    },
-    "sourcetools": {
-      "Package": "sourcetools",
-      "Version": "0.1.7-1",
       "Source": "Repository"
     },
     "stringi": {
@@ -538,17 +536,7 @@
     },
     "tinytex": {
       "Package": "tinytex",
-      "Version": "0.51",
-      "Source": "Repository"
-    },
-    "triebeard": {
-      "Package": "triebeard",
-      "Version": "0.4.1",
-      "Source": "Repository"
-    },
-    "urltools": {
-      "Package": "urltools",
-      "Version": "1.7.3",
+      "Version": "0.52",
       "Source": "Repository"
     },
     "utf8": {
@@ -558,7 +546,7 @@
     },
     "uuid": {
       "Package": "uuid",
-      "Version": "1.2-0",
+      "Version": "1.2-1",
       "Source": "Repository"
     },
     "vctrs": {
@@ -578,12 +566,12 @@
     },
     "withr": {
       "Package": "withr",
-      "Version": "3.0.0",
+      "Version": "3.0.1",
       "Source": "Repository"
     },
     "xfun": {
       "Package": "xfun",
-      "Version": "0.44",
+      "Version": "0.47",
       "Source": "Repository"
     },
     "xml2": {
@@ -591,14 +579,9 @@
       "Version": "1.3.6",
       "Source": "Repository"
     },
-    "xtable": {
-      "Package": "xtable",
-      "Version": "1.8-4",
-      "Source": "Repository"
-    },
     "yaml": {
       "Package": "yaml",
-      "Version": "2.3.8",
+      "Version": "2.3.10",
       "Source": "Repository"
     },
     "zip": {
