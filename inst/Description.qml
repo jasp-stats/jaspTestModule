@@ -118,7 +118,7 @@ Description
 		func:		"testAnalysisColumnFunc"
 	}
 
-	
+
 
 	Separator {}
 
@@ -177,19 +177,19 @@ Description
 		func:			"testSaveLoadButton"
 	}
 
-    Analysis
-    {
-        title:			"Test Variables Form"
-        qml:			"testVariablesForm.qml"
-        func:			"testVariablesForm"
-    }
+	Analysis
+	{
+		title:			"Test Variables Form"
+		qml:			"testVariablesForm.qml"
+		func:			"testVariablesForm"
+	}
 
-    Analysis
-    {
-        title:			"Test Option Names"
-        qml:			"testOptionNames.qml"
-        func:			"testOptionNames"
-    }
+	Analysis
+	{
+		title:			"Test Option Names"
+		qml:			"testOptionNames.qml"
+		func:			"testOptionNames"
+	}
 
 	Analysis
 	{
@@ -215,9 +215,16 @@ Description
 
 	Analysis
 	{
-		title:			"Test Factors Form"
+		title:			"Test Factors Form??"
 		qml:			"testFactorsForm.qml"
 		func:			"testFactorsFormFunc"
+	}
+
+	Analysis
+	{
+		title:			"Test Dropdown"
+		qml:			"testDropdown.qml"
+		func:			"testDropdownFunc"
 	}
 
 	Separator {}
