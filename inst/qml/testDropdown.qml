@@ -17,113 +17,176 @@
 //
 import QtQuick
 import JASP.Controls
+import "./common"
 
 Form
 {
+	ExplanationText
+	{
+		text:
+		"This analysis tests the width of the Dropdowns according to the fieldWidth, default value/index, setLabelAbove, addEmptyValue and placeholderText properties<br><br>" +
+		"Per default, the dropdown width (and its popup menu) will fit the longest possible value of the popup values. If a Type icon is added for a variable, this is also taken into account.<br>" +
+		"If the fieldWidth is set, then the width of the dropdown is fixed: if its value is smaller than the fixed length, then a white space is added, if it is smaller, then the value will be elided with '...'.<br>" +
+		"The popup menu should still be as wide as necessary.<br>" +
+		"Set some values in the Dropdonws and duplicate the analysis: check that the smae values are set."
+	}
+
+	columns: 1
+
 	Group
 	{
-		title: "Dropdown with values"
-		DropDown
+		title: "<b>Default Dropdown</b>"
+		columns: 2
+
+		Group
 		{
-			label: qsTr("No fixed width")
-			name: "dropDownValues"
-			values: ["one", "two", "really long values!!!!!"]
+			title: "Dropdown with values"
+			columns: 1
+
+			DropDown
+			{
+				label: qsTr("Label left")
+				name: "dropDownValues"
+				values: ["one", "two", "really long values!!!!!"]
+			}
+			DropDown
+			{
+				setLabelAbove: true
+				label: qsTr("Label above")
+				name: "dropDownValuesAbove"
+				values: ["one", "two", "really long values!!!!!"]
+			}
+			DropDown
+			{
+				label: qsTr("With startValue")
+				name: "dropDownStartValue"
+				values: ["one", "two", "really long values!!!!!"]
+				startValue: "really long values!!!!!"
+			}
+			DropDown
+			{
+				label: qsTr("With emptyValue")
+				name: "dropDownValuesEmptyValue"
+				values: ["one", "two", "really long values!!!!!"]
+				addEmptyValue: true
+				placeholderText: "Custom empty value"
+			}
 		}
 
-		DropDown
+		Group
 		{
-			label: qsTr("fixed width")
-			name: "dropDownValuesFixed"
-			values: ["one", "two", "really long values!!!!!"]
-			fieldWidth: 100
-		}
+			title: "Dropdown with variables"
+			columns: 1
 
-		DropDown
-		{
-			label: qsTr("fixed width with startValue")
-			name: "dropDownValuesFixedStartValue"
-			values: ["one", "two", "really long values!!!!!"]
-			fieldWidth: 100
-			startValue: "really long values!!!!!"
-		}
-
-		DropDown
-		{
-			label: qsTr("fixed width with emptyValue")
-			name: "dropDownValuesFixedEmptyValue"
-			values: ["one", "two", "really long values!!!!!"]
-			fieldWidth: 100
-			addEmptyValue: true
-		}
-
-		DropDown
-		{
-			setLabelAbove: true
-			label: qsTr("No fixed width")
-			name: "dropDownValuesAbove"
-			values: ["one", "two", "really long values!!!!!"]
-		}
-
-		DropDown
-		{
-			setLabelAbove: true
-			label: qsTr("fixed width")
-			name: "dropDownValuesFixedAbove"
-			values: ["one", "two", "really long values!!!!!"]
-			fieldWidth: 100
+			DropDown
+			{
+				label: qsTr("Label left")
+				name: "dropDownVariables"
+			}
+			DropDown
+			{
+				setLabelAbove: true
+				label: qsTr("Label above")
+				name: "dropDownVariablesLabel"
+			}
+			DropDown
+			{
+				label: qsTr("With startIndex")
+				name: "dropDownVariablesStartIndex"
+				currentIndex: 10
+			}
+			DropDown
+			{
+				label: qsTr("With emptyValue")
+				name: "dropDownVariablesEmptyValue"
+				values: ["one", "two", "really long values!!!!!"]
+				addEmptyValue: true
+				placeholderText: "Custom empty value"
+			}
 		}
 	}
 
 	Group
 	{
-		title: "Dropdown with variables"
+		title: "<b>Dropdown with fixed width</b>"
+		columns: 2
 
-		DropDown
+		Group
 		{
-			label: qsTr("No fixed width")
-			name: "dropDownVariables"
+			title: "Dropdown with values"
+			columns: 1
+
+			DropDown
+			{
+				label: qsTr("Label left")
+				name: "dropDownValuesFixed"
+				values: ["one", "two", "really long values!!!!!"]
+				fieldWidth: 100
+			}
+
+			DropDown
+			{
+				setLabelAbove: true
+				label: qsTr("Label above")
+				name: "dropDownValuesFixedAbove"
+				values: ["one", "two", "really long values!!!!!"]
+				fieldWidth: 100
+			}
+
+			DropDown
+			{
+				label: qsTr("With startValue")
+				name: "dropDownValuesFixedStartValue"
+				values: ["one", "two", "really long values!!!!!"]
+				fieldWidth: 100
+				startValue: "really long values!!!!!"
+			}
+
+			DropDown
+			{
+				label: qsTr("With emptyValue")
+				name: "dropDownValuesFixedEmptyValue"
+				values: ["one", "two", "really long values!!!!!"]
+				fieldWidth: 100
+				addEmptyValue: true
+				placeholderText: "Custom empty value"
+			}
 		}
 
-		DropDown
+		Group
 		{
-			label: qsTr("fixed width")
-			name: "dropDownVariablesFixed"
-			fieldWidth: 100
-		}
+			title: "Dropdown with variables"
+			columns: 1
 
-		DropDown
-		{
-			label: qsTr("fixed width with startIndex")
-			name: "dropDownVariablesFixedStartIndex"
-			fieldWidth: 100
-			currentIndex: 10
-		}
+			DropDown
+			{
+				label: qsTr("Label left")
+				name: "dropDownVariablesFixed"
+				fieldWidth: 100
+			}
+			DropDown
+			{
+				setLabelAbove: true
+				label: qsTr("Label above")
+				name: "dropDownVariablesFixedLabelAbove"
+				fieldWidth: 100
+			}
+			DropDown
+			{
+				label: qsTr("With startIndex")
+				name: "dropDownVariablesFixedStartIndex"
+				fieldWidth: 100
+				currentIndex: 10
+			}
 
-		DropDown
-		{
-			label: qsTr("fixed width with emptyValue")
-			name: "dropDownVariablesFixedEmptyValue"
-			fieldWidth: 100
-			addEmptyValue: true
-			placeholderText: "Custom empty value"
+			DropDown
+			{
+				label: qsTr("With emptyValue")
+				name: "dropDownVariablesFixedEmptyValue"
+				fieldWidth: 100
+				addEmptyValue: true
+				placeholderText: "Custom empty value"
+			}
 		}
-
-		DropDown
-		{
-			setLabelAbove: true
-			label: qsTr("No fixed width")
-			name: "dropDownVariablesLabel"
-		}
-
-		DropDown
-		{
-			setLabelAbove: true
-			label: qsTr("fixed width")
-			name: "dropDownVariablesFixedLabel"
-			fieldWidth: 100
-		}
-
 	}
-
-
 }
