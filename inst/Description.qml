@@ -227,6 +227,13 @@ Description
 		func:			"testDropdownFunc"
 	}
 
+	Analysis
+	{
+		title:			"Syntax Highlighting"
+		qml:			"SyntaxHighlighting.qml"
+		func:			"syntaxhighlightingFunc"
+	}
+
 	Separator {}
 
 	Analysis
