@@ -215,7 +215,7 @@ Description
 
 	Analysis
 	{
-		title:			"Test Factors Form??"
+		title:			"Test Factors Form"
 		qml:			"testFactorsForm.qml"
 		func:			"testFactorsFormFunc"
 	}
@@ -232,6 +232,13 @@ Description
 		title:			"Syntax Highlighting"
 		qml:			"SyntaxHighlighting.qml"
 		func:			"syntaxhighlightingFunc"
+	}
+
+	Analysis
+	{
+		title:			"ToolTip"
+		qml:			"Tooltip.qml"
+		func:			"tooltipFunc"
 	}
 
 	Separator {}
