@@ -116,6 +116,7 @@ Form
 				"<ul>" +
 				"<li>If the source has only 1 variable, then all labels of this source are used. The order of the labels are kept (check it by changing the order)</li>" +
 				"<li>If the source has several variables, then all labels of all variables are used. Duplicate labels are removed. The order of the labels must be the same as the order of the variables in the source.</li>" +
+				"<li>Check also that the number of levels is updated in the title of the dropdowns</li>" +
 				"<li>Filter some labels in one or more variables: check that these labels are removes in the dropdown.</li>" +
 				"<li>Duplicate the analysis and check that the controls have the same values.</li>" +
 				"</ul>"
@@ -147,14 +148,14 @@ Form
 		DropDown
 		{
 			name: "labelsFor1Variable"
-			label: "Labels for 1 variable"
+			label: "Labels for 1 variable: " + variableWithLabels.levels.length
 			values: variableWithLabels.levels
 		}
 
 		DropDown
 		{
 			name: "labelsForSeveralVariable"
-			label: "Labels for several variables"
+			label: "Labels for several variables: " + severalVariablesWithLabels.levels.length
 			values: severalVariablesWithLabels.levels
 		}
 	}
