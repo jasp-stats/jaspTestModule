@@ -30,9 +30,21 @@ Form
 		save: true
 	}
 
+
 	FileSelector
 	{
 		name: "loadThis"
 		save: false
+		filter:	"*.csv"
 	}
+
+	FileSelector
+	{
+		label: "Load multiple files"
+		name: "loadMultiple"
+		filter:	"*.csv"
+		save: false
+		multiple: true
+	}
+
 }
