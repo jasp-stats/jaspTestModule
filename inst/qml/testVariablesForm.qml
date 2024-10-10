@@ -24,7 +24,9 @@ Form
 			minNumericLevels:	minNumLevel.value
 			maxNumericLevels:	maxNumLevel.value
 			minLevels:			minLevel.value
-			maxLevels:			maxLevel.value
+			maxLevels:			maxLevel.values
+
+			onLevelsChanged:	messages.log("varS Levels is now: " + levels)
 		}
 
 		AssignedVariablesList	
@@ -37,6 +39,8 @@ Form
 			maxNumericLevels:	maxNumLevel.value
 			minLevels:			minLevel.value
 			maxLevels:			maxLevel.value
+
+			onLevelsChanged:	messages.log("varA Levels is now: " + levels)
 		}
 
 	}
