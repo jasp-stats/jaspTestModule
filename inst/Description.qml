@@ -7,7 +7,7 @@ Description
 	title:				qsTr("Wait for it...")
 	icon: 				"test.svg"
 	description: 		qsTr("A module to test stuff with.")
-	version			: "0.19.0"
+	version: 			"0.19.2"
 	author:				"Joris Goosen"
 	maintainer:			"Joris Goosen <Joris@JorisGoosen.nl>"
 	website:			""
@@ -289,6 +289,23 @@ Description
 	{
 		title:			"Analysis B";
 		func:			"AnalysisUpgradeB";
+		qml:			"AnalysisUpgrade.qml"
+		requiresData:	false
+	}
+
+		Analysis
+	{
+		title:			"Analysis A with incompatible to B";
+		func:			"AnalysisUpgradeIncompatibleA";
+		qml:			"AnalysisUpgrade.qml"
+		requiresData:	false
+	}
+
+
+	Analysis
+	{
+		title:			"Analysis B but then incompatible";
+		func:			"AnalysisUpgradeIncompatibleB";
 		qml:			"AnalysisUpgrade.qml"
 		requiresData:	false
 	}

@@ -51,4 +51,18 @@ Upgrades
 			}
 		}
 	}
+
+		Upgrade
+	{
+		functionName: 		"AnalysisUpgradeIncompatibleA"
+		newFunctionName:	"AnalysisUpgradeIncompatibleB"
+		fromVersion:		"1.0"
+		toVersion:			"1.0"
+	
+		ChangeIncompatible
+		{
+			msg:		"Because there was too much awesome shit to add"
+		}
+
+	}
 }
