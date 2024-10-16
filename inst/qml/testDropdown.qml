@@ -39,7 +39,7 @@ Form
 		columns: 2
 
 		Group
-		{
+		{	
 			title: "Dropdown with values"
 			columns: 1
 
@@ -82,18 +82,21 @@ Form
 			{
 				label: qsTr("Label left")
 				name: "dropDownVariables"
+				allowedColumns:	"scale"
 			}
 			DropDown
 			{
 				setLabelAbove: true
 				label: qsTr("Label above")
 				name: "dropDownVariablesLabel"
+				allowedColumns:	"ordinal"
 			}
 			DropDown
 			{
 				label: qsTr("With startIndex")
 				name: "dropDownVariablesStartIndex"
 				currentIndex: 10
+				allowedColumns:	"nominal"
 			}
 			DropDown
 			{
