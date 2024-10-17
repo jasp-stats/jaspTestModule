@@ -250,8 +250,8 @@ Form
 			}
 			IntegerField
 			{
-				id: maxNumerics
-				name: "maxNumerics"
+				id: maxNumeric
+				name: "maxNumeric"
 				label: "Max numerics for Scale"
 				value: 100
 				negativeValues: true
