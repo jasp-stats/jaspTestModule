@@ -39,7 +39,7 @@ Form
 		columns: 2
 
 		Group
-		{	
+		{
 			title: "Dropdown with values"
 			columns: 1
 
@@ -82,21 +82,18 @@ Form
 			{
 				label: qsTr("Label left")
 				name: "dropDownVariables"
-				allowedColumns:	"scale"
 			}
 			DropDown
 			{
 				setLabelAbove: true
 				label: qsTr("Label above")
 				name: "dropDownVariablesLabel"
-				allowedColumns:	"ordinal"
 			}
 			DropDown
 			{
 				label: qsTr("With startIndex")
 				name: "dropDownVariablesStartIndex"
 				currentIndex: 10
-				allowedColumns:	"nominal"
 			}
 			DropDown
 			{
@@ -189,6 +186,75 @@ Form
 				fieldWidth: 100
 				addEmptyValue: true
 				placeholderText: "Custom empty value"
+			}
+		}
+	}
+
+	Group
+	{
+		title: "<b>Dropdown with allowed types</b>"
+		columns: 2
+
+		Group
+		{
+			DropDown
+			{
+				label: qsTr("Scale")
+				name: "dropDownScale"
+				allowedColumns:	"scale"
+				minNumericLevels: minNumeric.value
+				maxNumericLevels: maxNumeric.value
+			}
+			DropDown
+			{
+				label: qsTr("Nominal")
+				name: "dropDownNominal"
+				allowedColumns:	"nominal"
+				minLevels: minLevels.value
+				maxLevels: maxLevels.value
+			}
+			DropDown
+			{
+				label: qsTr("Ordinal")
+				name: "dropDownOrdinal"
+				allowedColumns:	"ordinal"
+				minLevels: minLevels.value
+				maxLevels: maxLevels.value
+			}
+		}
+		Group
+		{
+			IntegerField
+			{
+				id: minLevels
+				name: "minLevels"
+				label: "Min levels for Nominal and Ordinal"
+				value: -1
+				negativeValues: true
+			}
+			IntegerField
+			{
+				id: maxLevels
+				name: "maxLevels"
+				label: "Max levels for Nominal and Ordinal"
+				value: 100
+				negativeValues: true
+			}
+			IntegerField
+			{
+				id: minNumeric
+				name: "minNumeric"
+				label: "Min numerics for Scale"
+				value: -1
+				negativeValues: true
+			}
+			IntegerField
+			{
+				id: maxNumerics
+				name: "maxNumerics"
+				label: "Max numerics for Scale"
+				value: 100
+				negativeValues: true
 			}
 		}
 	}
