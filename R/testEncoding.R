@@ -2,13 +2,24 @@ testEncodingFunc <- function(jaspResults, dataset, options)
 {
   tableOfOptions(jaspResults, options, dataset)
   
-  cols <- unlist(options$selected)
-  dat  <- .readDataSetToEnd(columns=cols)
-  tab  <- createJaspTable("Data & Encoding")
+  showData(dataset, jaspResults, "encodingsEtc", unlist(options$selected), "Selected data", options$genericFilter)
+  showData(dataset, jaspResults, "variablesWithInteractions", unlist(options$variablesWithInteractions), "Variables With Interactions")
+  showData(dataset, jaspResults, "variablesInsideComponentsList", unlist(options$componentsList[[1]]$variablesInComponentsList), "First Variables Inside Components List")
 
-  jaspResults[["encodingsEtc"]] <- tab
+}
 
-  print(dat)
+testEncodingPreloadDataFunc <- testEncodingFunc
+
+showData <- function(dataset, jaspResults, name, cols, title, filter = "")
+{
+  if (is.null(dataset))
+    dat <- .readDataSetToEnd(columns=cols)
+  else
+    dat <- dataset
+
+  tab  <- createJaspTable(title)
+
+  jaspResults[[name]] <- tab
 
   encName <- function(col) { return(paste0(col, "_encoding")); }
   filName <- function(col) { return(paste0(col, "_filtered")); }
@@ -24,7 +35,10 @@ testEncodingFunc <- function(jaspResults, dataset, options)
     tab$addColumnInfo(name=encName(col))
     tab[[encName(col)]] <- stringi::stri_enc_mark(colDat)
 
-    tab$addColumnInfo(name=filName(col))
-    tab[[filName(col)]] <- eval(parse(text=paste0("colDat ", options$genericFilter)))   
+    if (filter != "")
+    {
+        tab$addColumnInfo(name=filName(col))
+        tab[[filName(col)]] <- eval(parse(text=paste0("colDat ", filter)))
+    }
   }
 }

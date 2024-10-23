@@ -95,12 +95,20 @@ Description
 
 	Analysis
 	{
+		title:		qsTr("Test encoding with preloadData")
+		qml:		"testEncoding.qml"
+		func:		"testEncodingPreloadDataFunc"
+		preloadData	: true
+	}
+
+	Analysis
+	{
 		title:		qsTr("Test optionContainsValue")
 		qml:		"testOptionContainsValue.qml"
 		func:		"testOptionContainsValue"
 	}
 
-		Analysis
+	Analysis
 	{
 		title:	qsTr("Test Mixed Columns jaspTable")
 		qml:	"testMixedColumns.qml"
