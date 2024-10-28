@@ -128,14 +128,38 @@ Form
 
 					AssignedVariablesList
 					{
+						id:					singleVariableAA
 						name: 				"singleVariable"
 						title: 				qsTr("Single Variable")
 						singleVariable:		true
 					}
 				}
 
+
+				DropDown { name: "testDropDow"; label: "Dropdown"; values: singleVariableAA.levels}
+
 			}
 		}
+	}
+
+	Section
+	{
+		title: "Paired VariablesList"
+
+		ExplanationText
+		{
+			text: "
+			Paired VariablesList should also work with or without preloadData.<br>
+			Check that pairs and pairs.types are well defined in the options, and that the Pairs Variables table get the right values.
+			"
+		}
+
+		VariablesForm
+		{
+			AvailableVariablesList { name: "availableForPairs" }
+			AssignedPairsVariablesList { name: "pairs"; title: qsTr("Variable Pairs"); allowedColumns: ["scale"]}
+		}
+
 	}
 
 

@@ -88,14 +88,14 @@ Description
 
 	Analysis
 	{
-		title:		qsTr("Test encoding")
+		title:		qsTr("Test Variables encoding")
 		qml:		"testEncoding.qml"
 		func:		"testEncodingFunc"
 	}
 
 	Analysis
 	{
-		title:		qsTr("Test encoding with preloadData")
+		title:		qsTr("Test Variables encoding with preloadData")
 		qml:		"testEncoding.qml"
 		func:		"testEncodingPreloadDataFunc"
 		preloadData	: true
