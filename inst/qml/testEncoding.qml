@@ -22,71 +22,75 @@ import "./common"
 
 Form
 {
-	ExplanationText
+	Section
 	{
-		text: "
-		To avoid problems with not accepted characters in R, the variable names are encoded before sent to R, and decoded when dispayed in the results.<br>
-		The type of the column is also added in the encoded name, so that when the data is read, JASP knows how the variable should be read (as scale, nominal or as ordinal)<br>
-		<ul>
-		<li>Add some variables in the selected VariablesList, and check that the 'selected' option show the right variables, and the 'selected.types' show the right types. Change the type of the variables and check the change is reflected in the selected.types.
-		Check also that the data is read in the 'Selected Data' table.</li>
-		<li>Add a filter like '<10' in the 'Filter to selected' input. Check in the Data & encoded table that the variables are correctly filtered.</li>
-		<li>Select a variable in the dropdown, and check that the dropdown and dropdown.type give the right result.</li>
-		<li>Add some variables with interactions in the 'Variables with Interactions' VariablesList and change their types: check that the variablesWithInteraction and variablesWithInteraction.types gives the right values. Check also that the table give the right values</li>
-		</ul>
-		"
-	}
-
-	VariablesForm
-	{
-		AvailableVariablesList
+		title: "Simple Variables forms"
+		ExplanationText
 		{
-			name: "allVariablesList"
+			text: "
+			To avoid problems with not accepted characters in R, the variable names are encoded before sent to R, and decoded when dispayed in the results.<br>
+			The type of the column is also added in the encoded name, so that when the data is read, JASP knows how the variable should be read (as scale, nominal or as ordinal)<br>
+			<ul>
+			<li>Add some variables in the selected VariablesList, and check that the 'selected' option show the right variables, and the 'selected.types' show the right types. Change the type of the variables and check the change is reflected in the selected.types.
+			Check also that the data is read in the 'Selected Data' table.</li>
+			<li>Add a filter like '<10' in the 'Filter to selected' input. Check in the Data & encoded table that the variables are correctly filtered.</li>
+			<li>Select a variable in the dropdown, and check that the dropdown and dropdown.type give the right result.</li>
+			<li>Add some variables with interactions in the 'Variables with Interactions' VariablesList and change their types: check that the variablesWithInteraction and variablesWithInteraction.types gives the right values. Check also that the table give the right values</li>
+			</ul>
+			"
 		}
 
-		AssignedVariablesList
+		VariablesForm
 		{
-			id:				selected
-			name: 			"selected"
-			title: 			qsTr("Selected")
-			allowedColumns:	["scale", "nominal"]
-			allowTypeChange: true
+			AvailableVariablesList
+			{
+				name: "allVariablesList"
+			}
+
+			AssignedVariablesList
+			{
+				id:				selected
+				name: 			"selected"
+				title: 			qsTr("Selected")
+				allowedColumns:	["scale", "nominal"]
+				allowTypeChange: true
+			}
+			AssignedVariablesList
+			{
+				id: 				singleVariable
+				name: 				"singleVariable"
+				title: 				qsTr("Single Variable")
+				singleVariable:		true
+				allowedColumns:		"nominal"
+			}
 		}
-		AssignedVariablesList
+
+		TextField
 		{
-			id: 				singleVariable
-			name: 				"singleVariable"
-			title: 				qsTr("Single Variable")
-			singleVariable:		true
-			allowedColumns:		"nominal"
+			name: "genericFilter"
+			label: "Filter to selected"
 		}
-	}
 
-	TextField
-	{
-		name: "genericFilter"
-		label: "Filter to selected"
-	}
-
-	DropDown
-	{
-		name: "dropdown"
-		label: "Dropdown"
-		source: selected
-	}
-
-	VariablesForm
-	{
-		AvailableVariablesList	{ name: "allVariablesList2"	}
-		AssignedVariablesList
+		DropDown
 		{
-			id: variables2
-			name: "variablesWithInteractions"
-			title: 				qsTr("Variables with interactions")
-			allowTypeChange:	true
-			allowedColumns:		["scale", "nominal"]
-			listViewType: JASP.Interaction
-			addAvailableVariablesToAssigned: false
+			name: "dropdown"
+			label: "Dropdown"
+			source: selected
+		}
+
+		VariablesForm
+		{
+			AvailableVariablesList	{ name: "allVariablesList2"	}
+			AssignedVariablesList
+			{
+				id: variables2
+				name: "variablesWithInteractions"
+				title: 				qsTr("Variables with interactions")
+				allowTypeChange:	true
+				allowedColumns:		["scale", "nominal"]
+				listViewType: JASP.Interaction
+				addAvailableVariablesToAssigned: false
+			}
 		}
 	}
 
@@ -97,22 +101,24 @@ Form
 		ExplanationText
 		{
 			text: "
-			Same thing as in the previous section, but this time the VariablesLists are inside a Components List.
+			Same thing as in the previous section, but this time the VariablesLists are inside a Components List or a VariablesList is the source of a Components List
 			<ul>
 			<li>Add some rows in the components list by clicking on the + button. Check that the componentList option gets the right value</li>
+			<li>Add some values in the 'Variables for components list': check that the ComponentsList get the right values. Also check that the options get the right values and types by changing the types of the variables.</li>
 			</ul>
 			"
 		}
 
 		ComponentsList
 		{
-			name: "componentsList"
-			title: "Components List"
+			name: "componentsListWithVariables"
+			title: "Components List with VariablesList"
 
 			minimumItems: 1
 
 			rowComponent: Column
 			{
+				property alias selectedVariables: variablesInComponentsList
 				Text {text: "Row: " + rowValue}
 
 				VariablesForm
@@ -120,6 +126,7 @@ Form
 					AvailableVariablesList	{ name: "allVariablesListInComponentsList"										}
 					AssignedVariablesList
 					{
+						id:					variablesInComponentsList
 						name: 				"variablesInComponentsList"
 						title: 				qsTr("Variables")
 						allowedColumns:		["scale", "nominal"]
@@ -135,11 +142,41 @@ Form
 					}
 				}
 
+				DropDown { name: "levelsOfSingleVariable"; label: "Levels of Single Variable"; values: singleVariableAA.levels}
 
-				DropDown { name: "testDropDow"; label: "Dropdown"; values: singleVariableAA.levels}
+			}
+
+		}
+
+		Text {text: "Variables List as source of a ComponentsList"}
+		VariablesForm
+		{
+			AvailableVariablesList	{ name: "anotherVariablesList"	}
+			AssignedVariablesList
+			{
+				name: 				"variablesForComponentsList"
+				title: 				qsTr("Variables for components list")
+				allowedColumns:		["scale", "nominal"]
+				allowTypeChange:	true
+				listViewType:		JASP.Interaction
+				addAvailableVariablesToAssigned: false
 
 			}
 		}
+
+		ComponentsList
+		{
+			name: "componentsListFromVariablesList"
+			title: "ComponentsList with source a VariablesList"
+			source: "variablesForComponentsList"
+
+			rowComponent: Row
+			{
+				spacing: 10
+				Text {text: "Row: " + rowValue}
+			}
+		}
+
 	}
 
 	Section
@@ -161,6 +198,4 @@ Form
 		}
 
 	}
-
-
 }
