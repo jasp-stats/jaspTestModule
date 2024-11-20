@@ -40,7 +40,7 @@ Form
 			{
 				name		: "buttons1"
 				values		: ["button1", "button2"]
-				width		: form.width - jaspTheme.groupContentPadding
+				preferredWidth: form.width - jaspTheme.groupContentPadding
 				newItemName	: "Added Button "
 				rowComponent: RadioButton { name: label; label: "Dynamic " + rowValue }
 			}
@@ -57,7 +57,7 @@ Form
 				values			: ["button1", "button2"]
 				addItemManually	: false
 				addBorder		: false
-				width			: form.width - jaspTheme.groupContentPadding
+				preferredWidth	: form.width - jaspTheme.groupContentPadding
 				rowComponent	: RadioButton { value: label; label: "Dynamic " + rowValue }
 			}
 
@@ -96,7 +96,7 @@ Form
 				{
 					values			: ["button1", "button2"]
 					name			: "dynamicbuttons " + rowValue
-					width			: form.width - jaspTheme.groupContentPadding
+					preferredWidth	: form.width - jaspTheme.groupContentPadding
 					addItemManually	: false
 					addBorder		: false
 					rowComponent	: RadioButton { name: rowValue; label: group.name + " " + rowValue }
@@ -152,7 +152,7 @@ Form
 					name				: "customContrasts"
 					anchors.topMargin	: jaspTheme.rowSpacing
 					source				: "assigned"
-					width				: form.width
+					preferredWidth		: form.width
 					addBorder			: false
 
 					rowComponent:
