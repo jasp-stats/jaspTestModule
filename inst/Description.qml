@@ -249,6 +249,13 @@ Description
 		func:			"tooltipFunc"
 	}
 
+	Analysis
+	{
+		title:			"Test label format"
+		qml:			"testLabelFormat.qml"
+		func:			"testLabelFormatFunc"
+	}
+
 	Separator {}
 
 	Analysis
