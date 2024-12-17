@@ -31,7 +31,7 @@
     },
     "Matrix": {
       "Package": "Matrix",
-      "Version": "1.7-0",
+      "Version": "1.7-1",
       "Source": "Repository"
     },
     "R6": {
@@ -46,12 +46,12 @@
     },
     "Rcpp": {
       "Package": "Rcpp",
-      "Version": "1.0.13",
+      "Version": "1.0.13-1",
       "Source": "Repository"
     },
     "abind": {
       "Package": "abind",
-      "Version": "1.4-5",
+      "Version": "1.4-8",
       "Source": "Repository"
     },
     "askpass": {
@@ -116,7 +116,7 @@
     },
     "cpp11": {
       "Package": "cpp11",
-      "Version": "0.5.0",
+      "Version": "0.5.1",
       "Source": "Repository"
     },
     "data.table": {
@@ -261,23 +261,23 @@
     },
     "jaspBase": {
       "Package": "jaspBase",
-      "Version": "0.19.0",
+      "Version": "0.19.2",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "jasp-stats",
       "RemoteRepo": "jaspBase",
-      "RemoteSha": "7de02c442478e028fe2036e3b906059bf504c13e"
+      "RemoteSha": "e1c6dab867c820187bec60b941b1e3c6dc2834d9"
     },
     "jaspGraphs": {
       "Package": "jaspGraphs",
-      "Version": "0.19.0",
+      "Version": "0.19.2",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "jasp-stats",
       "RemoteRepo": "jaspGraphs",
-      "RemoteSha": "e439c080e3841e0719c00ce35c376b34c833b546"
+      "RemoteSha": "c73a76cd55a7f15ccbace1f7eb3b04a5209197ee"
     },
     "jpeg": {
       "Package": "jpeg",
@@ -291,7 +291,7 @@
     },
     "jsonlite": {
       "Package": "jsonlite",
-      "Version": "1.8.8",
+      "Version": "1.8.9",
       "Source": "Repository"
     },
     "knitr": {
@@ -376,7 +376,7 @@
     },
     "openssl": {
       "Package": "openssl",
-      "Version": "2.2.1",
+      "Version": "2.3.0",
       "Source": "Repository"
     },
     "pbapply": {
@@ -526,7 +526,7 @@
     },
     "textshaping": {
       "Package": "textshaping",
-      "Version": "0.4.0",
+      "Version": "0.4.1",
       "Source": "Repository"
     },
     "tibble": {
