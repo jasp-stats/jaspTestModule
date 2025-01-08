@@ -36,7 +36,9 @@ Form
 			"In this example, the interaction between variables are allowed. Also all selected variables should be added automatically to the Model 1.<br>" +
 			"The minmum numbers of models is set to 2, so the 'Remove model button should be disabled when only 2 models are present.<br>" +
 			"The nested feature can be dynamically disactivated by unchecking the 'Nested' checkbox: in this case all varaibles become automatically enabled and movable. Also the nested constraints are removed." +
-			"If the Nested checkbox is set again, the constraints are applied again, and the models get the necessary variables."
+			"If the Nested checkbox is set again, the constraints are applied again, and the models get the necessary variables.<br>" +
+			"It is also possible to change the type of the variables in the Factors Form: change some types, check that the analysis is each time rerun.<br>" +
+			"Duplicate the analysis, and check that you get the same variables (with their types) in each Variables List "
 		}
 
 		VariablesForm
@@ -65,6 +67,9 @@ Form
 			availableVariablesList.source:		"variables"
 			startIndex:			0
 			availableVariablesListName: "availableFactors"
+			allowedColumns:		["ordinal", "scale"]
+			allowTypeChange:	true
+
 		}
 
 		CheckBox
@@ -85,13 +90,17 @@ Form
 			text:
 			"This tests the simple Factors Form without nested features as in the CFA analysis.<br>" +
 			"Here the minimum number of Variables List is 1. The title names start by 'Factor 1'.<br>" +
-			"There is no interaction possibility between the variables."
+			"There is no interaction possibility between the variables.<br>" +
+			"It is also possible to change the type of the variables in the Factors Form: change some types, check that the analysis is each time rerun.<br>" +
+			"Duplicate the analysis, and check that you get the same variables (with their types) in each Variables List "
 		}
 
 		FactorsForm
 		{
 			name: "factors"
 			initNumberFactors: 1
+			allowedColumns:		["ordinal", "scale"]
+			allowTypeChange:	true
 		}
 	}
 
