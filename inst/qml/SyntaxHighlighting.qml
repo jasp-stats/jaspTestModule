@@ -18,7 +18,6 @@
 
 
 import JASP.Controls
-import JASP.Widgets
 import JASP
 
 Form

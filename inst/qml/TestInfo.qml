@@ -1,6 +1,5 @@
 import QtQuick
 import JASP.Controls
-import JASP.Widgets
 
 Form
 {
