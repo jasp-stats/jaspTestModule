@@ -45,6 +45,13 @@ Description
 
 	Analysis
 	{
+		title:	qsTr("Test jaspTable formatting")
+		qml:	"testTableFormatting.qml"
+		func:	"testTableFormattingFunc"
+	}
+
+	Analysis
+	{
 		id:			footnotesEntry
 		title:		qsTr("Wait for it...")
 		qml:		"test.qml"
