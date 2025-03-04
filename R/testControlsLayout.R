@@ -1,5 +1,5 @@
 
-testDropdownFunc <- function(jaspResults, dataset, options)
+testControlsLayoutFunc <- function(jaspResults, dataset, options)
 {
   tableOfOptions(jaspResults, options, dataset)
   

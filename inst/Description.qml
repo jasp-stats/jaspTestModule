@@ -244,9 +244,9 @@ Description
 
 	Analysis
 	{
-		title:			"Test Dropdown"
-		qml:			"testDropdown.qml"
-		func:			"testDropdownFunc"
+		title:			"Test Controls layout"
+		qml:			"testControlsLayout.qml"
+		func:			"testControlsLayoutFunc"
 	}
 
 	Analysis
