@@ -96,12 +96,11 @@ Form
 
 			info:				"This is an info field on a tabview"
 
-			content: Group
+			content: Column
 			{
 				TextArea
 				{
 					name:				"syntax"
-					width:				parent.width
 					//textType:			JASP.TextTypeModel
 					trim:				true
 					applyScriptInfo:	qsTr("Ctrl + Enter to apply. Click on the blue button above for help on the restriction syntax")

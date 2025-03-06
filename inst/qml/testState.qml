@@ -45,7 +45,7 @@ Form
 		newItemName:		qsTr("Tab 1")
 		optionKey:			"tabviewOptions"
 
-		content: Group
+		content: Column
 		{
 			CheckBox
 			{

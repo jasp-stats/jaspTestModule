@@ -110,4 +110,33 @@ Form
 		}
 	}
 
+	ExplanationText
+	{
+		text: "Test also range controls that use FormulaField.<br>" +
+			  "The default values is set to \"-1\" (as string) and 1 as integer: you should be able to initializa FormulaField with both string and integer/double.<br>" +
+			  "Afterwards you can set the values with 1/2 or sin(1) and check that the min/max is still respected."
+	}
+
+	Group
+	{
+		title: "Range using FormulaFields."
+		FormulaField
+		{
+			id:					leftInput
+			name:				"leftFormula"
+			defaultValue:		"-1"
+			min:				-Infinity
+			max:				rightInput.realValue
+		}
+
+		FormulaField
+		{
+			id:					rightInput
+			name:				"rightFormula"
+			defaultValue:		1
+			realValue:			1
+			min:				leftInput.realValue
+			max:				Infinity
+		}
+	}
 }
