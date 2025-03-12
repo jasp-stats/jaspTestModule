@@ -10,7 +10,7 @@ testTableFormattingFunc <- function(jaspResults, dataset, options)
 	tableData  <- data.frame(
 		list(
 			someNumber=c(0, 1, 2, 3.3), 
-			someMoney=c(10, 11.00, 100000002, 100.12),
+			someMoney=c(10, ".", 100000002, 100.12),
 			someMoneyDollar=c(1043, 11.00, 100000002, 100.12), 
 			someFixedDecimals=c(1.234, 12.34, 123.4, 1234.0 ),
 			someSignificance=c(1.234, 12.34, 1221312313.4, 1234.0 ),
