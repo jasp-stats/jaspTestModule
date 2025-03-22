@@ -17,6 +17,7 @@
 //
 import QtQuick
 import JASP.Controls
+import JASP
 import "./common"
 
 Form
@@ -92,15 +93,44 @@ Form
 			"Here the minimum number of Variables List is 1. The title names start by 'Factor 1'.<br>" +
 			"There is no interaction possibility between the variables.<br>" +
 			"It is also possible to change the type of the variables in the Factors Form: change some types, check that the analysis is each time rerun.<br>" +
+			"The Variables Lists inside the Factors Form are also available as source. So here the Variables List of a Components List have as source each Variables List of the Factors Form.<br>" +
+			"They have also a DropDown with values the titles of the Factors Form. So add some Factors, change the titles, and check that the Variables List in the Components List are synchronized<br>" +
 			"Duplicate the analysis, and check that you get the same variables (with their types) in each Variables List "
 		}
 
 		FactorsForm
 		{
+			id: simpleFactors
 			name: "factors"
 			initNumberFactors: 1
 			allowedColumns:		["ordinal", "scale"]
 			allowTypeChange:	true
+		}
+
+		ComponentsList
+		{
+			id: factorsList
+			name: "factorsList"
+			values: simpleFactors.factorsTitles
+			addItemManually: false
+
+			rowComponent: VariablesList
+			{
+				implicitWidth	: form.width - 2 * jaspTheme.generalAnchorMargin
+				implicitHeight	: jaspTheme.smallDefaultVariablesFormHeight
+
+				draggable		: false
+				title			: rowValue
+				source			: simpleFactors.factorsItems[rowIndex] //[rowIndex].model
+				listViewType	: JASP.AssignedVariables
+				name			: "newfactors"
+
+				rowComponent	: Row
+				{
+					CheckBox { name: "check" }
+					DropDown { name: "drop"; values: simpleFactors.factorsTitles }
+				}
+			}
 		}
 	}
 
