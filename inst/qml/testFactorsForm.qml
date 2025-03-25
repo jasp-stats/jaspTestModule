@@ -93,8 +93,8 @@ Form
 			"Here the minimum number of Variables List is 1. The title names start by 'Factor 1'.<br>" +
 			"There is no interaction possibility between the variables.<br>" +
 			"It is also possible to change the type of the variables in the Factors Form: change some types, check that the analysis is each time rerun.<br>" +
-			"The Variables Lists inside the Factors Form are also available as source. So here the Variables List of a Components List have as source each Variables List of the Factors Form.<br>" +
-			"They have also a DropDown with values the titles of the Factors Form. So add some Factors, change the titles, and check that the Variables List in the Components List are synchronized<br>" +
+			"The Variables Lists inside the Factors Form are also available as source. So here the Variables List inside a TabView has as source the corresponding Variables List of the Factors Form.<br>" +
+			"They have also a DropDown with values the titles of the Factors Form. So add and remove some Factors, change the titles, and check that the Variables List in the Tab View are synchronized<br>" +
 			"Duplicate the analysis, and check that you get the same variables (with their types) in each Variables List "
 		}
 
@@ -107,7 +107,7 @@ Form
 			allowTypeChange:	true
 		}
 
-		ComponentsList
+		TabView
 		{
 			id: factorsList
 			name: "factorsList"
@@ -120,8 +120,7 @@ Form
 				implicitHeight	: jaspTheme.smallDefaultVariablesFormHeight
 
 				draggable		: false
-				title			: rowValue
-				source			: simpleFactors.factorsItems[rowIndex] //[rowIndex].model
+				source			: simpleFactors.factorsItems[rowIndex]
 				listViewType	: JASP.AssignedVariables
 				name			: "newfactors"
 
