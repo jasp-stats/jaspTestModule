@@ -1,4 +1,4 @@
-tableView <- function(jaspResults, dataset, options) {
+testTableView <- function(jaspResults, dataset, options) {
   tableOfOptions(jaspResults, options, dataset)
   
 

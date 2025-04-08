@@ -208,14 +208,21 @@ Description
 
 	Analysis
 	{
-		title:			"Test TableView control"
-		qml:			"tableView.qml"
-		func:			"tableView"
+		title:			"Test Tab View"
+		qml:			"testTabView.qml"
+		func:			"testTabView"
 	}
 
 	Analysis
 	{
-		title:			"Test TextArea control"
+		title:			"Test Table View"
+		qml:			"testTableView.qml"
+		func:			"testTableView"
+	}
+
+	Analysis
+	{
+		title:			"Test TextArea"
 		qml:			"testTextArea.qml"
 		func:			"testTextArea"
 	}
