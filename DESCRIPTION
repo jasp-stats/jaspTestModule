@@ -12,10 +12,8 @@ Imports:
     jaspBase,
     jaspGraphs, 
     svglite,
-	stringi,
-	jaspSem
+	stringi
 Remotes: 
     jasp-stats/jaspBase,
-	jasp-stats/jaspGraphs,
-	jasp-stats/jaspSem
+	jasp-stats/jaspGraphs
 
