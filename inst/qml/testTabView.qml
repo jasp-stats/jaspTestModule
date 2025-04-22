@@ -114,6 +114,7 @@ Form
 		{
 			text:
 			"This tests a Tab View with Variables Form contaning Repeated Measures factors: check that this works correctly with several tabs.<br>" +
+			"Check also that the dropdown get the factors and for each factor, the right levels<br>" +
 			"Duplicate the analysis, and check that you get the same variables set in each Variables List in each tab."
 		}
 
@@ -122,12 +123,25 @@ Form
 			id: tabViewWithFactors
 			name: "tabViewWithFactors"
 
-			rowComponent: VariablesForm
+			rowComponent: Column
 			{
-				preferredHeight: 520 * preferencesModel.uiScale
-				AvailableVariablesList         { name: "allVariablesList" }
-				FactorLevelList                { name: "repeatedMeasuresFactors"; id: repeatedMeasuresFactors; title: qsTr("Repeated Measures Factors"); height: 180 * preferencesModel.uiScale; factorName: qsTr("RM Factor") }
-				AssignedRepeatedMeasuresCells  { name: "repeatedMeasuresCells"; title: qsTr("Repeated Measures Cells"); source: "repeatedMeasuresFactors" }
+				spacing: 10
+				VariablesForm
+				{
+					preferredHeight: 520 * preferencesModel.uiScale
+					AvailableVariablesList         { name: "allVariablesList" }
+					FactorLevelList                { name: "repeatedMeasuresFactors"; id: repeatedMeasuresFactors; title: qsTr("Repeated Measures Factors"); height: 180 * preferencesModel.uiScale; factorName: qsTr("RM Factor") }
+					AssignedRepeatedMeasuresCells  { name: "repeatedMeasuresCells"; title: qsTr("Repeated Measures Cells"); source: "repeatedMeasuresFactors" }
+				}
+
+				Group
+				{
+					columns: 2
+					height: jaspTheme.comboBoxHeight + 5
+
+					DropDown { name: "factors"; label: "Factors"; values: repeatedMeasuresFactors.factors; id: factors }
+					DropDown { name: "levels"; label: "Levels"; values: repeatedMeasuresFactors.factorLevelMap[factors.currentValue] }
+				}
 			}
 
 		}
