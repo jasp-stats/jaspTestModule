@@ -1,0 +1,694 @@
+{
+  "R": {
+    "Version": "4.5.0",
+    "Repositories": [
+      {
+        "Name": "CRAN",
+        "URL": "https://cloud.r-project.org"
+      }
+    ]
+  },
+  "Packages": {
+    "MASS": {
+      "Package": "MASS",
+      "Version": "7.3-65",
+      "Source": "Repository",
+      "Requirements": [
+        "R",
+        "grDevices",
+        "graphics",
+        "stats",
+        "utils",
+        "methods"
+      ]
+    },
+    "Matrix": {
+      "Package": "Matrix",
+      "Version": "1.7-3",
+      "Source": "Repository",
+      "Requirements": [
+        "R",
+        "methods",
+        "grDevices",
+        "graphics",
+        "grid",
+        "lattice",
+        "stats",
+        "utils"
+      ]
+    },
+    "R6": {
+      "Package": "R6",
+      "Version": "2.6.1",
+      "Source": "Repository",
+      "Requirements": [
+        "R"
+      ]
+    },
+    "RColorBrewer": {
+      "Package": "RColorBrewer",
+      "Version": "1.1-3",
+      "Source": "Repository",
+      "Requirements": [
+        "R"
+      ]
+    },
+    "Rcpp": {
+      "Package": "Rcpp",
+      "Version": "1.0.14",
+      "Source": "Repository",
+      "Requirements": [
+        "methods",
+        "utils"
+      ]
+    },
+    "askpass": {
+      "Package": "askpass",
+      "Version": "1.2.1",
+      "Source": "Repository",
+      "Requirements": [
+        "sys"
+      ]
+    },
+    "base64enc": {
+      "Package": "base64enc",
+      "Version": "0.1-3",
+      "Source": "Repository",
+      "Requirements": [
+        "R"
+      ]
+    },
+    "callr": {
+      "Package": "callr",
+      "Version": "3.7.6",
+      "Source": "Repository",
+      "Requirements": [
+        "R",
+        "processx",
+        "R6",
+        "utils"
+      ]
+    },
+    "cli": {
+      "Package": "cli",
+      "Version": "3.6.5",
+      "Source": "Repository",
+      "Requirements": [
+        "R",
+        "utils"
+      ]
+    },
+    "codetools": {
+      "Package": "codetools",
+      "Version": "0.2-20",
+      "Source": "Repository",
+      "Requirements": [
+        "R"
+      ]
+    },
+    "cpp11": {
+      "Package": "cpp11",
+      "Version": "0.5.2",
+      "Source": "Repository",
+      "Requirements": [
+        "R"
+      ]
+    },
+    "desc": {
+      "Package": "desc",
+      "Version": "1.4.3",
+      "Source": "Repository",
+      "Requirements": [
+        "R",
+        "cli",
+        "R6",
+        "utils"
+      ]
+    },
+    "digest": {
+      "Package": "digest",
+      "Version": "0.6.37",
+      "Source": "Repository",
+      "Requirements": [
+        "R",
+        "utils"
+      ]
+    },
+    "fansi": {
+      "Package": "fansi",
+      "Version": "1.0.6",
+      "Source": "Repository",
+      "Requirements": [
+        "R",
+        "grDevices",
+        "utils"
+      ]
+    },
+    "farver": {
+      "Package": "farver",
+      "Version": "2.1.2",
+      "Source": "Repository",
+      "Requirements": []
+    },
+    "fastmap": {
+      "Package": "fastmap",
+      "Version": "1.2.0",
+      "Source": "Repository",
+      "Requirements": []
+    },
+    "fontBitstreamVera": {
+      "Package": "fontBitstreamVera",
+      "Version": "0.1.1",
+      "Source": "Repository",
+      "Requirements": [
+        "R"
+      ]
+    },
+    "fontLiberation": {
+      "Package": "fontLiberation",
+      "Version": "0.1.0",
+      "Source": "Repository",
+      "Requirements": [
+        "R"
+      ]
+    },
+    "fontquiver": {
+      "Package": "fontquiver",
+      "Version": "0.2.1",
+      "Source": "Repository",
+      "Requirements": [
+        "R",
+        "fontBitstreamVera",
+        "fontLiberation"
+      ]
+    },
+    "gdtools": {
+      "Package": "gdtools",
+      "Version": "0.4.2",
+      "Source": "Repository",
+      "Requirements": [
+        "R",
+        "fontquiver",
+        "htmltools",
+        "Rcpp",
+        "systemfonts",
+        "tools"
+      ]
+    },
+    "ggplot2": {
+      "Package": "ggplot2",
+      "Version": "3.5.2",
+      "Source": "Repository",
+      "Requirements": [
+        "R",
+        "cli",
+        "glue",
+        "grDevices",
+        "grid",
+        "gtable",
+        "isoband",
+        "lifecycle",
+        "MASS",
+        "mgcv",
+        "rlang",
+        "scales",
+        "stats",
+        "tibble",
+        "vctrs",
+        "withr"
+      ]
+    },
+    "glue": {
+      "Package": "glue",
+      "Version": "1.8.0",
+      "Source": "Repository",
+      "Requirements": [
+        "R",
+        "methods"
+      ]
+    },
+    "gridExtra": {
+      "Package": "gridExtra",
+      "Version": "2.3",
+      "Source": "Repository",
+      "Requirements": [
+        "gtable",
+        "grid",
+        "grDevices",
+        "graphics",
+        "utils"
+      ]
+    },
+    "gridGraphics": {
+      "Package": "gridGraphics",
+      "Version": "0.5-1",
+      "Source": "Repository",
+      "Requirements": [
+        "grid",
+        "graphics",
+        "grDevices"
+      ]
+    },
+    "gtable": {
+      "Package": "gtable",
+      "Version": "0.3.6",
+      "Source": "Repository",
+      "Requirements": [
+        "R",
+        "cli",
+        "glue",
+        "grid",
+        "lifecycle",
+        "rlang",
+        "stats"
+      ]
+    },
+    "htmltools": {
+      "Package": "htmltools",
+      "Version": "0.5.8.1",
+      "Source": "Repository",
+      "Requirements": [
+        "R",
+        "base64enc",
+        "digest",
+        "fastmap",
+        "grDevices",
+        "rlang",
+        "utils"
+      ]
+    },
+    "isoband": {
+      "Package": "isoband",
+      "Version": "0.2.7",
+      "Source": "Repository",
+      "Requirements": [
+        "grid",
+        "utils"
+      ]
+    },
+    "jaspBase": {
+      "Package": "jaspBase",
+      "Version": "0.20.0",
+      "Source": "GitHub",
+      "Requirements": [
+        "cli",
+        "codetools",
+        "ggplot2",
+        "gridExtra",
+        "gridGraphics",
+        "jaspGraphs",
+        "jsonlite",
+        "lifecycle",
+        "officer",
+        "pkgbuild",
+        "plyr",
+        "ragg",
+        "R6",
+        "Rcpp",
+        "rvg",
+        "svglite",
+        "systemfonts",
+        "withr",
+        "testthat"
+      ],
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "jasp-stats",
+      "RemoteRepo": "jaspBase",
+      "RemoteSha": "82b4b3fd094ac3b43e4c92bc6857da7efb7530d1"
+    },
+    "jaspGraphs": {
+      "Package": "jaspGraphs",
+      "Version": "0.20.0",
+      "Source": "GitHub",
+      "Requirements": [
+        "testthat",
+        "ggplot2",
+        "gridExtra",
+        "gtable",
+        "lifecycle",
+        "jsonlite",
+        "R6",
+        "RColorBrewer",
+        "rlang",
+        "scales",
+        "viridisLite"
+      ],
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "jasp-stats",
+      "RemoteRepo": "jaspGraphs",
+      "RemoteSha": "78cc4121563962922e48513d1f27e10510263e8a"
+    },
+    "jsonlite": {
+      "Package": "jsonlite",
+      "Version": "2.0.0",
+      "Source": "Repository",
+      "Requirements": [
+        "methods"
+      ]
+    },
+    "labeling": {
+      "Package": "labeling",
+      "Version": "0.4.3",
+      "Source": "Repository",
+      "Requirements": [
+        "stats",
+        "graphics"
+      ]
+    },
+    "lattice": {
+      "Package": "lattice",
+      "Version": "0.22-7",
+      "Source": "Repository",
+      "Requirements": [
+        "R",
+        "grid",
+        "grDevices",
+        "graphics",
+        "stats",
+        "utils"
+      ]
+    },
+    "lifecycle": {
+      "Package": "lifecycle",
+      "Version": "1.0.4",
+      "Source": "Repository",
+      "Requirements": [
+        "R",
+        "cli",
+        "glue",
+        "rlang"
+      ]
+    },
+    "magrittr": {
+      "Package": "magrittr",
+      "Version": "2.0.3",
+      "Source": "Repository",
+      "Requirements": [
+        "R"
+      ]
+    },
+    "mgcv": {
+      "Package": "mgcv",
+      "Version": "1.9-3",
+      "Source": "Repository",
+      "Requirements": [
+        "R",
+        "nlme",
+        "methods",
+        "stats",
+        "graphics",
+        "Matrix",
+        "splines",
+        "utils"
+      ]
+    },
+    "nlme": {
+      "Package": "nlme",
+      "Version": "3.1-168",
+      "Source": "Repository",
+      "Requirements": [
+        "R",
+        "graphics",
+        "stats",
+        "utils",
+        "lattice"
+      ]
+    },
+    "officer": {
+      "Package": "officer",
+      "Version": "0.6.8",
+      "Source": "Repository",
+      "Requirements": [
+        "cli",
+        "graphics",
+        "grDevices",
+        "openssl",
+        "R6",
+        "ragg",
+        "stats",
+        "utils",
+        "uuid",
+        "xml2",
+        "zip"
+      ]
+    },
+    "openssl": {
+      "Package": "openssl",
+      "Version": "2.3.2",
+      "Source": "Repository",
+      "Requirements": [
+        "askpass"
+      ]
+    },
+    "pillar": {
+      "Package": "pillar",
+      "Version": "1.10.2",
+      "Source": "Repository",
+      "Requirements": [
+        "cli",
+        "glue",
+        "lifecycle",
+        "rlang",
+        "utf8",
+        "utils",
+        "vctrs"
+      ]
+    },
+    "pkgbuild": {
+      "Package": "pkgbuild",
+      "Version": "1.4.7",
+      "Source": "Repository",
+      "Requirements": [
+        "R",
+        "callr",
+        "cli",
+        "desc",
+        "processx",
+        "R6"
+      ]
+    },
+    "pkgconfig": {
+      "Package": "pkgconfig",
+      "Version": "2.0.3",
+      "Source": "Repository",
+      "Requirements": [
+        "utils"
+      ]
+    },
+    "plyr": {
+      "Package": "plyr",
+      "Version": "1.8.9",
+      "Source": "Repository",
+      "Requirements": [
+        "R",
+        "Rcpp"
+      ]
+    },
+    "processx": {
+      "Package": "processx",
+      "Version": "3.8.6",
+      "Source": "Repository",
+      "Requirements": [
+        "R",
+        "ps",
+        "R6",
+        "utils"
+      ]
+    },
+    "ps": {
+      "Package": "ps",
+      "Version": "1.9.1",
+      "Source": "Repository",
+      "Requirements": [
+        "R",
+        "utils"
+      ]
+    },
+    "ragg": {
+      "Package": "ragg",
+      "Version": "1.4.0",
+      "Source": "Repository",
+      "Requirements": [
+        "systemfonts",
+        "textshaping"
+      ]
+    },
+    "rlang": {
+      "Package": "rlang",
+      "Version": "1.1.6",
+      "Source": "Repository",
+      "Requirements": [
+        "R",
+        "utils"
+      ]
+    },
+    "rvg": {
+      "Package": "rvg",
+      "Version": "0.3.5",
+      "Source": "Repository",
+      "Requirements": [
+        "R",
+        "grDevices",
+        "Rcpp",
+        "officer",
+        "gdtools",
+        "xml2",
+        "rlang"
+      ]
+    },
+    "scales": {
+      "Package": "scales",
+      "Version": "1.4.0",
+      "Source": "Repository",
+      "Requirements": [
+        "R",
+        "cli",
+        "farver",
+        "glue",
+        "labeling",
+        "lifecycle",
+        "R6",
+        "RColorBrewer",
+        "rlang",
+        "viridisLite"
+      ]
+    },
+    "stringi": {
+      "Package": "stringi",
+      "Version": "1.8.7",
+      "Source": "Repository",
+      "Requirements": [
+        "R",
+        "tools",
+        "utils",
+        "stats"
+      ]
+    },
+    "svglite": {
+      "Package": "svglite",
+      "Version": "2.1.3",
+      "Source": "Repository",
+      "Requirements": [
+        "R",
+        "systemfonts",
+        "cpp11"
+      ]
+    },
+    "sys": {
+      "Package": "sys",
+      "Version": "3.4.3",
+      "Source": "Repository",
+      "Requirements": []
+    },
+    "systemfonts": {
+      "Package": "systemfonts",
+      "Version": "1.2.2",
+      "Source": "Repository",
+      "Requirements": [
+        "R",
+        "grid",
+        "jsonlite",
+        "lifecycle",
+        "tools",
+        "utils",
+        "cpp11"
+      ]
+    },
+    "textshaping": {
+      "Package": "textshaping",
+      "Version": "1.0.0",
+      "Source": "Repository",
+      "Requirements": [
+        "R",
+        "lifecycle",
+        "stats",
+        "stringi",
+        "systemfonts",
+        "utils",
+        "cpp11"
+      ]
+    },
+    "tibble": {
+      "Package": "tibble",
+      "Version": "3.2.1",
+      "Source": "Repository",
+      "Requirements": [
+        "R",
+        "fansi",
+        "lifecycle",
+        "magrittr",
+        "methods",
+        "pillar",
+        "pkgconfig",
+        "rlang",
+        "utils",
+        "vctrs"
+      ]
+    },
+    "utf8": {
+      "Package": "utf8",
+      "Version": "1.2.4",
+      "Source": "Repository",
+      "Requirements": [
+        "R"
+      ]
+    },
+    "uuid": {
+      "Package": "uuid",
+      "Version": "1.2-1",
+      "Source": "Repository",
+      "Requirements": [
+        "R"
+      ]
+    },
+    "vctrs": {
+      "Package": "vctrs",
+      "Version": "0.6.5",
+      "Source": "Repository",
+      "Requirements": [
+        "R",
+        "cli",
+        "glue",
+        "lifecycle",
+        "rlang"
+      ]
+    },
+    "viridisLite": {
+      "Package": "viridisLite",
+      "Version": "0.4.2",
+      "Source": "Repository",
+      "Requirements": [
+        "R"
+      ]
+    },
+    "withr": {
+      "Package": "withr",
+      "Version": "3.0.2",
+      "Source": "Repository",
+      "Requirements": [
+        "R",
+        "graphics",
+        "grDevices"
+      ]
+    },
+    "xml2": {
+      "Package": "xml2",
+      "Version": "1.3.8",
+      "Source": "Repository",
+      "Requirements": [
+        "R",
+        "cli",
+        "methods",
+        "rlang"
+      ]
+    },
+    "zip": {
+      "Package": "zip",
+      "Version": "2.3.2",
+      "Source": "Repository",
+      "Requirements": []
+    }
+  }
+}
