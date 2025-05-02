@@ -277,6 +277,13 @@ Description
 		func:			"testLabelFormatFunc"
 	}
 
+	Analysis
+	{
+		title:			"Test Input Field"
+		qml:			"testInputField.qml"
+		func:			"testInputFiledFunc"
+	}
+
 	Separator {}
 
 	Analysis
