@@ -32,6 +32,27 @@ Form
 		]
 	}
 
+	DropDown
+	{
+		id: dropdownVariables
+		name: "dropdownVariables"
+		label: "Dropdown with variables"
+		info: "You can choose one of the variables"
+	}
+
+
+	DropDown
+	{
+		property var extraValues: [
+			{ label: qsTr("One"),		value: "one",		info: "First one"},
+			{ label: qsTr("Two"),		value: "two",		info: "Second one"}
+		]
+		name: "dropdownVariableAndExtraValues"
+		label: "Dropdown with variables and extra values"
+		info: "You can choose one of the variables or special values"
+		source: [{values: extraValues}, {isDataSetVariables: true}]
+	}
+
 	RadioButtonGroup
 	{
 		name:	"radiobuttongroup"
@@ -57,7 +78,7 @@ Form
 
 	Section
 	{
-		title: "some fields in a section"
+		title: "Some fields in a section"
 		//name:	"aSection"
 
 		DoubleField
@@ -83,7 +104,7 @@ Form
 
 	Section
 	{
-		title: "another section just for shows"
+		title: "Another section just for shows"
 		//name:	"aSection"
 
 		TabView
@@ -137,6 +158,14 @@ Form
 			AssignedRepeatedMeasuresCells	{ info: "assigned RM"; 							name: "cells";			title: qsTr("RM!")	}
 			AssignedPairsVariablesList		{ info: "assigned pairs"; 						name: "paairs";			title: qsTr("PAIRS!")	}
 			FactorLevelList					{ info:	"FactorLevelList";						name: "repeatedMeasuresFactors";	title: qsTr("Repeated Measures Factors");	factorName: qsTr("RM Factor")	}
+		}
+
+		DropDown
+		{
+			name: "dropdownWithVariablesSource"
+			source: varA
+			label: "DropDown with variables from `With allowed` list"
+
 		}
 	}
 
