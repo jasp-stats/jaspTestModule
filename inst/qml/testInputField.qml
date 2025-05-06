@@ -53,6 +53,13 @@ Form
 
 		FormulaField
 		{
+			label: "Default nan: " + value + ", real value: " + realValue
+			name: "formulaNan"
+			value: "nan"
+		}
+
+		FormulaField
+		{
 			label: "Default 1/2: " + value + ", real value: " + realValue
 			name: "formulaHalf"
 			value: "1/2"
