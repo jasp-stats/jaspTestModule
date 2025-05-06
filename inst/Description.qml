@@ -281,7 +281,7 @@ Description
 	{
 		title:			"Test Input Field"
 		qml:			"testInputField.qml"
-		func:			"testInputFiledFunc"
+		func:			"testInputFieldFunc"
 	}
 
 	Separator {}
