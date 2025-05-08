@@ -43,6 +43,7 @@ Description
 		func:	"testCrapDataTable"
 	}
 
+
 	Analysis
 	{
 		title:	qsTr("Test jaspTable formatting")
@@ -124,7 +125,7 @@ Description
 
 	Separator {}
 
-	GroupTitle { title:		"Data and columns"; }
+	GroupTitleSmall { title:		"Data and columns"; }
 
 	Analysis
 	{
