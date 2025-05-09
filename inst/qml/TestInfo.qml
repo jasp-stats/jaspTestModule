@@ -76,6 +76,38 @@ Form
 		label:		"sliding: "
 	}
 
+	CheckBox
+	{
+		name: 						"barPlot"
+		label: 						qsTr("Bar plots")
+
+		info: qsTr("Displays the sample means as bars and the confidence intervals or standard errors as error bars for each measure.")
+
+		RadioButtonGroup
+		{
+			name: "barPlotErrorType"
+
+			RadioButton
+			{
+				value: 				"ci"
+				label: 				qsTr("Confidence interval")
+				checked: 			true
+				childrenOnSameRow: 	true
+				info:				qsTr("Coverage of the confidence intervals in percentages. By default, the confidence interval is set to 95%. This can be changed into the desired percentage.")
+
+				CIField { name: 	"barPlotCiLevel"}
+			}
+			RadioButton { value: 	"se";	label: qsTr("Standard error"); info: qsTr("By selecting this option, the error bars will represent standard errors of the mean of each condition." )}
+		}
+
+		CheckBox
+		{
+			name: "barPlotYAxisFixedToZero";
+			label: qsTr("Fix horizontal axis to 0"); checked: true;
+			info: qsTr("Fix horizontal axis to 0: Forces the graph to show the default x-axis at y = 0")
+		}
+	}
+
 	Section
 	{
 		title: "Some fields in a section"
