@@ -41,7 +41,7 @@ Form
 				name		: "buttons1"
 				values		: ["button1", "button2"]
 				preferredWidth: form.width - jaspTheme.groupContentPadding
-				newItemName	: "Added Button "
+				newItemValue : "Added Button "
 				rowComponent: RadioButton { name: label; label: "Dynamic " + rowValue }
 			}
 		}
