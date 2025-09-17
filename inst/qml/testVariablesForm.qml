@@ -4,43 +4,60 @@ import "./common"
 
 Form
 {
-	property var allowed: 		[ "ordinal" ]
-
-	
-	onAllowedChanged:	 {console.log("allowed is now " + allowed) }
+	property var allowed: 		[ "scale" ]
 
 	columns: 1
+
+	ExplanationText
+	{
+		text:
+			"Test visiblity of Variables lists inside of a Variables form.<br>
+			Some of the Variables list can become invisible (due to some settings in the analysis). In this case, the place occupied of the invisble
+			Variables lists can be left empty, or it can be used by the other Variables lists. This depends on the 'removeInvisibles' property.
+			<ul>
+				<li>Make the 'Toggling Variables lists invisible: see that the visible Variables lists keeps their height.</li>
+				<li>Toggle the removeInvisibles property (to set is to true): check that the visible Variables lists use all the space left</li>
+				<li>Make the Variables lists visible again: see that the Variables lists adjust their heights to use all the space.</li>
+			</ul>
+			Add constraints and check that the variables fulfill the constraints or give an error, even if a variable is already in the VariablesList.<br>
+			Change the allowed types, and check that the types of variables that are already in the VariablesList get the right type.<br>
+			Change the type of the variable directly in the VariablesList: check that only the allowed types are proposed.
+			"
+	}
+
+
+	onAllowedChanged:	 {console.log("allowed is now " + allowed) }
 
 	VariablesForm
 	{
 		id: varForm
 		AvailableVariablesList	{ name: "allVariablesList"										}
-		AssignedVariablesList	
-		{ 
+		AssignedVariablesList
+		{
 			id: 				varS
 			name: 				"varS"
-			title: 				qsTr("With min max levels")
+			title: 				qsTr("Variables")
+			allowedColumns: 	allowed
 
 			minNumericLevels:	minNumLevel.value
 			maxNumericLevels:	maxNumLevel.value
 			minLevels:			minLevel.value
-			maxLevels:			maxLevel.values
+			maxLevels:			maxLevel.value
+			allowTypeChange:	true
 
 			onLevelsChanged:	messages.log("varS Levels is now: " + levels)
 		}
 
-		AssignedVariablesList	
+		AssignedVariablesList
 		{
-			id: 				varA
-			name: 				"varA"
-			title: 				qsTr("With allowed and min/max(num)levels")				; 
-			allowedColumns: 	allowed	
+			id: 				varToggle
+			name: 				"varToggle"
+			title: 				qsTr("Toggling Variables List")				;
 			minNumericLevels:	minNumLevel.value
 			maxNumericLevels:	maxNumLevel.value
 			minLevels:			minLevel.value
 			maxLevels:			maxLevel.value
 
-			onLevelsChanged:	messages.log("varA Levels is now: " + levels)
 		}
 
 	}
@@ -60,114 +77,92 @@ Form
 		return list;
 	}
 
-	Section
+
+
+	Group
 	{
-		title: "Visiblity of the Variables lists"
-
-		ExplanationText
+		columns: 2
+		title: "<b>Toggling Variables List: " + (varToggle.visible ? " visible " : ("hidden and " + (varForm.removeInvisibles ? "removed": "not removed"))) + "</b>"
+		CheckBox
 		{
-			text:
-				"Test visiblity of Variables lists inside of a Variables form.<br>
-				Some of the Variables list can become invisible (due to some settings in the analysis). In this case, the place occupied of the invisble
-				Variables lists can be left empty, or it can be used by the other Variables lists. This depends on the 'removeInvisibles' property.
-				<ul>
-					<li>Make the 'With allowed' Variables lists invisible: see that the visible Variables lists keeps their height.</li>
-					<li>Toggle the removeInvisibles property (to set is to true): check that the visible Variables lists use all the space left</li>
-					<li>Make the Variables lists visible again: see that the Variables lists adjust their heights to use all the space.</li>
-				</ul>
-				"
+			name:		"toggleVisibility"
+			label:		"Toggle visiblility"
+			onClicked:	varToggle.visible = !varToggle.visible
+			checked:	varToggle.visible
 		}
-
-		Group
+		CheckBox
 		{
-			columns: 1
-			Button
-			{
-				text:		"Toggle visiblility of 'With allowed'"
-				onClicked:	varA.visible = !varA.visible
-			}
-			Button
-			{
-				text: "Toggle removeInvisibles property"
-				onClicked: varForm.removeInvisibles = !varForm.removeInvisibles
-			}
-			Text { text: "<b>Current removeInvisibles: " + (varForm.removeInvisibles ? "true" : "false") + "</b>" }
+			name:		"toggleRemoveInvisibles"
+			label:		"Toggle removeInvisibles property"
+			onClicked:	varForm.removeInvisibles = !varForm.removeInvisibles
+			checked:	varForm.removeInvisibles
 		}
 	}
 
-	Section
+	Group
 	{
-		title: "Allowed"
-
-		ExplanationText
+		title: "<b>Constraints</b>"
+		columns: 2
+		IntegerField
 		{
-			text:	"This has been modified and this explanation could probably be more informative than this"
+			id:				minNumLevel
+			name:			"minNumLevel"
+			text: 			"How many numeric level minimum"
+			defaultValue:	-1
+			min:			-1
 		}
 
-		Group
+		IntegerField
 		{
-			columns: 2
-			Group
-			{
-				columns: 1
-				IntegerField
-				{
-					id:				minNumLevel
-					name:			"minNumLevel"
-					text: 			"How many numeric level minimum"
-					defaultValue:	-1
-					min:			-1
-				}
+			id:				maxNumLevel
+			name:			"maxNumLevel"
+			text: 			"How many numeric level maximum"
+			defaultValue:	-1
+			min:			-1
+		}
 
-				IntegerField
-				{
-					id:				maxNumLevel
-					name:			"maxNumLevel"
-					text: 			"How many numeric level maximum"
-					defaultValue:	-1
-					min:			-1
-				}
+		IntegerField
+		{
+			id:				minLevel
+			name:			"minLevel"
+			text: 			"How many level minimum"
+			defaultValue:	-1
+			min:			-1
+		}
 
-				IntegerField
-				{
-					id:				minLevel
-					name:			"minLevel"
-					text: 			"How many level minimum"
-					defaultValue:	-1
-					min:			-1
-				}
+		IntegerField
+		{
+			id:				maxLevel
+			name:			"maxLevel"
+			text: 			"How many level maximum"
+			defaultValue:	-1
+			min:			-1
+		}
+	}
 
-				IntegerField
-				{
-					id:				maxLevel
-					name:			"maxLevel"
-					text: 			"How many level maximum"
-					defaultValue:	-1
-					min:			-1
-				}
-			}
+	Group
+	{
+		columns: 3
 
-			Group
-			{
-				columns: 1
-
-				Text { text: "<b>Current allowed: " + allowed.toString() + "</b>" }
-				Button
-				{
-					text: 			"Toggle scale in allowed"
-					onClicked:		allowed = toggleColList(allowed, "scale")
-				}
-				Button
-				{
-					text: 			"Toggle ordinal in allowed"
-					onClicked:		allowed = toggleColList(allowed, "ordinal")
-				}
-				Button
-				{
-					text: 			"Toggle nominal in allowed"
-					onClicked:		allowed = toggleColList(allowed, "nominal")
-				}
-			}
+		title: "<b>Allowed types: " + allowed.toString() + "</b>"
+		CheckBox
+		{
+			name:			"scale"
+			label: 			"Toggle scale"
+			onClicked:		allowed = toggleColList(allowed, "scale")
+			checked:		true
+		}
+		CheckBox
+		{
+			name:			"ordinal"
+			label: 			"Toggle ordinal"
+			onClicked:		allowed = toggleColList(allowed, "ordinal")
+		}
+		CheckBox
+		{
+			name:			"nominal"
+			label: 			"Toggle nominal"
+			onClicked:		allowed = toggleColList(allowed, "nominal")
 		}
 	}
 
