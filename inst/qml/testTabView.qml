@@ -146,4 +146,40 @@ Form
 
 		}
 	}
+
+	Section
+	{
+		title: "TabView Radio Button with default checked"
+		ExplanationText
+		{
+			text:
+			"Check another Radio Button: duplicate the analysis, and check that the right Radio Button is set"
+		}
+
+		TabView
+		{
+			name: "tabs"
+			addItemManually: true
+
+			rowComponent: RadioButtonGroup
+			{
+				name: 					"inputType"
+				title: 					qsTr("Input type")
+				radioButtonsOnSameRow: 	true
+				columns: 				2
+
+				RadioButton
+				{
+					value: 		"paths"
+					label: 		qsTr("Paths")
+					checked: 	true
+				}
+				RadioButton
+				{
+					value: 	"hayes"
+					label: 	qsTr("Hayes")
+				}
+			}
+		}
+	}
 }
