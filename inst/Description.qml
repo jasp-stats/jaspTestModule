@@ -7,13 +7,9 @@ Description
 	title:				qsTr("Wait for it...")
 	icon: 				"test.svg"
 	description: 		qsTr("A module to test stuff with.")
-	version			: "0.95.0"
-	author:				"Joris Goosen"
-	maintainer:			"Joris Goosen <Joris@JorisGoosen.nl>"
-	website:			""
-	license:			"Whatever"
 	requiresData: 		false
-
+	hasWrappers: 		false
+	
 	Timer
 	{
 		interval: 5000
