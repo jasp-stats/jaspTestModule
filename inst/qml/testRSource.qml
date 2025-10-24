@@ -43,7 +43,7 @@ Form
 			source:
 			[
 				{ values: ["one", "two"] },
-				{ rSource: ["exampleSourceId.top2.subTopA", "exampleSourceId.top2.subTopB"] }
+				{ rSource: ["myRSourceId.top2.subTopA", "myRSourceId.top2.subTopB"] }
 			]
 		}
 
@@ -58,7 +58,7 @@ Form
 	{
 		label	: "Dropdown with value: <b>" + value + "</b>"
 		name	: "drop"
-		source	: [{ name: "fromR", discard: { rSource: "exampleSourceId.top2.subTopA"} }]
+		source	: [{ name: "fromR", discard: { rSource: "myRSourceId.top2.subTopA"} }]
 	}
 
 
@@ -67,7 +67,7 @@ Form
 		id			: compList
 		label		: "ComponentsList"
 		name		: "ComponentsList"
-		rSource		: "exampleSourceId"
+		rSource		: "myRSourceId"
 		rowComponent: Column
 		{
 			Text { id: textLable; text: rowValue }
@@ -78,12 +78,77 @@ Form
 				name		: "subvalues"
 				source		:
 				[
-					{ rSource: {name: "exampleSourceId", use: rowValue } },
+					{ rSource: {name: "myRSourceId", use: rowValue } },
 					"assignMe"
 				]
 				rowComponent: CheckBox { name: "check"; label: rowValue }
 			}
 		}
+	}
+
+	Section
+	{
+		title: "R Source without sourceID defined"
+		columns: 1
+
+		ExplanationText
+		{
+			text: "This is the same test as the one above, but this time no sourceID is given in the R source, and so the sourceID should get the same value as its name"
+		}
+
+
+		VariablesForm
+		{
+			AvailableVariablesList
+			{
+				title: "Available items"
+				name: "fromR2"
+				source:
+				[
+					{ values: ["one", "two"] },
+					{ rSource: ["myRSourceId2.top2.subTopA", "myRSourceId2.top2.subTopB"] }
+				]
+			}
+
+			AssignedVariablesList
+			{
+				title: "Assigned items"
+				name: "assignMe2"
+			}
+		}
+
+		DropDown
+		{
+			label	: "Dropdown with value: <b>" + value + "</b>"
+			name	: "drop2"
+			source	: [{ name: "fromR2", discard: { rSource: "myRSourceId2.top2.subTopA"} }]
+		}
+
+
+		ComponentsList
+		{
+			id			: compList2
+			label		: "ComponentsList"
+			name		: "ComponentsList2"
+			rSource		: "myRSourceId2"
+			rowComponent: Column
+			{
+				Text { id: textLable2; text: rowValue }
+				ComponentsList
+				{
+					id: comp2
+					width		: compList2.width - 2 * jaspTheme.contentMargin
+					name		: "subvalues2"
+					source		:
+					[
+						{ rSource: {name: "myRSourceId2", use: rowValue } },
+						"assignMe2"
+					]
+					rowComponent: CheckBox { name: "check2"; label: rowValue }
+				}
+			}
+		}
+
 	}
 }
 

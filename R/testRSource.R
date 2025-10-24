@@ -3,7 +3,6 @@ testRSourceFunc <- function(jaspResults, dataset, options)
   tableOfOptions(jaspResults, options, dataset)
   
 	
-	jaspResults[["msg"]] <- createJaspHtml(text=gettext('<i>Something is written to a R source</i>'))
 
 	myData <- list()
         top2 = list()
@@ -14,5 +13,13 @@ testRSourceFunc <- function(jaspResults, dataset, options)
         myData[["top2"]] <- top2
 
 
-        jaspResults[["exampleSourceId"]] <- createJaspQmlSource(sourceID="exampleSourceId", value=myData)
+      exampleSourceId <- createJaspQmlSource(sourceID="myRSourceId", value=myData)
+      myRSourceId2 <- createJaspQmlSource(value=myData)
+      jaspResults[["exampleSourceId"]] <- exampleSourceId
+      jaspResults[["myRSourceId2"]] <- myRSourceId2 # No sourceID is given so myRSourceId2 will be used
+
+      jaspResults[["rsource1"]] <- createJaspHtml(text=paste0('R source exampleSourceId: ', gsub("[\r\n]", " ", exampleSourceId$value)))
+      jaspResults[["rsource2"]] <- createJaspHtml(text=paste0('R source myRSourceId2: ', gsub("[\r\n]", " ", myRSourceId2$value)))
+
+
 }
