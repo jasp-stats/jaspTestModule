@@ -9,6 +9,7 @@ Description
 	description: 		qsTr("A module to test stuff with.")
 	requiresData: 		false
 	hasWrappers: 		false
+	preloadData:		false
 	
 	Timer
 	{
