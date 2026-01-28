@@ -30,6 +30,9 @@ Form
 			"This analysis checks values in Formula, Integer & Double Fields<br>" +
 			"Each field show its value in its label, and for Formula fields, it shows also the real value.<br>" +
 			"Check that you can set infinity value for Double and Formula fields, also that the real values for formula fields are updated.<br>" +
+			"Check that you cannot set more decimals than allowed in Double Fields.<br>" +
+			"Set decimals with comma ',' or dot'.', and check that the values set in the label are always in English format (with dot).<br>" +
+			"Change the Language and Alternative language to check that the dots and commas correspond to the chosen language, but the label get the always the English fomat.<br>" +
 			"Duplicate the analysis, and check that the values are the same."
 	}
 
@@ -83,6 +86,36 @@ Form
 			value: -Infinity
 			negativeValues: true
 		}
+
+		DoubleField
+		{
+			label: "Default with 1 decimals: " + value
+			name: "doubleWith1Decimals"
+			value: 0.1
+			decimals: 1
+			fieldWidth: 100
+			negativeValues: true
+		}
+
+		DoubleField
+		{
+			label: "Default with 3 decimals (default): " + value
+			name: "doubleWith3Decimals"
+			value: 0.123
+			fieldWidth: 100
+			negativeValues: true
+		}
+
+		DoubleField
+		{
+			label: "Default with 5 decimals: " + value
+			name: "doubleWith5Decimals"
+			value: 0.12345
+			decimals: 5
+			fieldWidth: 100
+			negativeValues: true
+		}
+
 	}
 
 	Group
