@@ -64,20 +64,15 @@ Form
 
 	function toggleColList(list, toggleThis)
 	{
-		console.log("yo!")
-		console.log(list)
-		console.log(toggleThis)
+		// list.slice() just make a clone: this is needed to ensure that the new list is not the same object as the original list
+		// In this way, when setting the result of this function to the 'allowed' property, QML can see the change and emit a signal that allowed is changed.
+		// A push or splice function on an array is not detected by QML, and does not emit a change signal.
+		var clonedList = list.slice()
+		if(clonedList.indexOf(toggleThis) > -1) 	clonedList.splice(list.indexOf(toggleThis), 1)
+		else										clonedList.push(toggleThis);
 
-		if(list.indexOf(toggleThis) > -1) 	list.splice(list.indexOf(toggleThis), 1)
-		else								list.push(toggleThis);
-
-
-		console.log(list)
-
-		return list;
+		return clonedList;
 	}
-
-
 
 	Group
 	{
@@ -143,8 +138,9 @@ Form
 	Group
 	{
 		columns: 3
+		id: myGroup
 
-		title: "<b>Allowed types: " + allowed.toString() + "</b>"
+		title: "<b>Allowed types: " + allowed + "</b>"
 		CheckBox
 		{
 			name:			"scale"
