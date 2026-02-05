@@ -63,9 +63,10 @@ Form
 
 		FormulaField
 		{
-			label: "Default 1/2: " + value + ", real value: " + realValue
+			label: "Default 3/2: " + value + " (with min set to 1), real value: " + realValue
 			name: "formulaHalf"
-			value: "1/2"
+			value: "3/2"
+			min: 1
 		}
 	}
 
