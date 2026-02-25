@@ -4,7 +4,7 @@ import JASP.Module
 Description
 {
 	id:					testModuleDescription
-	title:				qsTr("Wait for it...")
+	title:				qsTr("Test Module")
 	icon: 				"test.svg"
 	description: 		qsTr("A module to test stuff with.")
 	requiresData: 		false
@@ -17,7 +17,7 @@ Description
 		onTriggered:
 		{
 			console.log(qsTr("Timer that displays the fact that updating Description.qml from live javascript code works fine."))
-			testModuleDescription.title = qsTr("Test Module")
+			testModuleDescription.title = qsTr("Test Module?")
 			footnotesEntry.title 		= qsTr("Test Footnotes jaspTable")
 		}
 
