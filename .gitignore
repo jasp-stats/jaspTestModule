@@ -3,3 +3,5 @@
 .RData
 .Ruserdata
 _processedLockFile.lock
+ModuleBundleBuildDir/
+bundles_out/

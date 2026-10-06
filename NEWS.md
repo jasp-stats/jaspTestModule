@@ -15,6 +15,17 @@
 ---
 
 # jaspTestModule (development version)
+## Added
+* "Test Multi-DataSet": analysis + form to exercise multi-dataset aware analyses
+  (`multiDataSetAware` Description entries, the VariablesForm dataset/filter selection,
+  the `datasets` handout and encoded-name routing of jaspBase, the readDataSet() guard,
+  the `.meta` dataSetId/filterId provenance and the non-aware counterpart as controls).
+* `Tools/buildBundle.R`: builds an installable `bundles_out/jaspTestModule.JASPModule`
+  from this checkout with the local `jasp-desktop/Engine/jaspBase` (or any checkout via
+  `JASP_BASE_DIR`) packed into the bundle; no JASP cellar needed.
+
+## Changed
+* `renv.lock` re-resolved for R 4.6.1 (current CRAN, jaspBase/jaspGraphs from GitHub HEAD).
 
 
 

@@ -106,6 +106,36 @@ Description
 		preloadData	: true
 	}
 
+	Separator {}
+
+	GroupTitle { title: "Multi dataset" }
+
+	// multiDataSetAware: the analysis gets every dataset its options reference as the `datasets`
+	// argument (jaspBase >= the multiDataSetAware branch) and VariablesForm's dataSetSelection
+	// dropdown becomes live. It only kicks in combined with preloadData; without it the engine
+	// logs that the analysis gets its data like a non-aware one.
+	Analysis
+	{
+		title:				"Test Multi-DataSet"
+		qml:				"testMultiDataSet.qml"
+		func:				"multiDataSetFunc"
+		requiresData:		true
+		preloadData:		true
+		multiDataSetAware:	true
+	}
+
+	// Same form and function, but NOT aware: dataSetSelection must stay inert and data must
+	// arrive the old way (through dataset/readDataSet), as a controls-and-regression check.
+	Analysis
+	{
+		title:				"Test Multi-DataSet (non-aware counterpart)"
+		qml:				"testMultiDataSet.qml"
+		func:				"multiDataSetFunc"
+		requiresData:		true
+		preloadData:		true
+		multiDataSetAware:	false
+	}
+
 	Analysis
 	{
 		title:		qsTr("Test optionContainsValue")
