@@ -1,6 +1,6 @@
 {
   "R": {
-    "Version": "4.5.2",
+    "Version": "4.6.1",
     "Repositories": [
       {
         "Name": "CRAN",
@@ -27,7 +27,7 @@
     },
     "Rcpp": {
       "Package": "Rcpp",
-      "Version": "1.1.1",
+      "Version": "1.1.2",
       "Source": "Repository",
       "Requirements": [
         "methods",
@@ -37,7 +37,7 @@
     },
     "S7": {
       "Package": "S7",
-      "Version": "0.2.1",
+      "Version": "0.2.2",
       "Source": "Repository",
       "Requirements": [
         "R",
@@ -54,7 +54,7 @@
     },
     "base64enc": {
       "Package": "base64enc",
-      "Version": "0.1-3",
+      "Version": "0.1-6",
       "Source": "Repository",
       "Requirements": [
         "R"
@@ -62,7 +62,7 @@
     },
     "bslib": {
       "Package": "bslib",
-      "Version": "0.9.0",
+      "Version": "0.12.0",
       "Source": "Repository",
       "Requirements": [
         "base64enc",
@@ -91,9 +91,10 @@
     },
     "callr": {
       "Package": "callr",
-      "Version": "3.7.6",
+      "Version": "3.8.0",
       "Source": "Repository",
       "Requirements": [
+        "otel",
         "processx",
         "R",
         "R6",
@@ -102,7 +103,7 @@
     },
     "cli": {
       "Package": "cli",
-      "Version": "3.6.5",
+      "Version": "3.6.6",
       "Source": "Repository",
       "Requirements": [
         "R",
@@ -119,7 +120,7 @@
     },
     "cpp11": {
       "Package": "cpp11",
-      "Version": "0.5.2",
+      "Version": "0.5.5",
       "Source": "Repository",
       "Requirements": [
         "R"
@@ -138,7 +139,7 @@
     },
     "curl": {
       "Package": "curl",
-      "Version": "7.0.0",
+      "Version": "8.0.0",
       "Source": "Repository",
       "Requirements": [
         "R"
@@ -146,7 +147,7 @@
     },
     "data.table": {
       "Package": "data.table",
-      "Version": "1.18.0",
+      "Version": "1.18.6.1",
       "Source": "Repository",
       "Requirements": [
         "methods",
@@ -175,7 +176,7 @@
     },
     "dplyr": {
       "Package": "dplyr",
-      "Version": "1.1.4",
+      "Version": "1.2.1",
       "Source": "Repository",
       "Requirements": [
         "cli",
@@ -252,7 +253,7 @@
     },
     "fs": {
       "Package": "fs",
-      "Version": "1.6.6",
+      "Version": "2.1.0",
       "Source": "Repository",
       "Requirements": [
         "methods",
@@ -261,7 +262,7 @@
     },
     "gdtools": {
       "Package": "gdtools",
-      "Version": "0.4.4",
+      "Version": "0.5.1",
       "Source": "Repository",
       "Requirements": [
         "fontquiver",
@@ -283,7 +284,7 @@
     },
     "ggplot2": {
       "Package": "ggplot2",
-      "Version": "4.0.1",
+      "Version": "4.0.3",
       "Source": "Repository",
       "Requirements": [
         "cli",
@@ -303,7 +304,7 @@
     },
     "glue": {
       "Package": "glue",
-      "Version": "1.8.0",
+      "Version": "1.8.1",
       "Source": "Repository",
       "Requirements": [
         "methods",
@@ -312,7 +313,7 @@
     },
     "gridExtra": {
       "Package": "gridExtra",
-      "Version": "2.3",
+      "Version": "2.3.1",
       "Source": "Repository",
       "Requirements": [
         "graphics",
@@ -348,7 +349,7 @@
     },
     "highr": {
       "Package": "highr",
-      "Version": "0.11",
+      "Version": "0.12",
       "Source": "Repository",
       "Requirements": [
         "R",
@@ -384,7 +385,7 @@
     },
     "httr": {
       "Package": "httr",
-      "Version": "1.4.7",
+      "Version": "1.4.9",
       "Source": "Repository",
       "Requirements": [
         "curl",
@@ -436,14 +437,13 @@
       "RemoteHost": "api.github.com",
       "RemoteUsername": "jasp-stats",
       "RemoteRepo": "jaspBase",
-      "RemoteSha": "a5770b1bb36f6c5aebca3d15e5eab0dd4976602e"
+      "RemoteSha": "6a6910dbe148caba2d82d60b8c42305ac40d2f1d"
     },
     "jaspGraphs": {
       "Package": "jaspGraphs",
       "Version": "0.20.0",
       "Source": "GitHub",
       "Requirements": [
-        "testthat",
         "cli",
         "ggplot2",
         "gridExtra",
@@ -454,13 +454,15 @@
         "plotly",
         "R6",
         "rlang",
-        "scales"
+        "scales",
+        "testthat",
+        "vdiffr"
       ],
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "jasp-stats",
       "RemoteRepo": "jaspGraphs",
-      "RemoteSha": "db3c899263a1d8d236ed0e7e3a7b6814b48c14ae"
+      "RemoteSha": "cdc4c9cf20f52c22c24162ea6fcbdd6b211e92db"
     },
     "jquerylib": {
       "Package": "jquerylib",
@@ -480,7 +482,7 @@
     },
     "knitr": {
       "Package": "knitr",
-      "Version": "1.51",
+      "Version": "1.52",
       "Source": "Repository",
       "Requirements": [
         "evaluate",
@@ -503,7 +505,7 @@
     },
     "later": {
       "Package": "later",
-      "Version": "1.4.5",
+      "Version": "1.4.8",
       "Source": "Repository",
       "Requirements": [
         "R",
@@ -513,10 +515,11 @@
     },
     "lazyeval": {
       "Package": "lazyeval",
-      "Version": "0.2.2",
+      "Version": "0.2.3",
       "Source": "Repository",
       "Requirements": [
-        "R"
+        "R",
+        "rlang"
       ]
     },
     "lifecycle": {
@@ -531,7 +534,7 @@
     },
     "magrittr": {
       "Package": "magrittr",
-      "Version": "2.0.4",
+      "Version": "2.0.5",
       "Source": "Repository",
       "Requirements": [
         "R"
@@ -556,7 +559,7 @@
     },
     "officer": {
       "Package": "officer",
-      "Version": "0.7.3",
+      "Version": "0.7.6",
       "Source": "Repository",
       "Requirements": [
         "cli",
@@ -576,7 +579,7 @@
     },
     "openssl": {
       "Package": "openssl",
-      "Version": "2.3.4",
+      "Version": "2.4.2",
       "Source": "Repository",
       "Requirements": [
         "askpass"
@@ -627,7 +630,7 @@
     },
     "plotly": {
       "Package": "plotly",
-      "Version": "4.11.0",
+      "Version": "4.12.1",
       "Source": "Repository",
       "Requirements": [
         "base64enc",
@@ -640,7 +643,6 @@
         "htmlwidgets",
         "httr",
         "jsonlite",
-        "lazyeval",
         "magrittr",
         "promises",
         "purrr",
@@ -666,7 +668,7 @@
     },
     "processx": {
       "Package": "processx",
-      "Version": "3.8.6",
+      "Version": "3.9.0",
       "Source": "Repository",
       "Requirements": [
         "ps",
@@ -692,7 +694,7 @@
     },
     "ps": {
       "Package": "ps",
-      "Version": "1.9.1",
+      "Version": "1.9.3",
       "Source": "Repository",
       "Requirements": [
         "R",
@@ -701,7 +703,7 @@
     },
     "purrr": {
       "Package": "purrr",
-      "Version": "1.2.1",
+      "Version": "1.2.2",
       "Source": "Repository",
       "Requirements": [
         "cli",
@@ -714,7 +716,7 @@
     },
     "ragg": {
       "Package": "ragg",
-      "Version": "1.5.0",
+      "Version": "1.5.2",
       "Source": "Repository",
       "Requirements": [
         "systemfonts",
@@ -731,7 +733,7 @@
     },
     "rlang": {
       "Package": "rlang",
-      "Version": "1.1.7",
+      "Version": "1.3.0",
       "Source": "Repository",
       "Requirements": [
         "R",
@@ -740,7 +742,7 @@
     },
     "rmarkdown": {
       "Package": "rmarkdown",
-      "Version": "2.30",
+      "Version": "2.32",
       "Source": "Repository",
       "Requirements": [
         "bslib",
@@ -761,7 +763,7 @@
     },
     "rvg": {
       "Package": "rvg",
-      "Version": "0.4.0",
+      "Version": "0.4.2",
       "Source": "Repository",
       "Requirements": [
         "gdtools",
@@ -805,7 +807,7 @@
     },
     "stringi": {
       "Package": "stringi",
-      "Version": "1.8.7",
+      "Version": "1.8.9",
       "Source": "Repository",
       "Requirements": [
         "R",
@@ -852,7 +854,7 @@
     },
     "systemfonts": {
       "Package": "systemfonts",
-      "Version": "1.3.1",
+      "Version": "1.3.2",
       "Source": "Repository",
       "Requirements": [
         "base64enc",
@@ -867,7 +869,7 @@
     },
     "textshaping": {
       "Package": "textshaping",
-      "Version": "1.0.4",
+      "Version": "1.0.5",
       "Source": "Repository",
       "Requirements": [
         "cpp11",
@@ -933,7 +935,7 @@
     },
     "tinytex": {
       "Package": "tinytex",
-      "Version": "0.58",
+      "Version": "0.61",
       "Source": "Repository",
       "Requirements": [
         "xfun"
@@ -949,7 +951,7 @@
     },
     "uuid": {
       "Package": "uuid",
-      "Version": "1.2-1",
+      "Version": "1.2-2",
       "Source": "Repository",
       "Requirements": [
         "R"
@@ -957,7 +959,7 @@
     },
     "vctrs": {
       "Package": "vctrs",
-      "Version": "0.7.0",
+      "Version": "0.7.3",
       "Source": "Repository",
       "Requirements": [
         "cli",
@@ -969,7 +971,7 @@
     },
     "viridisLite": {
       "Package": "viridisLite",
-      "Version": "0.4.2",
+      "Version": "0.4.3",
       "Source": "Repository",
       "Requirements": [
         "R"
@@ -977,7 +979,7 @@
     },
     "withr": {
       "Package": "withr",
-      "Version": "3.0.2",
+      "Version": "3.0.3",
       "Source": "Repository",
       "Requirements": [
         "graphics",
@@ -987,7 +989,7 @@
     },
     "xfun": {
       "Package": "xfun",
-      "Version": "0.56",
+      "Version": "0.61",
       "Source": "Repository",
       "Requirements": [
         "grDevices",
@@ -998,7 +1000,7 @@
     },
     "xml2": {
       "Package": "xml2",
-      "Version": "1.5.2",
+      "Version": "1.6.0",
       "Source": "Repository",
       "Requirements": [
         "cli",
@@ -1015,9 +1017,11 @@
     },
     "zip": {
       "Package": "zip",
-      "Version": "2.3.3",
+      "Version": "3.0.2",
       "Source": "Repository",
-      "Requirements": []
+      "Requirements": [
+        "cli"
+      ]
     }
   }
 }
