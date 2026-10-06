@@ -20,9 +20,15 @@
   (`multiDataSetAware` Description entries, the VariablesForm dataset/filter selection,
   the `datasets` handout and encoded-name routing of jaspBase, the readDataSet() guard,
   the `.meta` dataSetId/filterId provenance and the non-aware counterpart as controls).
+  The aware analysis is wrapped (`hasWrapper: true`): body in `multiDataSetFuncInternal`,
+  generated `multiDataSetFunc(datasets = ...)` wrapper for R syntax use.
 * `Tools/buildBundle.R`: builds an installable `bundles_out/jaspTestModule.JASPModule`
   from this checkout with the local `jasp-desktop/Engine/jaspBase` (or any checkout via
   `JASP_BASE_DIR`) packed into the bundle; no JASP cellar needed.
+* `Tools/testMultiDataSet.R` (+ `_wrapper.R`): full headless test of the analysis over
+  engine-style queued slices, the wrapper in a clean session and a legacy non-aware run.
+* `Tools/testdata/DataSetA.csv` / `DataSetB.csv`: two datasets with deliberately colliding
+  column names for the per-dataset routing test.
 
 ## Changed
 * `renv.lock` re-resolved for R 4.6.1 (current CRAN, jaspBase/jaspGraphs from GitHub HEAD).
