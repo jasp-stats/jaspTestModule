@@ -142,6 +142,24 @@ if (!("--check-only" %in% args)) tryCatch(jaspModuleTools::compile(
   stop(e)
 }, finally = restoreLock())
 
+# Load the module Description and the multi-dataset form through the native SyntaxInterface
+# (jaspSyntax, in the tool library): catches QML errors like missing imports or unknown types
+# at build time, without firing up JASP. Skipped when jaspSyntax isn't installed.
+Sys.setenv(QT_QPA_PLATFORM = "offscreen")
+if (requireNamespace("jaspSyntax", quietly = TRUE)) {
+  message("checking module Description + QML forms via jaspSyntax ...")
+  suppressPackageStartupMessages(library(jaspSyntax))
+  desc <- readModuleDescription(moduledir)
+  stopifnot(!is.null(desc))
+  for (analysisFunc in c("multiDataSetFunc")) {
+    opts <- readDefaultAnalysisOptions(moduledir, analysisFunc)
+    stopifnot(is.list(opts), !is.null(attr(opts, "qmlFile")))
+    message("  ", analysisFunc, " -> ", basename(attr(opts, "qmlFile")), " loads OK")
+  }
+} else {
+  message("NOTE: jaspSyntax not installed (see github.com/jasp-stats/jaspSyntax) - QML not checked.")
+}
+
 # ---------------------------------------------------------------------------------------------
 # Verify: the bundle manifest must list jaspBase, and the packed jaspBase must be OUR checkout
 # (guard against silently packing a cached GitHub build instead).
