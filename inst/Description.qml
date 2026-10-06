@@ -122,15 +122,17 @@ Description
 		requiresData:		true
 		preloadData:		true
 		multiDataSetAware:	true
+		hasWrapper:			true
 	}
 
-	// Same form and function, but NOT aware: dataSetSelection must stay inert and data must
-	// arrive the old way (through dataset/readDataSet), as a controls-and-regression check.
+	// Same form, but NOT aware and NOT wrapped: the engine calls multiDataSetFuncInternal
+	// directly (dataset/readDataSet as always) and the dataset selection must stay inert.
+	// (It cannot use func: "multiDataSetFunc" - that name is the R-syntax wrapper now.)
 	Analysis
 	{
 		title:				"Test Multi-DataSet (non-aware counterpart)"
 		qml:				"testMultiDataSet.qml"
-		func:				"multiDataSetFunc"
+		func:				"multiDataSetFuncInternal"
 		requiresData:		true
 		preloadData:		true
 		multiDataSetAware:	false

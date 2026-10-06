@@ -6,7 +6,7 @@
 # which jaspBase's dataSetIdFromEncoded / dataSetNameFromEncoded / getDataSetColumn route.
 # While such a run is active, readDataSet* stops: one 'current dataset' is meaningless here.
 
-multiDataSetFunc <- function(jaspResults, dataset, options, datasets = NULL) {
+multiDataSetFuncInternal <- function(jaspResults, dataset, options, datasets = NULL) {
   aware <- !is.null(datasets)
 
   jaspResults[["explanation"]] <- createJaspHtml(paste0(
@@ -74,7 +74,7 @@ selectedVariablesTable <- function(jaspResults, options, datasets, dataset) {
       entry  <- list(variable = column, dataSetId = "-", dataSetName = "-", column = column,
                      type = .typeSuffix(value), n = NA_integer_, values = "")
       if (!is.null(dataset) && column %in% names(dataset))
-        entry <- c(entry, .describeColumn(dataset[[column]]))
+        entry <- .fillDescription(entry, dataset[[column]])
       table[[value]] <- entry
       next
     }
@@ -91,7 +91,7 @@ selectedVariablesTable <- function(jaspResults, options, datasets, dataset) {
 
     columnData <- jaspBase::getDataSetColumn(value, datasets)
     if (!is.null(columnData))
-      entry <- c(entry, .describeColumn(columnData))
+      entry <- .fillDescription(entry, columnData)
 
     table[[value]] <- entry
   }
@@ -129,13 +129,14 @@ readDataSetGuardDemo <- function(jaspResults) {
   if (length(match) == 2L) match[2] else NA_character_
 }
 
-.describeColumn <- function(columnData) {
+.fillDescription <- function(entry, columnData) {
   if (is.numeric(columnData)) {
-    list(n = sum(!is.na(columnData)),
-         values = sprintf("mean %.2f, sd %.2f", mean(columnData, na.rm = TRUE), sd(columnData, na.rm = TRUE)))
+    entry$n      <- sum(!is.na(columnData))
+    entry$values <- sprintf("mean %.2f, sd %.2f", mean(columnData, na.rm = TRUE), sd(columnData, na.rm = TRUE))
   } else {
     levels <- unique(as.character(stats::na.omit(columnData)))
-    list(n = length(stats::na.omit(columnData)),
-         values = paste(utils::head(levels, 5), collapse = ", "))
+    entry$n      <- length(stats::na.omit(columnData))
+    entry$values <- paste(utils::head(levels, 5), collapse = ", ")
   }
+  entry
 }

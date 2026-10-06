@@ -125,6 +125,18 @@ if (localJaspBase && !("--check-only" %in% args)) {
 
 dir.create(resultdir, showWarnings = FALSE)
 
+# renv::restore skips same-version records, so a changed local jaspBase checkout would silently
+# NOT be rebuilt into the pkglib (the version stays 0.20.4). When bundling against the local
+# checkout: drop the installed jaspBase first so it is always rebuilt from source.
+if (localJaspBase && !("--check-only" %in% args)) {
+  pkglib <- file.path(workdir, "build_dir", basename(moduledir))
+  installedBase <- file.path(pkglib, "jaspBase")
+  if (dir.exists(installedBase)) {
+    message("removing stale jaspBase from ", pkglib, " (will rebuild from the local checkout)")
+    unlink(installedBase, recursive = TRUE)
+  }
+}
+
 message("compiling + bundling (log is chatty, first run compiles all of jaspBase's deps) ...")
 if (!("--check-only" %in% args)) tryCatch(jaspModuleTools::compile(
   moduledir           = moduledir,
@@ -184,7 +196,7 @@ archive::archive_extract(file.path(checkdir, jaspBaseHash), dir = pkgdir)
 suppressPackageStartupMessages(library(jaspBase, lib.loc = file.path(checkdir, "lib")))
 
 if (localJaspBase) {
-  markers <- c("dataSetColumnFromEncoded", "dataSetIdFromEncoded", "getDataSetColumn") %in% getNamespaceExports("jaspBase")
+  markers <- c("dataSetColumnFromEncoded", "dataSetIdFromEncoded", "getDataSetColumn", "storeDataSets") %in% getNamespaceExports("jaspBase")
   runBody <- any(grepl("multiDataSet|dataSetEncodedNames", deparse(body(jaspBase::runJaspResults))))
   if (!all(markers) || !runBody)
     stop("bundled jaspBase is MISSING the local multiDataSetAware code (exports: ",
