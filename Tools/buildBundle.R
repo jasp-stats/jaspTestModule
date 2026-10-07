@@ -227,4 +227,20 @@ if (localJaspBase) {
 }
 
 message("Bundle: ", bundle, "  (size: ", format(file.size(bundle) / 2^20, digits = 1), " MiB)")
-message("Install in JASP: + menu -> Add module -> From file, pick that .JASPModule.")
+
+# ---------------------------------------------------------------------------------------------
+# Install into the local developer JASP so the module is simply THERE after every build
+# (same result as "Add module -> From file", through JASP's own installer - see
+# Tools/installModuleLocal.sh for the mechanism). Skipped with --check-only,
+# --no-install-local or SKIP_MODULE_LOCAL_INSTALL=1; a failure here is a warning only:
+# the bundle itself is fine (most often JASP is still running).
+if (!("--check-only" %in% args) && !("--no-install-local" %in% args) && !nzchar(Sys.getenv("SKIP_MODULE_LOCAL_INSTALL"))) {
+  installer <- file.path(moduledir, "Tools", "installModuleLocal.sh")
+  status <- system2(installer, shQuote(bundle))
+  if (identical(as.integer(status), 0L))
+    message("installed into the local JASP (module_libs + manifest + dev prefs) - restart ./build/Desktop/JASP to pick it up.")
+  else
+    warning("bundle built OK, but the local install failed (is JASP running?) - run Tools/installModuleLocal.sh manually.")
+} else {
+  message("Install in JASP: + menu -> Add module -> From file, pick that .JASPModule (or run Tools/installModuleLocal.sh).")
+}

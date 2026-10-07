@@ -25,8 +25,17 @@
 3. [verify] GUI end-to-end after bundle rebuild: dropdown fills tables (aware + twin), guard
    demo, per-form dataset switching in the GUI, and saved-file reload of an aware analysis
    (`restoreProvenanceFromBoundValues` / `remapSavedProvenance` still lack an end-to-end test).
-4. [rebuild] Bundle via `Tools/buildBundle.R` (new jaspBase + module + qmls); user reinstalls.
-5. [note] Syntax-mode side effects to watch: readRequestedDataset() after an aware parse consumes
+4. [DONE] Bundle + local install: `Tools/buildBundle.R` now ends by installing the bundle into
+   the local dev JASP automatically (Tools/installModuleLocal.sh: jaspModuleBundleManager
+   install + manifest version normalization + developerMode/modulesRemembered prefs).
+   Skip with `--no-install-local` / SKIP_MODULE_LOCAL_INSTALL=1; JASP must not be running.
+5. [upstream] JASP bug candidate: bundle tooling writes manifest `"version":[[0,96,2]]` but
+   `InstalledModules::parseModuleInfo` (installedmodules.cpp:28) throws on arrays via
+   `version.isMember("Version")` → "Could not parse module manifest" → module silently skipped
+   at every restart after a perfectly fine GUI install. Fix belongs in jasp-desktop
+   (accept arrays) and/or jaspModuleBundleManager (write strings). installModuleLocal.sh
+   works around it by rewriting the manifest field.
+6. [note] Syntax-mode side effects to watch: readRequestedDataset() after an aware parse consumes
    queue slices; jaspSyntax result decoding (columnEncoderContext) is per current dataset —
    multi-dataset result decoding in pure syntax output may need the same multi-encoder care.
 6. [ops] jaspSyntax installs MUST pass `JASPSYNTAX_LIB_PATH=<local libSyntaxInterface.so>`
