@@ -95,13 +95,15 @@ Description
 		hasWrapper:			true
 	}
 
-	// Same form, but NOT aware and NOT wrapped: data must arrive the old way (dataset/readDataSet)
-	// and the dataset selection must stay inert. Own func name because with hasWrappers the engine
-	// appends "Internal" to every entry's func (and the wrapper name may not *be* an Internal).
+	// Same forms, but NOT aware: data must arrive the old way (dataset/readDataSet) and the dataset
+	// selection must stay inert. Own func name because with hasWrappers the engine appends
+	// "Internal" to every entry's func (and the wrapper name may not *be* an Internal). Own qml too:
+	// the aware form's datasetSelectionOptions would (rightly) demand selections in syntax mode,
+	// which a non-aware analysis neither has nor needs.
 	Analysis
 	{
 		title:				"Test Multi-DataSet (non-aware counterpart)"
-		qml:				"testMultiDataSet.qml"
+		qml:				"testMultiDataSetNonAware.qml"
 		func:				"multiDataSetNonAware"
 		requiresData:		true
 		preloadData:		true

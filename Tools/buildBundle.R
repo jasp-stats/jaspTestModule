@@ -196,10 +196,12 @@ archive::archive_extract(file.path(checkdir, jaspBaseHash), dir = pkgdir)
 suppressPackageStartupMessages(library(jaspBase, lib.loc = file.path(checkdir, "lib")))
 
 if (localJaspBase) {
-  markers <- c("dataSetColumnFromEncoded", "dataSetIdFromEncoded", "getDataSetColumn", "storeDataSets") %in% getNamespaceExports("jaspBase")
-  runBody <- any(grepl("multiDataSet|dataSetEncodedNames", deparse(body(jaspBase::runJaspResults))))
+  expected  <- c("dataSetIdFromEncoded", "dataSetNameFromEncoded", "getDataSetFor",
+                 "getDataSetColumn", "storeDataSets")
+  markers   <- stats::setNames(expected %in% getNamespaceExports("jaspBase"), expected)
+  runBody   <- any(grepl("multiDataSet", deparse(body(jaspBase::runJaspResults))))
   if (!all(markers) || !runBody)
-    stop("bundled jaspBase is MISSING the local multiDataSetAware code (exports: ",
+    stop("bundled jaspBase is MISSING the local multiDataSetAware code (missing exports: ",
          paste(names(markers)[!markers], collapse = ", "), if (runBody) "" else " + runJaspResults body", ")")
   message("VERIFIED: bundled jaspBase loads and carries the local multiDataSetAware code.")
 } else {

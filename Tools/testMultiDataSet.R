@@ -117,13 +117,15 @@ check(grepl("not available in multi-dataset aware analyses", raw1, fixed = TRUE)
       "guard demo: readDataSet() hard-stopped during the aware run")
 
 # ------------------------------------------------------------------ Path 2: wrapper call -------
-# The syntax-mode wrapper flow (loadQmlAndParseOptions) still encodes option values against the
-# bridge's single dataset view while the handed-over list keeps plain names: the dataset-selection
-# design (TODO-multidataset.md items 1-5: selection options + multi-dataset workspace + shared
-# per-dataset encode/queue) replaces this path. Tools/testMultiDataSet_wrapper.R stays ready to
-# assert the new semantics once that lands.
-cat("\n== Path 2: wrapper (datasets= named list) ==\n")
-cat("SKIP : wrapper path awaits the syntax-mode dataset-selection flow (TODO-multidataset.md #1-#5)\n")
+# The wrapper path is run in a clean Rscript subprocess (no jaspTools runtime in the way):
+# datasets= loads into the bridge workspace, the dataSetA/dataSetB options select each form's
+# dataset, the bridge encodes per dataset and queues slices - engine parity via the shared
+# DataBridge preparation. Exactly the RStudio/syntax-mode scenario the wrapper is made for.
+cat("\n== Path 2: wrapper (datasets= named list + dataset selection options) ==\n")
+path2Script <- file.path(moduledir, "Tools", "testMultiDataSet_wrapper.R")
+status2 <- system2("Rscript", c(shQuote(path2Script)), stdout = TRUE, stderr = FALSE)
+writeLines(status2)
+check(any(grepl("MULTIDATASET-WRAPPER-OK", status2, fixed = TRUE)), "wrapper subprocess succeeded")
 
 # ------------------------------------------------------------------ Path 3: legacy still OK ----
 cat("\n== Path 3: legacy non-aware run (no datasets) ==\n")

@@ -22,6 +22,8 @@
 multiDataSetNonAware <- function(
           data = NULL,
           version = "1",
+          dataSetA = list(types = "unknown", value = ""),
+          dataSetB = list(types = "unknown", value = ""),
           dependentA = list(types = list(), value = list()),
           dependentB = list(types = list(), value = list()),
           guardDemo = FALSE,
@@ -43,7 +45,7 @@ multiDataSetNonAware <- function(
       jaspBase::storeDataSet(data)
    }
 
-   optionsWithFormula <- c("dependentA", "dependentB")
+   optionsWithFormula <- c("dataSetA", "dataSetB", "dependentA", "dependentB")
    for (name in optionsWithFormula) {
       if ((name %in% optionsWithFormula) && inherits(options[[name]], "formula")) options[[name]] = jaspBase::jaspFormula(options[[name]], data)   }
 
