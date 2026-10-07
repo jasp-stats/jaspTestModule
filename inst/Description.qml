@@ -18,7 +18,6 @@ Description
 		{
 			console.log(qsTr("Timer that displays the fact that updating Description.qml from live javascript code works fine."))
 			testModuleDescription.title = qsTr("Test Module?")
-			footnotesEntry.title 		= qsTr("Test Footnotes jaspTable")
 		}
 
 		running: true
@@ -26,13 +25,6 @@ Description
 	}
 
 	GroupTitle	{ title:	"jaspResults stuff"	}
-	Analysis
-	{
-		title:	qsTr("Test Transposed jaspTable")
-		qml:	"test.qml"
-		func:	"testTransposedTableFunc"
-	}
-
 	Analysis
 	{
 		title:	qsTr("Test jaspTable with crappy data")
@@ -46,14 +38,6 @@ Description
 		title:	qsTr("Test jaspTable formatting")
 		qml:	"testTableFormatting.qml"
 		func:	"testTableFormattingFunc"
-	}
-
-	Analysis
-	{
-		id:			footnotesEntry
-		title:		qsTr("Wait for it...")
-		qml:		"test.qml"
-		func:		"testFootnotesTableFunc"
 	}
 
 	Analysis
@@ -75,20 +59,6 @@ Description
 		title:		qsTr("Test latex")
 		qml:		"testHtml.qml"
 		func:		"testLatexFunc"
-	}
-
-	Analysis
-	{
-		title:		qsTr("Test jaspContainer")
-		qml:		"test.qml"
-		func:		"testContainerFunc"
-	}
-
-	Analysis
-	{
-		title:		qsTr("Test Plot Status")
-		qml:		"TestPlotStatus.qml"
-		func:		"testPlotStatus"
 	}
 
 	Analysis

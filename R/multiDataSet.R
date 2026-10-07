@@ -57,43 +57,46 @@ selectedVariablesTable <- function(jaspResults, options, datasets, dataset) {
   table <- createJaspTable("Selected variables")
   jaspResults[["selectedVariables"]] <- table
 
-  table$addColumnInfo("variable",     title = "Variable (routed to)")
-  table$addColumnInfo("dataSetId",    title = "Dataset id")
-  table$addColumnInfo("dataSetName",  title = "Dataset title")
-  table$addColumnInfo("column",       title = "Column")
-  table$addColumnInfo("type",         title = "Type")
-  table$addColumnInfo("n",            title = "n")
-  table$addColumnInfo("values",       title = "mean (scale) / first levels (factor)")
+  table$addColumnInfo("source",     title = "Form")
+  table$addColumnInfo("variable",   title = "Variable (routed to)")
+  table$addColumnInfo("dataSetId",  title = "Dataset id")
+  table$addColumnInfo("dataSetName", title = "Dataset title")
+  table$addColumnInfo("column",     title = "Column")
+  table$addColumnInfo("type",       title = "Type")
+  table$addColumnInfo("n",          title = "n")
+  table$addColumnInfo("values",     title = "mean (scale) / first levels (factor)")
 
-  values <- .dependentValues(options)
+  for (entry in list(list(form = "A", values = .dependentValues(options$dependentA)),
+                     list(form = "B", values = .dependentValues(options$dependentB)))) {
+    for (value in entry$values) {
+      if (is.null(datasets)) {
+        # Non-aware: plain preload semantics, decode against the current encoder.
+        column <- sub("\\.(scale|ordinal|nominal)$", "", jaspBase::decodeColNames(value))
+        row    <- list(source = entry$form, variable = column, dataSetId = "-", dataSetName = "-",
+                       column = column, type = .typeSuffix(value), n = NA_integer_, values = "")
+        if (!is.null(dataset) && column %in% names(dataset))
+          row <- .fillDescription(row, dataset[[column]])
+        table[[paste0(entry$form, ":", value)]] <- row
+        next
+      }
 
-  for (value in values) {
-    if (is.null(datasets)) {
-      # Non-aware: plain preload semantics, decode against the current encoder.
-      column <- sub("\\.(scale|ordinal|nominal)$", "", jaspBase::decodeColNames(value))
-      entry  <- list(variable = column, dataSetId = "-", dataSetName = "-", column = column,
-                     type = .typeSuffix(value), n = NA_integer_, values = "")
-      if (!is.null(dataset) && column %in% names(dataset))
-        entry <- .fillDescription(entry, dataset[[column]])
-      table[[value]] <- entry
-      next
+      id  <- jaspBase::dataSetIdFromEncoded(value)
+      col <- jaspBase::dataSetColumnFromEncoded(value, datasets)
+      row <- list(
+        source      = entry$form,
+        variable    = value,
+        dataSetId   = if (is.na(id)) "none (legacy)" else id,
+        dataSetName = jaspBase::dataSetNameFromEncoded(value, datasets),
+        column      = col,
+        type        = .typeSuffix(value),
+        n           = NA_integer_, values = "")
+
+      columnData <- jaspBase::getDataSetColumn(value, datasets)
+      if (!is.null(columnData))
+        row <- .fillDescription(row, columnData)
+
+      table[[paste0(entry$form, ":", value)]] <- row
     }
-
-    id      <- jaspBase::dataSetIdFromEncoded(value)
-    column  <- jaspBase::dataSetColumnFromEncoded(value, datasets)
-    entry   <- list(
-      variable    = value,
-      dataSetId   = if (is.na(id)) "none (legacy)" else id,
-      dataSetName = jaspBase::dataSetNameFromEncoded(value, datasets),
-      column      = column,
-      type        = .typeSuffix(value),
-      n           = NA_integer_, values = "")
-
-    columnData <- jaspBase::getDataSetColumn(value, datasets)
-    if (!is.null(columnData))
-      entry <- .fillDescription(entry, columnData)
-
-    table[[value]] <- entry
   }
 }
 
@@ -126,9 +129,10 @@ multiDataSetNonAwareInternal <- function(jaspResults, dataset, options) {
 
 # ------------------------------------------------------------------ internals
 
-.dependentValues <- function(options) {
-  values <- unlist(options$dependent, recursive = TRUE)
-  values[!is.na(values) & as.character(values) != ""]
+.dependentValues <- function(values) {
+  if (is.null(values)) return(character(0))
+  values <- unlist(values, recursive = TRUE)
+  as.character(values[!is.na(values) & as.character(values) != ""])
 }
 
 .typeSuffix <- function(value) {

@@ -17,7 +17,9 @@ datasets <- list(
   "12" = read.csv(file.path(moduledir, "Tools/testdata/DataSetB.csv")))
 attr(datasets, "dataSetNames") <- c("11" = "DataSetA", "12" = "DataSetB")
 
-res <- jaspTestModule::multiDataSetFunc(datasets = datasets, dependent = c("Score", "Condition"))
+res <- jaspTestModule::multiDataSetFunc(datasets = datasets,
+                                        dependentA = "Score",                    # in both datasets -> routes to the primary
+                                        dependentB = c("Age", "Condition"))     # Condition only exists in DataSetB
 raw <- as.character(res$.__enclos_env__$private$getResults())
 j   <- jsonlite::fromJSON(raw, simplifyVector = FALSE)$results
 

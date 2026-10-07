@@ -51,8 +51,8 @@ suppressMessages(jaspTools::setupJaspTools(
 jaspTools::setPkgOption("module.dirs", moduledir)
 jaspTools::setPkgOption("reinstall.modules", FALSE)
 
-opts1 <- list(dependent = c("JASPColumn_11_0.scale", "JASPColumn_11_2.nominal",
-                            "JASPColumn_12_0.scale", "JASPColumn_12_1.scale"),
+opts1 <- list(dependentA = c("JASPColumn_11_0.scale", "JASPColumn_11_2.nominal"),
+              dependentB = c("JASPColumn_12_0.scale", "JASPColumn_12_1.scale"),
               showMeta = FALSE, guardDemo = TRUE, plotWidth = 400, plotHeight = 300)
 res1  <- jaspTools::runAnalysis("multiDataSetFunc", options = opts1, datasets = datasets, view = FALSE, quiet = TRUE)
 r1    <- res1$results
@@ -66,26 +66,26 @@ ovTitle <- columnValues(r1$dataSetOverview, "title")
 check(identical(unname(ovId), c("11", "12")),                "overview ids 11,12")
 check(identical(unname(ovTitle), c("DataSetA", "DataSetB")), "overview titles from dataSetNames attr")
 
+# schema order: source=1, variable=2, ... keyed by the row id so assertions do not depend on json order
 sv       <- r1$selectedVariables
+svSrc    <- columnValues(sv, "source")
 svVar    <- columnValues(sv, "variable")
 svId     <- columnValues(sv, "dataSetId")
 svName   <- columnValues(sv, "dataSetName")
 svCol    <- columnValues(sv, "column")
 svType   <- columnValues(sv, "type")
 svN      <- columnValues(sv, "n")
-# keyed by the row id so assertions do not depend on json row order
-byRow <- function(v) v[svVar]
 expected <- list(
-  "JASPColumn_11_0.scale"   = c(id = "11", name = "DataSetA", column = "Score", type = "scale"),
-  "JASPColumn_11_2.nominal" = c(id = "11", name = "DataSetA", column = "Group", type = "nominal"),
-  "JASPColumn_12_0.scale"   = c(id = "12", name = "DataSetB", column = "Score", type = "scale"),
-  "JASPColumn_12_1.scale"   = c(id = "12", name = "DataSetB", column = "Age",   type = "scale"))
+  "JASPColumn_11_0.scale"   = c(src = "A", id = "11", name = "DataSetA", column = "Score", type = "scale"),
+  "JASPColumn_11_2.nominal" = c(src = "A", id = "11", name = "DataSetA", column = "Group", type = "nominal"),
+  "JASPColumn_12_0.scale"   = c(src = "B", id = "12", name = "DataSetB", column = "Score", type = "scale"),
+  "JASPColumn_12_1.scale"   = c(src = "B", id = "12", name = "DataSetB", column = "Age",   type = "scale"))
 check(all(names(expected) %in% svVar), "all four dependents present in the routing table")
 for (v in names(expected)) if (v %in% svVar) {
   i <- which(svVar == v)[1]
-  check(svId[i] == expected[[v]]["id"] && svName[i] == expected[[v]]["name"] &&
+  check(svSrc[i] == expected[[v]]["src"] && svId[i] == expected[[v]]["id"] && svName[i] == expected[[v]]["name"] &&
         svCol[i] == expected[[v]]["column"] && svType[i] == expected[[v]]["type"],
-        paste0("routing ", v, " -> ", expected[[v]]["name"], "/", expected[[v]]["column"]))
+        paste0("routing [form ", expected[[v]]["src"], "] ", v, " -> ", expected[[v]]["name"], "/", expected[[v]]["column"]))
 }
 check(all(svN == "10"), "all four columns read 10 rows")
 
@@ -105,7 +105,7 @@ check(any(grepl("MULTIDATASET-WRAPPER-OK", status2, fixed = TRUE)), "wrapper sub
 # ------------------------------------------------------------------ Path 3: legacy still OK ----
 cat("\n== Path 3: legacy non-aware run (no datasets) ==\n")
 res3 <- jaspTools::runAnalysis("multiDataSetFunc", dataset = datasets[["11"]],
-                               options = list(dependent = c("Score"), showMeta = FALSE,
+                               options = list(dependentA = c("Score"), dependentB = c("Age"), showMeta = FALSE,
                                               guardDemo = TRUE, plotWidth = 400, plotHeight = 300),
                                view = FALSE, quiet = TRUE)
 raw3 <- jsonlite::toJSON(res3, auto_unbox = TRUE)
