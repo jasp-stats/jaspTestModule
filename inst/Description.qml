@@ -8,7 +8,7 @@ Description
 	icon: 				"test.svg"
 	description: 		qsTr("A module to test stuff with.")
 	requiresData: 		false
-	hasWrappers: 		false
+	hasWrappers: 		true
 	preloadData:		false
 	
 	Timer
@@ -125,14 +125,14 @@ Description
 		hasWrapper:			true
 	}
 
-	// Same form, but NOT aware and NOT wrapped: the engine calls multiDataSetFuncInternal
-	// directly (dataset/readDataSet as always) and the dataset selection must stay inert.
-	// (It cannot use func: "multiDataSetFunc" - that name is the R-syntax wrapper now.)
+	// Same form, but NOT aware and NOT wrapped: data must arrive the old way (dataset/readDataSet)
+	// and the dataset selection must stay inert. Own func name because with hasWrappers the engine
+	// appends "Internal" to every entry's func (and the wrapper name may not *be* an Internal).
 	Analysis
 	{
 		title:				"Test Multi-DataSet (non-aware counterpart)"
 		qml:				"testMultiDataSet.qml"
-		func:				"multiDataSetFuncInternal"
+		func:				"multiDataSetNonAware"
 		requiresData:		true
 		preloadData:		true
 		multiDataSetAware:	false

@@ -117,6 +117,13 @@ readDataSetGuardDemo <- function(jaspResults) {
   jaspResults[["guardDemo"]] <- createJaspHtml(message)
 }
 
+# Non-aware counterpart (Description entry func: "multiDataSetNonAware"; the engine appends
+# Internal because hasWrappers is on for the whole module). Same form and body, but reached
+# through the old single-dataset path: no datasets argument, so readDataSet/dataset rule.
+multiDataSetNonAwareInternal <- function(jaspResults, dataset, options) {
+  multiDataSetFuncInternal(jaspResults, dataset, options)
+}
+
 # ------------------------------------------------------------------ internals
 
 .dependentValues <- function(options) {

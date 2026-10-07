@@ -1,4 +1,4 @@
-testFootnotesTableFunc <- function(jaspResults, dataset, options)
+testFootnotesTableFuncInternal <- function(jaspResults, dataset, options)
 {
   tableOfOptions(jaspResults, options, dataset)
   

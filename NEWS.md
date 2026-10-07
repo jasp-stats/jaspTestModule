@@ -32,6 +32,14 @@
 
 ## Changed
 * `renv.lock` re-resolved for R 4.6.1 (current CRAN, jaspBase/jaspGraphs from GitHub HEAD).
+* `hasWrappers: true` for the module: every analysis body now lives in `<func>Internal`
+  and has a generated `R/<func>Wrapper.R` (via jaspSyntax/SyntaxInterface) exposing the
+  plain `<func>(data = ..., ...)` entry point for R syntax use - 38 of 43; the four
+  entries pointing at removed qml files (test.qml, TestPlotStatus.qml) can't generate
+  one, and filteredDataEntry crashes the syntax bridge headlessly (Filter without
+  DataSet assertion in CommonData/filter.cpp - a real bridge bug to fix).
+* Non-aware counterpart moved to its own func (`multiDataSetNonAware`), a wrapper may
+  not be generated for a `...Internal` name.
 
 
 

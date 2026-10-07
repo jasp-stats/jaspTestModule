@@ -1,4 +1,4 @@
-testOptionContainsValue <- function(jaspResults, dataset, options)
+testOptionContainsValueInternal <- function(jaspResults, dataset, options)
 {
   tableOfOptions(jaspResults, options, dataset)
   

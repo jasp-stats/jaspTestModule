@@ -1,4 +1,4 @@
-testMixedColumnsTableFunc <- function(jaspResults, dataset, options) {
+testMixedColumnsTableFuncInternal <- function(jaspResults, dataset, options) {
 
   if (options[["checkbox_0"]])
     set.seed(123)

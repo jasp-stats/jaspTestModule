@@ -1,5 +1,5 @@
 
-testInputFieldFunc <- function(jaspResults, dataset, options)
+testInputFieldFuncInternal <- function(jaspResults, dataset, options)
 {
   tableOfOptions(jaspResults, options, dataset)
   

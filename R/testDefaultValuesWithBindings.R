@@ -1,4 +1,4 @@
-testDefaultValuesWithBindings <- function(jaspResults, dataset, options)
+testDefaultValuesWithBindingsInternal <- function(jaspResults, dataset, options)
 {
   tableOfOptions(jaspResults, options, dataset)
   

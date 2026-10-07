@@ -1,4 +1,4 @@
-testTransposedTableFunc <- function(jaspResults, dataset, options)
+testTransposedTableFuncInternal <- function(jaspResults, dataset, options)
 {
   tableOfOptions(jaspResults, options, dataset)
   
