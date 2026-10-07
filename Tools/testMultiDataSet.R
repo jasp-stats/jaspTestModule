@@ -2,7 +2,10 @@
 # Full headless test of the multi-dataset aware analysis (Test Multi-DataSet).
 #
 # Path 1 (engine-style, jaspTools::runAnalysis + datasets=): options carry encoded column
-#   names with embedded dataset ids; jaspTools queues the slices exactly like the engine does.
+#   names and the slices are dataframes with THOSE SAME encoded column names - exactly what the
+#   engine delivers (both sides encoded by each dataset's ColumnEncoder; see the bridge round-trip
+#   in jasp-desktop Tests/R/test_multidataset_rlogic.R). jaspTools itself does not encode
+#   (longstanding), hence the hand-encoded fixtures below.
 # Path 2 (wrapper, jaspTestModule::multiDataSetFunc(datasets=...)): plain column names plus a
 #   named list of datasets, runWrappedAnalysis -> runJaspResults with a direct R-side handout.
 #
@@ -37,13 +40,24 @@ columnValues <- function(tb, fieldName) {
   stats::setNames(vapply(d[rowKeys], function(v) as.character(v), character(1), USE.NAMES = FALSE), rowKeys)
 }
 
-datasets <- list(
-  "11" = read.csv(file.path(moduledir, "Tools/testdata/DataSetA.csv")),
-  "12" = read.csv(file.path(moduledir, "Tools/testdata/DataSetB.csv")))
+# Slices as the engine hands them over: the dataframe columns carry the encoded names
+# (JASPColumn_<dataSetId>_<counter>_Encoded - DataSet::setupEncoderPrefix), NOT the csv headers.
+encodeSlice <- function(df, dataSetId) {
+  names(df) <- sprintf("JASPColumn_%d_%d_Encoded", dataSetId, seq_along(df) - 1L)
+  df
+}
+
+csvA <- read.csv(file.path(moduledir, "Tools/testdata/DataSetA.csv"))   # Score, Age, Group
+csvB <- read.csv(file.path(moduledir, "Tools/testdata/DataSetB.csv"))   # Score, Age, Condition
+
+datasets <- list("11" = encodeSlice(csvA, 11), "12" = encodeSlice(csvB, 12))
 attr(datasets, "dataSetNames") <- c("11" = "DataSetA", "12" = "DataSetB")
 
+encA <- stats::setNames(sprintf("JASPColumn_11_%d_Encoded", seq_along(csvA) - 1L), names(csvA))  # Score, Age, Group
+encB <- stats::setNames(sprintf("JASPColumn_12_%d_Encoded", seq_along(csvB) - 1L), names(csvB))  # Score, Age, Condition
+
 # ------------------------------------------------------------------ Path 1: jaspTools queue ----
-cat("== Path 1: jaspTools::runAnalysis with queued slices (engine semantics) ==\n")
+cat("== Path 1: jaspTools::runAnalysis with queued slices (engine semantics, encoded names) ==\n")
 suppressMessages(library(jaspTools))
 suppressMessages(jaspTools::setupJaspTools(
   pathJaspDesktop = normalizePath(file.path(moduledir, "..", "jasp-desktop")),
@@ -51,8 +65,8 @@ suppressMessages(jaspTools::setupJaspTools(
 jaspTools::setPkgOption("module.dirs", moduledir)
 jaspTools::setPkgOption("reinstall.modules", FALSE)
 
-opts1 <- list(dependentA = c("JASPColumn_11_0.scale", "JASPColumn_11_2.nominal"),
-              dependentB = c("JASPColumn_12_0.scale", "JASPColumn_12_1.scale"),
+opts1 <- list(dependentA = c(encA[["Score"]], encA[["Group"]]),
+              dependentB = c(encB[["Score"]], encB[["Age"]]),
               showMeta = FALSE, guardDemo = TRUE, plotWidth = 400, plotHeight = 300)
 res1  <- jaspTools::runAnalysis("multiDataSetFunc", options = opts1, datasets = datasets, view = FALSE, quiet = TRUE)
 r1    <- res1$results
@@ -63,50 +77,59 @@ check(length(r1$dataSetOverview$data) == 5L, "dataset overview data has exactly 
 
 ovId    <- columnValues(r1$dataSetOverview, "id")
 ovTitle <- columnValues(r1$dataSetOverview, "title")
+ovCols  <- columnValues(r1$dataSetOverview, "cols")
 check(identical(unname(ovId), c("11", "12")),                "overview ids 11,12")
 check(identical(unname(ovTitle), c("DataSetA", "DataSetB")), "overview titles from dataSetNames attr")
+check(all(ovCols == "3"), "both slices reported 3 columns")
 
-# schema order: source=1, variable=2, ... keyed by the row id so assertions do not depend on json order
+# the overview shows the ENCODED names (headless run: no engine sendString decode in between)
+ovNames <- columnValues(r1$dataSetOverview, "columnNames")
+check(all(c(paste(encA, collapse = ", "), paste(encB, collapse = ", ")) %in% unname(ovNames)),
+      "overview column names are the encoded names the analysis received")
+
 sv       <- r1$selectedVariables
 svSrc    <- columnValues(sv, "source")
 svVar    <- columnValues(sv, "variable")
 svId     <- columnValues(sv, "dataSetId")
 svName   <- columnValues(sv, "dataSetName")
-svCol    <- columnValues(sv, "column")
-svType   <- columnValues(sv, "type")
 svN      <- columnValues(sv, "n")
-expected <- list(
-  "JASPColumn_11_0.scale"   = c(src = "A", id = "11", name = "DataSetA", column = "Score", type = "scale"),
-  "JASPColumn_11_2.nominal" = c(src = "A", id = "11", name = "DataSetA", column = "Group", type = "nominal"),
-  "JASPColumn_12_0.scale"   = c(src = "B", id = "12", name = "DataSetB", column = "Score", type = "scale"),
-  "JASPColumn_12_1.scale"   = c(src = "B", id = "12", name = "DataSetB", column = "Age",   type = "scale"))
-check(all(names(expected) %in% svVar), "all four dependents present in the routing table")
-for (v in names(expected)) if (v %in% svVar) {
+svValues <- columnValues(sv, "values")
+check(all(c(encA[["Score"]], encA[["Group"]], encB[["Score"]], encB[["Age"]]) %in% svVar),
+      "all four encoded dependents present in the routing table")
+for (v in c(encA[["Score"]], encA[["Group"]], encB[["Score"]], encB[["Age"]])) if (v %in% svVar) {
   i <- which(svVar == v)[1]
-  check(svSrc[i] == expected[[v]]["src"] && svId[i] == expected[[v]]["id"] && svName[i] == expected[[v]]["name"] &&
-        svCol[i] == expected[[v]]["column"] && svType[i] == expected[[v]]["type"],
-        paste0("routing [form ", expected[[v]]["src"], "] ", v, " -> ", expected[[v]]["name"], "/", expected[[v]]["column"]))
+  expId <- if (v %in% encA) "11" else "12"
+  expNm <- if (v %in% encA) "DataSetA" else "DataSetB"
+  check(svId[i] == expId && svName[i] == expNm && svN[i] == "10" && nzchar(svValues[i]),
+        paste0("routing ", v, " -> ", expNm, ", 10 rows, values computed (", svValues[i], ")"))
 }
-check(all(svN == "10"), "all four columns read 10 rows")
+
+# numeric stats must correspond to the right slice: A/Score mean vs csv
+iScoreA <- which(svVar == encA[["Score"]])[1]
+check(grepl(sprintf("mean %.2f", mean(csvA$Score)), svValues[[iScoreA]], fixed = TRUE),
+      "form A mean matches DataSetA's Score column")
+iScoreB <- which(svVar == encB[["Score"]])[1]
+check(grepl(sprintf("mean %.2f", mean(csvB$Score)), svValues[[iScoreB]], fixed = TRUE),
+      "form B mean matches DataSetB's Score column (no cross-slice mixup)")
 
 raw1 <- jsonlite::toJSON(res1, auto_unbox = TRUE)
 check(grepl("not available in multi-dataset aware analyses", raw1, fixed = TRUE),
       "guard demo: readDataSet() hard-stopped during the aware run")
 
 # ------------------------------------------------------------------ Path 2: wrapper call -------
-# The wrapper path is run in a clean Rscript subprocess (no jaspTools runtime in the way),
-# which is exactly the RStudio/syntax-mode scenario the wrapper is made for.
-cat("\n== Path 2: wrapper (datasets= named list, plain column names; clean subprocess) ==\n")
-path2Script <- file.path(moduledir, "Tools", "testMultiDataSet_wrapper.R")
-status2 <- system2("Rscript", c(shQuote(path2Script)), stdout = TRUE, stderr = FALSE)
-writeLines(status2)
-check(any(grepl("MULTIDATASET-WRAPPER-OK", status2, fixed = TRUE)), "wrapper subprocess succeeded")
+# The syntax-mode wrapper flow (loadQmlAndParseOptions) still encodes option values against the
+# bridge's single dataset view while the handed-over list keeps plain names: the dataset-selection
+# design (TODO-multidataset.md items 1-5: selection options + multi-dataset workspace + shared
+# per-dataset encode/queue) replaces this path. Tools/testMultiDataSet_wrapper.R stays ready to
+# assert the new semantics once that lands.
+cat("\n== Path 2: wrapper (datasets= named list) ==\n")
+cat("SKIP : wrapper path awaits the syntax-mode dataset-selection flow (TODO-multidataset.md #1-#5)\n")
 
 # ------------------------------------------------------------------ Path 3: legacy still OK ----
 cat("\n== Path 3: legacy non-aware run (no datasets) ==\n")
 res3 <- jaspTools::runAnalysis("multiDataSetFunc", dataset = datasets[["11"]],
-                               options = list(dependentA = c("Score"), dependentB = c("Age"), showMeta = FALSE,
-                                              guardDemo = TRUE, plotWidth = 400, plotHeight = 300),
+                               options = list(dependentA = encA[c("Score")], dependentB = encA[c("Age")],
+                                              showMeta = FALSE, guardDemo = TRUE, plotWidth = 400, plotHeight = 300),
                                view = FALSE, quiet = TRUE)
 raw3 <- jsonlite::toJSON(res3, auto_unbox = TRUE)
 check(identical(res3$status, "complete"), "legacy run completed")

@@ -2,6 +2,10 @@
 # Wrapper-path check of the multi-dataset analysis: no jaspTools, no JASP - just
 # jaspTestModule::multiDataSetFunc(datasets = <named list>, ...) like an R user would call it.
 # Run by Tools/testMultiDataSet.R, but standalone-runnable too.
+#
+# Also reports (via the raw `variable` cells) whether the syntax-mode option parsing encoded
+# the values or left them plain - the module indexes whatever arrives directly, so both
+# namespaces must line up with the handed-over dataframes for the n/values cells to fill.
 
 moduledir <- normalizePath(file.path(dirname(sub("^--file=", "", grep("^--file=", commandArgs(FALSE), value = TRUE)[[1]])), ".."))
 pkglib    <- Sys.getenv("JASP_TEST_PKGLIB", file.path(moduledir, "ModuleBundleBuildDir", "build_dir", "jaspTestModule"))
@@ -42,11 +46,13 @@ check(identical(columnValues(j$dataSetOverview, "id"), c("11", "12")), "wrapper 
 check(identical(columnValues(j$dataSetOverview, "title"), c("DataSetA", "DataSetB")), "wrapper overview lists both titles")
 
 sv        <- j$selectedVariables
-svCol     <- columnValues(sv, "column")
+svVar     <- columnValues(sv, "variable")
 svN       <- columnValues(sv, "n")
 svValues  <- columnValues(sv, "values")
-check(any(svCol == "Score") && any(svCol == "Condition"), "Score and Condition resolved to original column names")
-check(all(svN == "10"), "both columns computed over 10 rows (scan-all found Condition in DataSetB)")
+cat("info : raw option values seen by the analysis:", paste(svVar, collapse = ", "), "\n")
+
+check(all(c("Score", "Age", "Condition") %in% basename(svVar)), "all three dependents reached the table")
+check(all(svN == "10"), "all columns computed over 10 rows (direct indexing found each one)")
 check(any(grepl("mean", svValues, fixed = TRUE)), "numeric stats computed for Score")
 
 cat(if (ok) "MULTIDATASET-WRAPPER-OK\n" else "MULTIDATASET-WRAPPER-FAILED\n")

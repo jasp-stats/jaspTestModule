@@ -1,9 +1,14 @@
 # Multi-dataset aware analyses (jasp-desktop branch dataSetAwareVarForm, jaspBase branch
 # multiDataSetAware). An analysis whose Description/Analysis entry sets multiDataSetAware gets
 # every dataset it references as `datasets`: a named list keyed by dataset id, with the user
-# facing titles in attr(datasets, "dataSetNames"). Its variable options carry encoded column
-# names whose prefix embeds the dataset they were selected from (JASPColumn_<dataSetId>_<n>),
-# which jaspBase's dataSetIdFromEncoded / dataSetNameFromEncoded / getDataSetColumn route.
+# facing titles in attr(datasets, "dataSetNames"). Options and data share the ENCODED namespace:
+# variable options carry names like "JASPColumn_<dataSetId>_<n>_Encoded" and the dataframes'
+# column names are the very same strings (encoded by each dataset's own ColumnEncoder, whose
+# prefix embeds the dataset id), so an analysis indexes with the option value as-is:
+# getDataSetColumn(value, datasets) / datasets[[id]][[value]]. Result strings are decoded back to
+# the original names on their way to the GUI, so putting encoded names in tables/plots is not
+# just allowed, it is how provenance survives. jaspBase's dataSetIdFromEncoded /
+# dataSetNameFromEncoded / getDataSetFor route values to their dataset.
 # While such a run is active, readDataSet* stops: one 'current dataset' is meaningless here.
 
 multiDataSetFuncInternal <- function(jaspResults, dataset, options, datasets = NULL) {
@@ -35,7 +40,7 @@ dataSetOverviewTable <- function(jaspResults, datasets, dataset) {
   table$addColumnInfo("title",    title = "Title")
   table$addColumnInfo("rows",     title = "Rows")
   table$addColumnInfo("cols",     title = "Columns")
-  table$addColumnInfo("columnNames", title = "Column names")
+  table$addColumnInfo("columnNames", title = "Column names (decoded on the way out)")
 
   if (!is.null(datasets)) {
     titles <- attr(datasets, "dataSetNames")
@@ -48,7 +53,7 @@ dataSetOverviewTable <- function(jaspResults, datasets, dataset) {
     }
   } else if (!is.null(dataset)) {
     table[["current"]] <- list(
-      id = "(current)", title = "(the one dataset)", rows = nrow(dataset), ncol(dataset),
+      id = "(current)", title = "(the one dataset)", rows = nrow(dataset), cols = ncol(dataset),
       columnNames = paste(names(dataset), collapse = ", "))
   }
 }
@@ -58,40 +63,32 @@ selectedVariablesTable <- function(jaspResults, options, datasets, dataset) {
   jaspResults[["selectedVariables"]] <- table
 
   table$addColumnInfo("source",     title = "Form")
-  table$addColumnInfo("variable",   title = "Variable (routed to)")
+  table$addColumnInfo("variable",   title = "Variable (decoded on the way out)")
   table$addColumnInfo("dataSetId",  title = "Dataset id")
   table$addColumnInfo("dataSetName", title = "Dataset title")
-  table$addColumnInfo("column",     title = "Column")
-  table$addColumnInfo("type",       title = "Type")
   table$addColumnInfo("n",          title = "n")
   table$addColumnInfo("values",     title = "mean (scale) / first levels (factor)")
 
   for (entry in list(list(form = "A", values = .dependentValues(options$dependentA)),
                      list(form = "B", values = .dependentValues(options$dependentB)))) {
     for (value in entry$values) {
-      if (is.null(datasets)) {
-        # Non-aware: plain preload semantics, decode against the current encoder.
-        column <- sub("\\.(scale|ordinal|nominal)$", "", jaspBase::decodeColNames(value))
-        row    <- list(source = entry$form, variable = column, dataSetId = "-", dataSetName = "-",
-                       column = column, type = .typeSuffix(value), n = NA_integer_, values = "")
-        if (!is.null(dataset) && column %in% names(dataset))
-          row <- .fillDescription(row, dataset[[column]])
-        table[[paste0(entry$form, ":", value)]] <- row
-        next
+      # value indexes the data as-is in both modes: options and column names share the encoded
+      # namespace (or are both plain, in a jaspTools run). Only the routing to one dataset out
+      # of `datasets` is aware-specific; the non-aware run has exactly the one dataset anyway.
+      columnData <- if (is.null(datasets)) {
+        if (!is.null(dataset) && value %in% names(dataset)) dataset[[value]] else NULL
+      } else {
+        jaspBase::getDataSetColumn(value, datasets)
       }
 
-      id  <- jaspBase::dataSetIdFromEncoded(value)
-      col <- jaspBase::dataSetColumnFromEncoded(value, datasets)
+      id  <- if (is.null(datasets)) NA_integer_ else jaspBase::dataSetIdFromEncoded(value)
       row <- list(
         source      = entry$form,
         variable    = value,
-        dataSetId   = if (is.na(id)) "none (legacy)" else id,
-        dataSetName = jaspBase::dataSetNameFromEncoded(value, datasets),
-        column      = col,
-        type        = .typeSuffix(value),
+        dataSetId   = if (is.null(datasets)) "-" else if (is.na(id)) "none (legacy)" else as.character(id),
+        dataSetName = if (is.null(datasets)) "-" else jaspBase::dataSetNameFromEncoded(value, datasets),
         n           = NA_integer_, values = "")
 
-      columnData <- jaspBase::getDataSetColumn(value, datasets)
       if (!is.null(columnData))
         row <- .fillDescription(row, columnData)
 
@@ -133,11 +130,6 @@ multiDataSetNonAwareInternal <- function(jaspResults, dataset, options) {
   if (is.null(values)) return(character(0))
   values <- unlist(values, recursive = TRUE)
   as.character(values[!is.na(values) & as.character(values) != ""])
-}
-
-.typeSuffix <- function(value) {
-  match <- regmatches(as.character(value), regexec("\\.(scale|ordinal|nominal)$", value))[[1]]
-  if (length(match) == 2L) match[2] else NA_character_
 }
 
 .fillDescription <- function(entry, columnData) {
