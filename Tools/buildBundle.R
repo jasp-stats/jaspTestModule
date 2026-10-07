@@ -163,10 +163,28 @@ if (requireNamespace("jaspSyntax", quietly = TRUE)) {
   suppressPackageStartupMessages(library(jaspSyntax))
   desc <- readModuleDescription(moduledir)
   stopifnot(!is.null(desc))
-  for (analysisFunc in c("multiDataSetFunc")) {
-    opts <- readDefaultAnalysisOptions(moduledir, analysisFunc)
-    stopifnot(is.list(opts), !is.null(attr(opts, "qmlFile")))
-    message("  ", analysisFunc, " -> ", basename(attr(opts, "qmlFile")), " loads OK")
+  for (check in list(
+      list(func = "multiDataSetFunc",     qml = "testMultiDataSet.qml",         aware = TRUE),
+      list(func = "multiDataSetNonAware", qml = "testMultiDataSetNonAware.qml", aware = FALSE))) {
+    qmlFile <- file.path(moduledir, "inst", "qml", check$qml)
+    stopifnot(file.exists(qmlFile))
+    parseOptions <- NULL
+    if (check$aware) {
+      # The aware forms declare dataSetSelectionOptions; the bridge (rightly) demands every one
+      # of them names a loaded dataset - give the smoke check one dummy to point them all at.
+      jaspSyntax::loadDataSets(list(bundleCheck = data.frame(ok = 1)))
+      hits  <- Filter(function(h) length(h) == 2L,
+                      regmatches(readLines(qmlFile, warn = FALSE),
+                                 regexec('dataSetSelectionOption[[:space:]]*:[[:space:]]*"([^"]+)"',
+                                         readLines(qmlFile, warn = FALSE))))
+      sels  <- vapply(hits, function(h) h[[2]], character(1))
+      stopifnot(length(sels) > 0L)
+      parseOptions <- stats::setNames(as.list(rep("bundleCheck", length(sels))), sels)
+    }
+    parsed <- jaspSyntax::parseQmlOptions(qmlFile, options = parseOptions, moduleName = "jaspTestModule",
+                                          analysisName = check$func, isolated = FALSE)
+    stopifnot(!is.null(parsed))
+    message("  ", check$func, " -> ", check$qml, " loads OK")
   }
 } else {
   message("NOTE: jaspSyntax not installed (see github.com/jasp-stats/jaspSyntax) - QML not checked.")
