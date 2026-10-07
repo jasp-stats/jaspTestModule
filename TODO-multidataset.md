@@ -17,10 +17,10 @@
   data); default filter queued per slice. Names are user-convenience only (DataSet title).
 
 ## TODO
-1. [fix] Desktop plot gap: `Analysis::loadPlotlyJsonInResults` decodes plotly JSON against the
+1. [DONE jasp-desktop d8ed73558] Desktop plot gap: `Analysis::loadPlotlyJsonInResults` decodes plotly JSON against the
    analysis' OWN dataset encoder only — aware analyses plotting other datasets stay encoded.
    Same multi-encoder treatment as `Engine::sendString` `_analysisDataSetEncoders`.
-2. [harden] `_analysisDataSetEncoders` stores raw `ColumnEncoder*` — dataset deleted mid-run
+2. [DONE jasp-desktop 0bf83f920] `_analysisDataSetEncoders` stored raw `ColumnEncoder*` — dataset deleted mid-run
    dangles (only the CURRENT pointer is guarded in ~DataSet). Re-resolve by id at send time.
 3. [verify] GUI end-to-end after bundle rebuild: dropdown fills tables (aware + twin), guard
    demo, per-form dataset switching in the GUI, and saved-file reload of an aware analysis
@@ -47,8 +47,8 @@
   dataSetEncodedNames snapshot deleted; real `_Encoded` parsing; direct indexing; faithful fixtures).
 - jaspTools `0d621f3` dead stub + maps removed.
 - jaspTestModule `6f6cec1` demo indexes directly; path-1 fixtures carry real encoded names.
-- UNCOMMITTED (all suites green: JASPTest 109, QuickTest 93, rlogic incl bridge, jaspBase 46,
-  module 29 incl wrapper): syntax-mode dataset selection across jasp-desktop (workspace
+- COMMITTED `2bc37b8`+jasp-desktop `3e09b7b31` etc. (all suites green: JASPTest 109, QuickTest 93, rlogic incl bridge, jaspBase 46,
+X dataset selection across jasp-desktop (workspace
   dataSetByTitle, DataSetProvider titled loads + firstLoadedDataSetId + named loads skip reset,
   VariablesFormBase dataSetSelectionOption/dataSetTitleValues/selectDataSetByName/
   applyDataSetSelection, JASPControl _setInitialized apply-hook, AnalysisForm
