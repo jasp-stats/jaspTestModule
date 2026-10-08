@@ -67,3 +67,37 @@ X dataset selection across jasp-desktop (workspace
   runWrappedAnalysis aware flow with string parts), jaspTestModule (selection options + depends
   in testMultiDataSet.qml, twin's own qml, wrapper test rewritten, buildBundle check fixed).
 - Known NOT-a-bug: jaspTools doesn't encode (longstanding, user-confirmed, out of scope).
+
+## Crash 2026-10-08
+SEGV opening Test Multi-DataSet on desktop with two CSVs loaded: log ended at
+`AnalysisForm::setAnalysisUp() for 0x...` and JASP died.
+
+**Root cause** (jasp-desktop): `testMultiDataSet.qml` carries `depends: "dataSetA"` /
+`depends: "dataSetB"` on the AssignedVariablesLists (bind the syntax-mode dataset-selection
+option before the lists, 3e09b7b31/5b983c9). On desktop that option's bound DropDown is
+deliberately unnamed (`name: syntaxMode ? variablesForm.dataSetSelectionOption : ""`) so it is
+never registered in `AnalysisForm::_controls`; `JASPControl::_addExplicitDependency` resolved
+the name to `nullptr` and inserted it into `_depends` unconditionally. `AnalysisForm::sortControls`
+then dereferenced it (`depend->depends()` at this=0x20). Backtrace: setAnalysisUp -> _setUpControls
+-> _setUp -> sortControls -> std::set<JASPControl*>::begin(this=0x20).
+
+**Fix** jasp-desktop `785afe486`: _addExplicitDependency only inserts resolved, non-self controls
+(an unresolvable `depends` name imposes no binding order; desktop stays 100% functional, the
+syntax-mode DropDown stays inert there); sortControls skips nulls defensively. No module changes.
+
+**Repro + verify recipe (scripted, no GUI):**
+1. `rpcServerEnabled=true` in ~/.config/JASP/JASP.conf; nothing else running.
+2. `cd <jasp-desktop>/build && QT_QPA_PLATFORM=offscreen gdb -batch -ex run -ex bt --args ./Desktop/JASP > /tmp/jasp_run.log 2>&1 &`
+3. `python3 Tools/verifyMultiDataSetRpc.py` — loads DataSetA+DataSetB via RPC (two datasets in
+   one workspace), creates the analysis (this is where the pre-fix build SEGVs), binds
+   dependentA=Score@ds1 and dependentB=Score+Condition@ds2 (Score exists in both; mixed
+   provenance via analysis_setFilter + the unchanged-value early return in
+   BoundControlBase::setBoundValue), runs and asserts the results: 'Datasets in this run' has
+   both datasets (titles, 10 rows each), 'Selected variables' routes each value to its own
+   dataset with n=10 and mean/levels (A:Score mean 12.50 -> DataSet 1, B:Score mean 17.73 +
+   B:Condition X,Y,Z -> DataSet 2), all decoded (no JASPColumn_* left).
+Pre-fix the script dies at analysis_create with the backtrace above; post-fix ALL CHECKS PASSED.
+Suites green with the fix: JASPTest 109 PASS, JASPQuickTest 93 PASS.
+Note: RPC `analysis_create` cannot carry options, and per-control drops are not exposed; the
+script works around that with setFilter-then-run (unchanged values keep their .meta), so no
+new RPC surface was needed.
