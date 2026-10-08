@@ -16,6 +16,12 @@
   pre-check; ComboBoxBase coerces "" to first entry). No filters in syntax mode (pre-filtered
   data); default filter queued per slice. Names are user-convenience only (DataSet title).
 
+## ACTIVE PLAN
+The per-host FilterSelect refactor (independent per-form selection, filter-id options,
+VariableInfo provider chain) is planned in full at:
+`/home/virtuoos/.opencode/plan/multidataset-filterselect.md` — READ IT, red-tests-first.
+It replaces the linked-dropdown design (both dropdowns mirrored analysis->filterId = the bug).
+
 ## TODO
 1. [DONE jasp-desktop d8ed73558] Desktop plot gap: `Analysis::loadPlotlyJsonInResults` decodes plotly JSON against the
    analysis' OWN dataset encoder only — aware analyses plotting other datasets stay encoded.
