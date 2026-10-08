@@ -140,14 +140,20 @@ tabs = tables(results)
 print("tables found:", [(k, t.get("title")) for k, t in tabs.items()][:20])
 
 def field_maps(t):
-    """jaspBase json: data[i] is a {rowKey: value} map for schema field i."""
+    """jaspBase json, both layouts: column-major (data[i] is a {rowKey: value} map for schema
+    field i) and row-major (data[i] is one {field: value} dict per row, setData(data.frame))."""
     fields = [f["name"] for f in t["schema"]["fields"]]
+    data = t["data"]
+    if data and all(isinstance(e, dict) and set(e.keys()) <= set(fields) and e.keys() for e in data):
+        rows = {f"row{i}": r for i, r in enumerate(data)}
+        fm = {f: {k: r.get(f) for k, r in rows.items()} for f in fields}
+        return fields, fm, sorted(rows.keys())
     rowkeys = set()
-    for entry in t["data"]:
+    for entry in data:
         for key, val in entry.items():
             if val is not None and key not in fields:
                 rowkeys.add(key)
-    return fields, {f: t["data"][i] for i, f in enumerate(fields)}, sorted(rowkeys)
+    return fields, {f: data[i] for i, f in enumerate(fields)}, sorted(rowkeys)
 
 ds = next((t for t in tabs.values() if t.get("title") == "Datasets in this run"), None)
 check("'Datasets in this run' table present", ds is not None)

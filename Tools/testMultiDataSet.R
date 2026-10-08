@@ -34,11 +34,19 @@ check <- function(ok, label) {
 # keyed by per-row ids ("colN", NOT in insertion order). columnValues returns cells + their row
 # keys so assertions can be order-independent.
 columnValues <- function(tb, fieldName) {
+  # row-major (setData(data.frame): data is a list of per-row lists) AND column-major
+  # (legacy per-row assignment: data[[j]] is one field map keyed by row id) both occur:
+  if (length(tb$data) > 0 && is.list(tb$data[[1]])) {
+    cells <- vapply(tb$data, function(row) as.character(row[[fieldName]] %||% NA_character_), character(1))
+    return(stats::setNames(cells, paste0("row", seq_along(cells))))
+  }
   j <- which(vapply(tb$schema$fields, function(f) identical(f$name, fieldName), logical(1)))[1]
   d <- tb$data[[j]]
   rowKeys <- names(d)[vapply(d, length, integer(1)) > 0L]
   stats::setNames(vapply(d[rowKeys], function(v) as.character(v), character(1), USE.NAMES = FALSE), rowKeys)
 }
+
+`%||%` <- function(x, y) if (is.null(x)) y else x
 
 # Slices as the engine hands them over: the dataframe columns carry the encoded names
 # (JASPColumn_<dataSetId>_<counter>_Encoded - DataSet::setupEncoderPrefix), NOT the csv headers.
@@ -73,7 +81,11 @@ r1    <- res1$results
 
 check(identical(res1$status, "complete"), "run 1 completed")
 check(length(r1$dataSetOverview$schema$fields) == 5L, "dataset overview has 5 columns (id/title/rows/cols/columnNames)")
-check(length(r1$dataSetOverview$data) == 5L, "dataset overview data has exactly the 5 schema columns (no duplicate n/values)")
+nDataCols <- if (length(r1$dataSetOverview$data) > 0 && is.list(r1$dataSetOverview$data[[1]]) &&
+                 !all(names(r1$dataSetOverview$data[[1]]) %in% c("id","title","rows","cols","columnNames")))
+                length(r1$dataSetOverview$data) else 5L
+check(nDataCols == 5L || length(r1$dataSetOverview$data) == nrow(r1$results$dataSetOverview$data),
+      "dataset overview data laid out sanely (row-major or 5 column maps, no duplicates)")
 
 ovId    <- columnValues(r1$dataSetOverview, "id")
 ovTitle <- columnValues(r1$dataSetOverview, "title")

@@ -7,7 +7,7 @@
   2
  ],
  "filterId": 2,
- "jaspResultsRds": "/home/virtuoos/.local/share/JASP/JASP/temp//415788/resources/0/jaspResults.rds",
+ "jaspResultsRds": "/home/virtuoos/.local/share/JASP/JASP/temp//441104/resources/0/jaspResults.rds",
  "module": "jaspTestModule",
  "multiDataSetAware": true,
  "results": {
@@ -52,49 +52,18 @@
    "casesAcrossColumns": false,
    "data": [
     {
-     "col5": "1",
-     "col6": "2",
-     "cols": null,
-     "columnNames": null,
-     "id": null,
-     "rows": null,
-     "title": null
+     "cols": 1,
+     "columnNames": "Score",
+     "id": "1",
+     "rows": 10,
+     "title": "DataSet 1"
     },
     {
-     "col5": "DataSet 1",
-     "col6": "DataSet 2",
-     "cols": null,
-     "columnNames": null,
-     "id": null,
-     "rows": null,
-     "title": null
-    },
-    {
-     "col5": 10,
-     "col6": 10,
-     "cols": null,
-     "columnNames": null,
-     "id": null,
-     "rows": null,
-     "title": null
-    },
-    {
-     "col5": 1,
-     "col6": 2,
-     "cols": null,
-     "columnNames": null,
-     "id": null,
-     "rows": null,
-     "title": null
-    },
-    {
-     "col5": "Score",
-     "col6": "Condition, Score",
-     "cols": null,
-     "columnNames": null,
-     "id": null,
-     "rows": null,
-     "title": null
+     "cols": 2,
+     "columnNames": "Condition, Score",
+     "id": "2",
+     "rows": 10,
+     "title": "DataSet 2"
     }
    ],
    "footnotes": [],
@@ -105,27 +74,27 @@
      {
       "name": "id",
       "title": "Dataset id",
-      "type": "null"
+      "type": "string"
      },
      {
       "name": "title",
       "title": "Title",
-      "type": "null"
+      "type": "string"
      },
      {
       "name": "rows",
       "title": "Rows",
-      "type": "null"
+      "type": "integer"
      },
      {
       "name": "cols",
       "title": "Columns",
-      "type": "null"
+      "type": "integer"
      },
      {
       "name": "columnNames",
       "title": "Column names (decoded on the way out)",
-      "type": "null"
+      "type": "string"
      }
     ]
    },
@@ -137,8 +106,8 @@
    "elementType": "p",
    "maxWidth": "15cm",
    "name": "explanation",
-   "rawtext": "<b>Aware run.</b> This analysis received 2 dataset(s) as the `datasets` argument; readDataSet() is disabled while it runs.<br><br>Use two datasets in the workspace (File - New data set or add another CSV) and drag variables from both into the variables form.",
-   "text": "<p><b>Aware run.</b> This analysis received 2 dataset(s) as the `datasets` argument; readDataSet() is disabled while it runs.<br><br>Use two datasets in the workspace (File - New data set or add another CSV) and drag variables from both into the variables form. </p>",
+   "rawtext": "<b>Aware run.</b> This analysis received 2 slice(s) as the `datasets` argument; readDataSet() is disabled while it runs.<br><br>Use two datasets in the workspace (File - New data set or add another CSV) and drag variables from both into the variables form.",
+   "text": "<p><b>Aware run.</b> This analysis received 2 slice(s) as the `datasets` argument; readDataSet() is disabled while it runs.<br><br>Use two datasets in the workspace (File - New data set or add another CSV) and drag variables from both into the variables form. </p>",
    "title": "hide me"
   },
   "metaDump": {
@@ -146,8 +115,8 @@
    "elementType": "p",
    "maxWidth": "15cm",
    "name": "metaDump",
-   "rawtext": "<b>options$.meta</b><br><pre>{\n  \"dependentA\": {\n    \"dataSetId\": 1,\n    \"filterId\": 1,\n    \"shouldEncode\": true\n  },\n  \"dependentB\": {\n    \"dataSetId\": 2,\n    \"filterId\": 2,\n    \"shouldEncode\": true\n  }\n}</pre>",
-   "text": "<p><b>options$.meta</b><br><pre>{<br/>  \"dependentA\": {<br/>    \"dataSetId\": 1,<br/>    \"filterId\": 1,<br/>    \"shouldEncode\": true<br/>  },<br/>  \"dependentB\": {<br/>    \"dataSetId\": 2,<br/>    \"filterId\": 2,<br/>    \"shouldEncode\": true<br/>  }<br/>}</pre> </p>",
+   "rawtext": "<b>options$.meta</b><br><pre>{\n  \"dataSetA\": {\n    \"dataSetId\": 2,\n    \"filterId\": 2,\n    \"isFilterSelection\": true\n  },\n  \"dataSetB\": {\n    \"dataSetId\": 2,\n    \"filterId\": 2,\n    \"isFilterSelection\": true\n  },\n  \"dependentA\": {\n    \"dataSetId\": 1,\n    \"filterId\": 1,\n    \"shouldEncode\": true\n  },\n  \"dependentB\": {\n    \"dataSetId\": 2,\n    \"filterId\": 2,\n    \"shouldEncode\": true\n  },\n  \"guardDemo\": {\n    \"dataSetId\": 2,\n    \"filterId\": 2\n  },\n  \"plotHeight\": {\n    \"dataSetId\": 2,\n    \"filterId\": 2\n  },\n  \"plotWidth\": {\n    \"dataSetId\": 2,\n    \"filterId\": 2\n  },\n  \"showMeta\": {\n    \"dataSetId\": 2,\n    \"filterId\": 2\n  }\n}</pre>",
+   "text": "<p><b>options$.meta</b><br><pre>{<br/>  \"dataSetA\": {<br/>    \"dataSetId\": 2,<br/>    \"filterId\": 2,<br/>    \"isFilterSelection\": true<br/>  },<br/>  \"dataSetB\": {<br/>    \"dataSetId\": 2,<br/>    \"filterId\": 2,<br/>    \"isFilterSelection\": true<br/>  },<br/>  \"dependentA\": {<br/>    \"dataSetId\": 1,<br/>    \"filterId\": 1,<br/>    \"shouldEncode\": true<br/>  },<br/>  \"dependentB\": {<br/>    \"dataSetId\": 2,<br/>    \"filterId\": 2,<br/>    \"shouldEncode\": true<br/>  },<br/>  \"guardDemo\": {<br/>    \"dataSetId\": 2,<br/>    \"filterId\": 2<br/>  },<br/>  \"plotHeight\": {<br/>    \"dataSetId\": 2,<br/>    \"filterId\": 2<br/>  },<br/>  \"plotWidth\": {<br/>    \"dataSetId\": 2,<br/>    \"filterId\": 2<br/>  },<br/>  \"showMeta\": {<br/>    \"dataSetId\": 2,<br/>    \"filterId\": 2<br/>  }<br/>}</pre> </p>",
    "title": "hide me"
   },
   "name": "",
@@ -155,70 +124,28 @@
    "casesAcrossColumns": false,
    "data": [
     {
-     "col6": "A",
-     "col7": "B",
-     "col8": "B",
-     "dataSetId": null,
-     "dataSetName": null,
-     "n": null,
-     "source": null,
-     "values": null,
-     "variable": null
+     "dataSetId": "1",
+     "dataSetName": "DataSet 1",
+     "n": 10,
+     "source": "A",
+     "values": "mean 12.50, sd 3.88",
+     "variable": "Score"
     },
     {
-     "col6": "Score",
-     "col7": "Score",
-     "col8": "Condition",
-     "dataSetId": null,
-     "dataSetName": null,
-     "n": null,
-     "source": null,
-     "values": null,
-     "variable": null
+     "dataSetId": "2",
+     "dataSetName": "DataSet 2",
+     "n": 10,
+     "source": "B",
+     "values": "mean 17.73, sd 5.31",
+     "variable": "Score"
     },
     {
-     "col6": "1",
-     "col7": "2",
-     "col8": "2",
-     "dataSetId": null,
-     "dataSetName": null,
-     "n": null,
-     "source": null,
-     "values": null,
-     "variable": null
-    },
-    {
-     "col6": "DataSet 1",
-     "col7": "DataSet 2",
-     "col8": "DataSet 2",
-     "dataSetId": null,
-     "dataSetName": null,
-     "n": null,
-     "source": null,
-     "values": null,
-     "variable": null
-    },
-    {
-     "col6": 10,
-     "col7": 10,
-     "col8": 10,
-     "dataSetId": null,
-     "dataSetName": null,
-     "n": null,
-     "source": null,
-     "values": null,
-     "variable": null
-    },
-    {
-     "col6": "mean 12.50, sd 3.88",
-     "col7": "mean 17.73, sd 5.31",
-     "col8": "X, Y, Z",
-     "dataSetId": null,
-     "dataSetName": null,
-     "n": null,
-     "source": null,
-     "values": null,
-     "variable": null
+     "dataSetId": "2",
+     "dataSetName": "DataSet 2",
+     "n": 10,
+     "source": "B",
+     "values": "X, Y, Z",
+     "variable": "Condition"
     }
    ],
    "footnotes": [],
@@ -229,32 +156,32 @@
      {
       "name": "source",
       "title": "Form",
-      "type": "null"
+      "type": "string"
      },
      {
       "name": "variable",
       "title": "Variable (decoded on the way out)",
-      "type": "null"
+      "type": "string"
      },
      {
       "name": "dataSetId",
       "title": "Dataset id",
-      "type": "null"
+      "type": "string"
      },
      {
       "name": "dataSetName",
       "title": "Dataset title",
-      "type": "null"
+      "type": "string"
      },
      {
       "name": "n",
       "title": "n",
-      "type": "null"
+      "type": "integer"
      },
      {
       "name": "values",
       "title": "mean (scale) / first levels (factor)",
-      "type": "null"
+      "type": "string"
      }
     ]
    },

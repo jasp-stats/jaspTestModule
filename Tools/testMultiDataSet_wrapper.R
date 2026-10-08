@@ -31,7 +31,12 @@ raw <- as.character(res$.__enclos_env__$private$getResults())
 j   <- jsonlite::fromJSON(raw, simplifyVector = FALSE)$results
 
 columnValues <- function(tb, fieldName) {
-  idx <- which(vapply(tb$schema$fields, function(f) identical(f$name, fieldName), logical(1)))[1]
+  fields <- vapply(tb$schema$fields, function(f) f$name, character(1))
+  if (length(tb$data) > 0 && is.list(tb$data[[1]]) && any(names(tb$data[[1]]) %in% fields)) {
+    cells <- vapply(tb$data, function(row) paste(as.character(row[[fieldName]]), collapse = ", "), character(1))
+    return(stats::setNames(cells, paste0("row", seq_along(cells))))
+  }
+  idx <- which(fields == fieldName)[1]
   d <- tb$data[[idx]]
   rowKeys <- names(d)[vapply(d, length, integer(1)) > 0L]
   stats::setNames(vapply(d[rowKeys], function(v) paste(as.character(v), collapse = ", "), character(1), USE.NAMES = FALSE), rowKeys)
