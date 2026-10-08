@@ -1,109 +1,99 @@
-# Multi-dataset aware feature — open work (2026-10-07, post syntax-mode-selection)
+# Multi-dataset aware feature — status (2026-10-08, post FilterSelect refactor)
 
-## Decided design (ground truth from user)
+## Decided design (ground truth, v2 — supersedes the linked-dropdown v1)
 - Options and dataset slices share the ENCODED namespace (`JASPColumn_<dsId>_<n>_Encoded`);
-  R indexes `datasets[[id]][[encodedValue]]` directly; results/plots are decoded on the way out
-  (engine sendString loops every encoder the analysis references).
-- `preloadData` forced true for aware analyses (Modules::AnalysisEntry + EntryBase getters);
-  the engine checks multiAware BEFORE the preload flag.
-- Syntax mode: `datasets = list(name = df, ...)` loads each df into the bridge Workspace/DataSet
-  (title = list name, real ids + encoders). Each VariablesForm has a dataset-selection OPTION
-  (dataSetSelectionOption names it; NO_DESKTOP_MODE-gated bound DropDown); the user fills the
-  dataset NAME there; JASPControl::_setInitialized re-applies the owning form's selection before
-  every child binds (order-proof), QML validates + stamps .meta, the bridge then encodes
-  per-dataset and queues slices via the SHARED DataBridge::prepareMultiDataSetRun (same code as
-  Engine::runAnalysis). Empty/missing selection options fail with a clear R error (bridge
-  pre-check; ComboBoxBase coerces "" to first entry). No filters in syntax mode (pre-filtered
-  data); default filter queued per slice. Names are user-convenience only (DataSet title).
-
-## ACTIVE PLAN
-The per-host FilterSelect refactor (independent per-form selection, filter-id options,
-VariableInfo provider chain) is planned in full at:
-`/home/virtuoos/.opencode/plan/multidataset-filterselect.md` — READ IT, red-tests-first.
-It replaces the linked-dropdown design (both dropdowns mirrored analysis->filterId = the bug).
+  R indexes the slice's columns by option value directly; results/plots are decoded on the way
+  out (engine sendString loops every workspace encoder; plotly decode loops referenced datasets).
+- **Selection state is per-HOST, not per-analysis.** Any component consuming variable info for
+  itself declares `dataSetSelectionOption` (a `HostFilterSelection` member): VariablesFormBase
+  and TextAreaBase do so today. The option's value is a **FILTER ID** (a filter implies its
+  dataset; ids survive renames), written in BOTH modes by one reusable `FilterSelect.qml`
+  (a bound DropDown, `values:` = workspace filter list "DataSet - Filter", created behind
+  `Loader { active: selectionAvailable }` so an unnamed bound control can never exist).
+- **Provider chain follows the component chain:** each selecting host owns a `VariableInfo`
+  whose provider is the selected `Filter` (Filter *is* a VariableInfoProvider: per-dataset
+  columns/types/levels, rows filtered, `Filter::columnEncoder()` gives the dataset encoder).
+  `JASPControl::effectiveVarInfo()` / `effectiveSelectionFilter()` resolve nearest-selecting-host
+  (self included), else `AnalysisForm::varInfo()` (analysis filter / shownFilter — today's
+  behavior for everything non-aware). Non-JASPControl pieces (Formula) use the static
+  `JASPControl::varInfoForItem()`.
+- **Selection code never touches** `analysis->setFilterId` / `workspace->setShownDataSet` —
+  those belong to the analysis-GLOBAL FilterMenuButton (the true legacy widget, untouched).
+- `.meta` provenance is stamped with the filter the value was selected THROUGH (host's, else
+  analysis'), so per-form datasets survive save/restore and reach the engine per control.
+- **Slice queue keyed by filter id:** `prepareMultiDataSetRun` collects every distinct
+  (dataSetId, filterId) from `.meta`; one slice per pair (two forms on one dataset with
+  different filters → two differently-filtered dataframes). R-side `datasets` keys = resolved
+  filter id, `attr "dataSetIds"`/`"dataSetNames"` map back; a selection option indexes its own
+  slice directly: `datasets[[as.character(options$dataSetA)]]`. jaspTools handouts stay keyed by
+  dataset id; `.sliceKeyForDataSet` bridges both.
+- **Syntax deviation confined to the wrapper layer:** bridge translates a selection option that
+  names a loaded dataset ("haha") into that DataSet's default filter id before binding (unknown
+  names fail loudly with the list of loaded datasets; "" too). `datasets = list(haha = df, ...)`
+  stays the user-facing API (names become DataSet titles). Forms are mode-blind.
+- Single-dataset API on AnalysisBase **refuses** for aware analyses instead of silently answering
+  about one arbitrary dataset: `Analysis::dataSet()`, `isColumnFreeOrMine()`,
+  `isOwnComputedColumn()`, computed-column request handlers (log + safe default);
+  `usesDataSet()` consults `referencedDataSets()` when aware.
+- `preloadData` forced true for aware analyses; engine checks multiAware BEFORE preload.
+- Vanished filter/dataset while selected: selection falls back to the analysis/current filter
+  (same spirit as the analysis-global behavior), never dangles (HostFilterSelection validates on
+  dataSetRemoved/filtersCountChanged).
 
 ## TODO
-1. [DONE jasp-desktop d8ed73558] Desktop plot gap: `Analysis::loadPlotlyJsonInResults` decodes plotly JSON against the
-   analysis' OWN dataset encoder only — aware analyses plotting other datasets stay encoded.
-   Same multi-encoder treatment as `Engine::sendString` `_analysisDataSetEncoders`.
-2. [DONE jasp-desktop 0bf83f920] `_analysisDataSetEncoders` stored raw `ColumnEncoder*` — dataset deleted mid-run
-   dangles (only the CURRENT pointer is guarded in ~DataSet). Re-resolve by id at send time.
-3. [verify] GUI end-to-end after bundle rebuild: dropdown fills tables (aware + twin), guard
-   demo, per-form dataset switching in the GUI, and saved-file reload of an aware analysis
-   (`restoreProvenanceFromBoundValues` / `remapSavedProvenance` still lack an end-to-end test).
-4. [DONE] Bundle + local install: `Tools/buildBundle.R` now ends by installing the bundle into
-   the local dev JASP automatically (Tools/installModuleLocal.sh: jaspModuleBundleManager
-   install + manifest version normalization + developerMode/modulesRemembered prefs).
-   Skip with `--no-install-local` / SKIP_MODULE_LOCAL_INSTALL=1; JASP must not be running.
-5. [upstream] JASP bug candidate: bundle tooling writes manifest `"version":[[0,96,2]]` but
-   `InstalledModules::parseModuleInfo` (installedmodules.cpp:28) throws on arrays via
-   `version.isMember("Version")` → "Could not parse module manifest" → module silently skipped
-   at every restart after a perfectly fine GUI install. Fix belongs in jasp-desktop
-   (accept arrays) and/or jaspModuleBundleManager (write strings). installModuleLocal.sh
-   works around it by rewriting the manifest field.
+1. [verify-manual] GUI smoke test (last resort, everything else is scripted): two CSVs, open
+   Test Multi-DataSet, flip BOTH "Data" dropdowns independently, watch tables stay filled and
+   unlinked; R/JAGS text areas with an option show their own dropdown.
+2. [open] Saved-file reload of an aware analysis end-to-end: per-form filter-id selections
+   restored through `bindTo` (+ `restoreProvenanceFromBoundValues`), vanished filter → fallback.
+   No automated test yet (needs RPC save/open or a crafted .jasp fixture).
+3. [open] Same-dataset-two-filters desktop GUI demo: the module analysis routes per form's
+   selection slice; a test data pair where BOTH forms use dataset 1 with different filters would
+   exercise the C8 two-slice path in the GUI (covered in rlogic unit, not e2e).
+4. [upstream] JASP bug candidate: bundle tooling writes manifest `"version":[[0,96,2]]` but
+   `InstalledModules::parseModuleInfo` throws on arrays → module silently skipped at restart.
+   installModuleLocal.sh works around it (rewrites to string).
+5. [KNOWN PRE-EXISTING FAILURE — user-confirmed, NOT from the FilterSelect refactor]
+   `ctest testDbMigration` aborts: "Trying to load ':memory:' but it doesn't exist!" — broken
+   since the earlier multi-dataset work (workspace/database lifecycle). Investigate separately.
 6. [note] Syntax-mode side effects to watch: readRequestedDataset() after an aware parse consumes
-   queue slices; jaspSyntax result decoding (columnEncoderContext) is per current dataset —
-   multi-dataset result decoding in pure syntax output may need the same multi-encoder care.
-6. [ops] jaspSyntax installs MUST pass `JASPSYNTAX_LIB_PATH=<local libSyntaxInterface.so>`
-   (configure otherwise downloads release binaries needing mysql/pq/icu74, absent here);
+   queue slices; jaspSyntax result decoding is per current dataset — multi-dataset result decoding
+   in pure syntax output may need the same multi-encoder care.
+7. [ops] jaspSyntax installs MUST pass `JASPSYNTAX_LIB_PATH=<local libSyntaxInterface.so>`;
    after each SyntaxInterface rebuild copy the .so to BOTH `jaspSyntax/src/` and
    `.toolLib/jaspSyntax/libs/`.
+8. [later] FormulaBase as host in its own right (its own FilterSelect + option): today a Formula
+   only follows the VariablesForm it lives in (varInfoForItem). Top-level Formulas keep the
+   analysis-wide fallback.
 
-## Done (this session)
-- jasp-desktop `515c1f241` (dropdown visibility: syncMultiDataSetAwareness push, EntryBase notify,
-  VariablesFormBase::setUp bootstrap — static controls never get formIsKnown — + render probe).
-- jasp-desktop `a8cd23e5d` dead dataset-aware decode plumbing removed (C++ dataSetIdFromEncoded
-  mirror, .decodeColNamesForDataSet callback chain), encode->decode->encode cycle test on real
-  encoders (pins the `_Encoded` format).
-- jasp-desktop `b87a8bbbe` empty-cells fix (primaryDataSetId for unfiltered analyses; aware
-  checked before preload; cols always collected; rlogic bridge round-trip through jaspSyntax
-  proving the index-directly invariant against real encoder output) + submodule bumps.
-- jaspBase `edc73fe` helpers operate in the encoded namespace (dataSetColumnFromEncoded +
-  dataSetEncodedNames snapshot deleted; real `_Encoded` parsing; direct indexing; faithful fixtures).
-- jaspTools `0d621f3` dead stub + maps removed.
-- jaspTestModule `6f6cec1` demo indexes directly; path-1 fixtures carry real encoded names.
-- COMMITTED `2bc37b8`+jasp-desktop `3e09b7b31` etc. (all suites green: JASPTest 109, QuickTest 93, rlogic incl bridge, jaspBase 46,
-X dataset selection across jasp-desktop (workspace
-  dataSetByTitle, DataSetProvider titled loads + firstLoadedDataSetId + named loads skip reset,
-  VariablesFormBase dataSetSelectionOption/dataSetTitleValues/selectDataSetByName/
-  applyDataSetSelection, JASPControl _setInitialized apply-hook, AnalysisForm
-  dataSetSelectionOptionNames, syntaxbridge pre-check + aware prepare branch + shared
-  DataBridge::prepareMultiDataSetRun extraction), jaspSyntax (loadDataSets,
-  loadQmlAndParseOptionsStatus, importer name), jaspBase (storeDataSets -> loadDataSets,
-  runWrappedAnalysis aware flow with string parts), jaspTestModule (selection options + depends
-  in testMultiDataSet.qml, twin's own qml, wrapper test rewritten, buildBundle check fixed).
-- Known NOT-a-bug: jaspTools doesn't encode (longstanding, user-confirmed, out of scope).
+## Done (FilterSelect refactor, 2026-10-08) — plan file: /home/virtuoos/.opencode/plan/multidataset-filterselect.md
+- jasp-desktop `8636529f5` RED contract tests first (two forms two filters simultaneously,
+  bogus-id rejection, per-form list contents; fixture dataset "Second" w/ overlapping TestInts).
+- jasp-desktop `557f089d1` the core: HostFilterSelection (filter-id, per-host state, C10
+  validation), JASPControl::effectiveVarInfo/effectiveSelectionFilter + all consumers rerouted
+  (lists, SourceItem, textareas, custom contrasts, filteredDataEntry, R/JAGS textareas),
+  FilterSelect.qml, createMeta stamps host filter, Filter::columnEncoder, single-dataset guards,
+  usesDataSet-referencedDataSets; DELETED: dataSetSelection bool + both old dropdowns,
+  selectDataSetByName/applyDataSetSelection, _setInitialized re-apply hook, name-based
+  selection, analysis-filter mirroring.
+- jasp-desktop `3bbafd477` + jaspBase `69ec48c` filter-keyed slice queue (pair collector,
+  per-pair slices, `.sliceKeyForDataSet`, rlogic + unit tests for the contract).
+- jasp-desktop `e8a4db4e5` bridge name→default-filter-id translation (C7), errors list datasets.
+- jasp-desktop `46c4603c3` TextAreaBase host (FilterSelect in TextArea.qml, JAGS highlighter
+  follows host) + Formula follows its form's host.
+- module `c2d59eb` qmls use only dataSetSelectionOption (+depends, now resolvable in both modes);
+  R routes via the form's own selection slice with legacy fallback; wrapper regenerates.
+- module RPC verifier now drives the dropdown contract itself (options carry filter ids, NO
+  analysis_setFilter anywhere): independent simultaneous selections, A:Score mean 12.50 vs
+  B:Score mean 17.73 (same name, different datasets — the "compare with itself" trap made
+  impossible), per-form .meta stamps (1/1 vs 2/2), n=10 everywhere, zero raw JASPColumn_*.
+- Suites green: JASPTest 110, JASPQuickTest 96 (T1-T3c/T9/T12), JASPTestColumnEncoderContext 10,
+  rlogic incl. bridge round-trip, module paths 1-3, RPC desktop e2e ALL CHECKS PASSED.
+  (ctest except testDbMigration — see item 5, pre-existing.)
 
-## Crash 2026-10-08
-SEGV opening Test Multi-DataSet on desktop with two CSVs loaded: log ended at
-`AnalysisForm::setAnalysisUp() for 0x...` and JASP died.
-
-**Root cause** (jasp-desktop): `testMultiDataSet.qml` carries `depends: "dataSetA"` /
-`depends: "dataSetB"` on the AssignedVariablesLists (bind the syntax-mode dataset-selection
-option before the lists, 3e09b7b31/5b983c9). On desktop that option's bound DropDown is
-deliberately unnamed (`name: syntaxMode ? variablesForm.dataSetSelectionOption : ""`) so it is
-never registered in `AnalysisForm::_controls`; `JASPControl::_addExplicitDependency` resolved
-the name to `nullptr` and inserted it into `_depends` unconditionally. `AnalysisForm::sortControls`
-then dereferenced it (`depend->depends()` at this=0x20). Backtrace: setAnalysisUp -> _setUpControls
--> _setUp -> sortControls -> std::set<JASPControl*>::begin(this=0x20).
-
-**Fix** jasp-desktop `785afe486`: _addExplicitDependency only inserts resolved, non-self controls
-(an unresolvable `depends` name imposes no binding order; desktop stays 100% functional, the
-syntax-mode DropDown stays inert there); sortControls skips nulls defensively. No module changes.
-
-**Repro + verify recipe (scripted, no GUI):**
-1. `rpcServerEnabled=true` in ~/.config/JASP/JASP.conf; nothing else running.
-2. `cd <jasp-desktop>/build && QT_QPA_PLATFORM=offscreen gdb -batch -ex run -ex bt --args ./Desktop/JASP > /tmp/jasp_run.log 2>&1 &`
-3. `python3 Tools/verifyMultiDataSetRpc.py` — loads DataSetA+DataSetB via RPC (two datasets in
-   one workspace), creates the analysis (this is where the pre-fix build SEGVs), binds
-   dependentA=Score@ds1 and dependentB=Score+Condition@ds2 (Score exists in both; mixed
-   provenance via analysis_setFilter + the unchanged-value early return in
-   BoundControlBase::setBoundValue), runs and asserts the results: 'Datasets in this run' has
-   both datasets (titles, 10 rows each), 'Selected variables' routes each value to its own
-   dataset with n=10 and mean/levels (A:Score mean 12.50 -> DataSet 1, B:Score mean 17.73 +
-   B:Condition X,Y,Z -> DataSet 2), all decoded (no JASPColumn_* left).
-Pre-fix the script dies at analysis_create with the backtrace above; post-fix ALL CHECKS PASSED.
-Suites green with the fix: JASPTest 109 PASS, JASPQuickTest 93 PASS.
-Note: RPC `analysis_create` cannot carry options, and per-control drops are not exposed; the
-script works around that with setFilter-then-run (unchanged values keep their .meta), so no
-new RPC surface was needed.
+## Crash 2026-10-08 (fixed, historical)
+SEGV opening Test Multi-DataSet: `depends: "dataSetA"` targeted the syntax-only dropdown that was
+deliberately unnamed on desktop → `_addExplicitDependency` inserted nullptr → `sortControls`
+deref'd it. Interim fix `785afe486` (skip unresolved deps — kept as defense). The FilterSelect
+refactor removed the ROOT cause: the dropdown is now named and registered in both modes, and
+`Loader { active: selectionAvailable }` makes an unnamed bound control structurally impossible.

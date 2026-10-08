@@ -3,11 +3,16 @@
 
 Precondition: JASP (dev build) already running offscreen with RPC enabled, NO datasets.
 Steps: load DataSetA + DataSetB (2 datasets in the workspace), create the multi-dataset
-test analysis, bind dependentA to a column of dataset 1 and dependentB to a column that
-exists in BOTH datasets plus one that exists only in dataset 2, run, fetch results and
-assert:
+test analysis, and drive it the way the GUI dropdowns do: options dataSetA/dataSetB carry
+FILTER IDS (form A -> filter 1 = dataset 1, form B -> filter 2 = dataset 2, simultaneously -
+the linked-dropdown regression scenario), dependentA = Score (ds1) and dependentB = Score
+(same name, ds2!) + Condition (only ds2). Never analysis_setFilter (that is the analysis-
+global FilterMenuButton filter). Asserts:
   - 'Datasets in this run' has 2 rows with titles + row/col counts
-  - 'Selected variables' rows have n=10 and mean/levels values (not empty, not JASPColumn_*)
+  - 'Selected variables' rows have n=10 and the right means (Score/Score land on DIFFERENT
+    datasets: 12.50 vs 17.73 - no 'variable compared with itself')
+  - the .meta dump shows per-form provenance (dependentA ds1/f1, dependentB ds2/f2)
+  - no raw JASPColumn_* anywhere (decode on send)
 Exit 0 = all good, 1 = failure (details printed).
 
 Run recipe (scripted crash-repro + verify loop):
@@ -52,7 +57,7 @@ def wait_up(max_wait=120):
 
 call = _rpc
 
-import sys, json, time
+import sys, json, time, re as _re
 
 A_CSV = "/home/virtuoos/Broncode/JASP/jaspTestModule/Tools/testdata/DataSetA.csv"
 B_CSV = "/home/virtuoos/Broncode/JASP/jaspTestModule/Tools/testdata/DataSetB.csv"
@@ -83,17 +88,19 @@ an = call("analysis_create", {"module": "jaspTestModule", "analysis": "multiData
 check("form created without SEGV, analysis multiDataSetAware", an.get("status") == "success" and an.get("multiDataSetAware") is True)
 aid = an.get("analysisId")
 
-# bind form A's variable while the analysis runs on dataset 1 (filter 1)
-print(call("analysis_setFilter", {"analysisId": aid, "filterId": 1}).get("status"))
+# The FilterSelect dropdowns write their selection into options dataSetA/dataSetB (filter ids),
+# exactly like the desktop GUI does - no analysis_setFilter anywhere (that is the analysis-GLOBAL
+# filter, the FormMenuButton's; per-form selection must never touch it):
 r1 = call("analysis_run", {"analysisId": aid, "wait": True, "timeoutMs": 60000, "options": {
+    "dataSetA": "1",
     "dependentA": {"types": [], "value": ["Score"]}}})
-check("first run (dependentA=Score @dataset1) complete", r1.get("status") == "complete",
-      str(r1.get("status")))
+check("run 1 (dataSetA=f1, dependentA=Score) complete", r1.get("status") == "complete", str(r1.get("status")))
 
-# switch to dataset 2 and add form B's variables: dependentA is unchanged so its ds1
-# provenance survives the rebind (BoundControlBase::setBoundValue early-returns)
-print(call("analysis_setFilter", {"analysisId": aid, "filterId": 2}).get("status"))
+# The real regression scenario: form B selects filter 2 (dataset 2) WHILE form A stays on
+# filter 1 - both selections live simultaneously, identically named column from each.
 r2 = call("analysis_run", {"analysisId": aid, "wait": True, "timeoutMs": 120000, "options": {
+    "dataSetA": "1",
+    "dataSetB": "2",
     "dependentA": {"types": [], "value": ["Score"]},
     "dependentB": {"types": [], "value": ["Score", "Condition"]},
     "showMeta": True}})
@@ -175,9 +182,30 @@ if sv:
     check("scale rows show mean, factor row shows levels",
           a_score and str(a_score["values"]).startswith("mean") and b_cond and str(b_cond["values"]) == "X, Y, Z",
           f"{a_score['values'] if a_score else None!r} / {b_cond['values'] if b_cond else None!r}")
+    # the headline: same column name, two datasets, two different truths (NOT the same variable):
+    check("A:Score is DataSetA's Score (mean 12.50)", a_score and "12.50" in str(a_score["values"]), json.dumps(a_score))
+    check("B:Score is DataSetB's Score (mean 17.73), not A's repeated", b_score and "17.73" in str(b_score["values"]), json.dumps(b_score))
+    check("A:Score and B:Score are different rows with different data", bool(a_score and b_score and a_score["values"] != b_score["values"]))
     check("decoded names, no raw JASPColumn_*", "JASPColumn" not in dump, dump[:300])
 
 check("analysis references both datasets (dataSetIds in run response)", sorted(r2.get("dataSetIds", [])) == [1, 2], str(r2.get("dataSetIds")))
+
+# T3c: per-form provenance as the engine SAW it - options$.meta must stamp each control with
+# ITS OWN form's dataset/filter (showMeta is on), not one global analysis filter.
+meta_text = json.dumps(results).replace(chr(92)+chr(34), '"').replace("&quot;", '"').replace("&#34;", '"')
+def meta_of(opt):
+    i = meta_text.find(f'"{opt}"')
+    while i != -1:
+        window = meta_text[i:i + 400]
+        if "dataSetId" in window and "filterId" in window:
+            m_ds = _re.search(r'"dataSetId":\s*"?(-?\d+)', window)
+            m_fl = _re.search(r'"filterId":\s*"?(-?\d+)', window)
+            if m_ds and m_fl:
+                return m_ds.group(1), m_fl.group(1)
+        i = meta_text.find(f'"{opt}"', i + 1)
+    return None
+check("meta.dependentA stamped with form A's dataset/filter (1/1)", meta_of("dependentA") == ("1", "1"), str(meta_of("dependentA")))
+check("meta.dependentB stamped with form B's dataset/filter (2/2)", meta_of("dependentB") == ("2", "2"), str(meta_of("dependentB")))
 
 print("\n" + ("ALL CHECKS PASSED" if not fails else f"{len(fails)} FAILURES: {fails}"))
 sys.exit(0 if not fails else 1)

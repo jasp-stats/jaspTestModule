@@ -1,0 +1,266 @@
+{
+ "analysis": "multiDataSetFunc",
+ "analysisId": 0,
+ "dataSetId": -1,
+ "dataSetIds": [
+  1,
+  2
+ ],
+ "filterId": 2,
+ "jaspResultsRds": "/home/virtuoos/.local/share/JASP/JASP/temp//415788/resources/0/jaspResults.rds",
+ "module": "jaspTestModule",
+ "multiDataSetAware": true,
+ "results": {
+  ".meta": [
+   {
+    "info": "",
+    "mustBe": [],
+    "mustContain": {},
+    "name": "explanation",
+    "title": "hide me",
+    "type": "htmlNode"
+   },
+   {
+    "info": "",
+    "mustBe": [],
+    "mustContain": {},
+    "name": "dataSetOverview",
+    "title": "Datasets in this run",
+    "type": "table"
+   },
+   {
+    "info": "",
+    "mustBe": [],
+    "mustContain": {},
+    "name": "selectedVariables",
+    "title": "Selected variables",
+    "type": "table"
+   },
+   {
+    "info": "",
+    "mustBe": [],
+    "mustContain": {},
+    "name": "metaDump",
+    "title": "hide me",
+    "type": "htmlNode"
+   }
+  ],
+  "citation": [
+   "JASP Team (2026). JASP (Version 1) [Computer software]."
+  ],
+  "dataSetOverview": {
+   "casesAcrossColumns": false,
+   "data": [
+    {
+     "col5": "1",
+     "col6": "2",
+     "cols": null,
+     "columnNames": null,
+     "id": null,
+     "rows": null,
+     "title": null
+    },
+    {
+     "col5": "DataSet 1",
+     "col6": "DataSet 2",
+     "cols": null,
+     "columnNames": null,
+     "id": null,
+     "rows": null,
+     "title": null
+    },
+    {
+     "col5": 10,
+     "col6": 10,
+     "cols": null,
+     "columnNames": null,
+     "id": null,
+     "rows": null,
+     "title": null
+    },
+    {
+     "col5": 1,
+     "col6": 2,
+     "cols": null,
+     "columnNames": null,
+     "id": null,
+     "rows": null,
+     "title": null
+    },
+    {
+     "col5": "Score",
+     "col6": "Condition, Score",
+     "cols": null,
+     "columnNames": null,
+     "id": null,
+     "rows": null,
+     "title": null
+    }
+   ],
+   "footnotes": [],
+   "name": "dataSetOverview",
+   "overTitle": false,
+   "schema": {
+    "fields": [
+     {
+      "name": "id",
+      "title": "Dataset id",
+      "type": "null"
+     },
+     {
+      "name": "title",
+      "title": "Title",
+      "type": "null"
+     },
+     {
+      "name": "rows",
+      "title": "Rows",
+      "type": "null"
+     },
+     {
+      "name": "cols",
+      "title": "Columns",
+      "type": "null"
+     },
+     {
+      "name": "columnNames",
+      "title": "Column names (decoded on the way out)",
+      "type": "null"
+     }
+    ]
+   },
+   "status": "complete",
+   "title": "Datasets in this run"
+  },
+  "explanation": {
+   "class": "",
+   "elementType": "p",
+   "maxWidth": "15cm",
+   "name": "explanation",
+   "rawtext": "<b>Aware run.</b> This analysis received 2 dataset(s) as the `datasets` argument; readDataSet() is disabled while it runs.<br><br>Use two datasets in the workspace (File - New data set or add another CSV) and drag variables from both into the variables form.",
+   "text": "<p><b>Aware run.</b> This analysis received 2 dataset(s) as the `datasets` argument; readDataSet() is disabled while it runs.<br><br>Use two datasets in the workspace (File - New data set or add another CSV) and drag variables from both into the variables form. </p>",
+   "title": "hide me"
+  },
+  "metaDump": {
+   "class": "",
+   "elementType": "p",
+   "maxWidth": "15cm",
+   "name": "metaDump",
+   "rawtext": "<b>options$.meta</b><br><pre>{\n  \"dependentA\": {\n    \"dataSetId\": 1,\n    \"filterId\": 1,\n    \"shouldEncode\": true\n  },\n  \"dependentB\": {\n    \"dataSetId\": 2,\n    \"filterId\": 2,\n    \"shouldEncode\": true\n  }\n}</pre>",
+   "text": "<p><b>options$.meta</b><br><pre>{<br/>  \"dependentA\": {<br/>    \"dataSetId\": 1,<br/>    \"filterId\": 1,<br/>    \"shouldEncode\": true<br/>  },<br/>  \"dependentB\": {<br/>    \"dataSetId\": 2,<br/>    \"filterId\": 2,<br/>    \"shouldEncode\": true<br/>  }<br/>}</pre> </p>",
+   "title": "hide me"
+  },
+  "name": "",
+  "selectedVariables": {
+   "casesAcrossColumns": false,
+   "data": [
+    {
+     "col6": "A",
+     "col7": "B",
+     "col8": "B",
+     "dataSetId": null,
+     "dataSetName": null,
+     "n": null,
+     "source": null,
+     "values": null,
+     "variable": null
+    },
+    {
+     "col6": "Score",
+     "col7": "Score",
+     "col8": "Condition",
+     "dataSetId": null,
+     "dataSetName": null,
+     "n": null,
+     "source": null,
+     "values": null,
+     "variable": null
+    },
+    {
+     "col6": "1",
+     "col7": "2",
+     "col8": "2",
+     "dataSetId": null,
+     "dataSetName": null,
+     "n": null,
+     "source": null,
+     "values": null,
+     "variable": null
+    },
+    {
+     "col6": "DataSet 1",
+     "col7": "DataSet 2",
+     "col8": "DataSet 2",
+     "dataSetId": null,
+     "dataSetName": null,
+     "n": null,
+     "source": null,
+     "values": null,
+     "variable": null
+    },
+    {
+     "col6": 10,
+     "col7": 10,
+     "col8": 10,
+     "dataSetId": null,
+     "dataSetName": null,
+     "n": null,
+     "source": null,
+     "values": null,
+     "variable": null
+    },
+    {
+     "col6": "mean 12.50, sd 3.88",
+     "col7": "mean 17.73, sd 5.31",
+     "col8": "X, Y, Z",
+     "dataSetId": null,
+     "dataSetName": null,
+     "n": null,
+     "source": null,
+     "values": null,
+     "variable": null
+    }
+   ],
+   "footnotes": [],
+   "name": "selectedVariables",
+   "overTitle": false,
+   "schema": {
+    "fields": [
+     {
+      "name": "source",
+      "title": "Form",
+      "type": "null"
+     },
+     {
+      "name": "variable",
+      "title": "Variable (decoded on the way out)",
+      "type": "null"
+     },
+     {
+      "name": "dataSetId",
+      "title": "Dataset id",
+      "type": "null"
+     },
+     {
+      "name": "dataSetName",
+      "title": "Dataset title",
+      "type": "null"
+     },
+     {
+      "name": "n",
+      "title": "n",
+      "type": "null"
+     },
+     {
+      "name": "values",
+      "title": "mean (scale) / first levels (factor)",
+      "type": "null"
+     }
+    ]
+   },
+   "status": "complete",
+   "title": "Selected variables"
+  }
+ },
+ "status": "complete"
+}
