@@ -31,7 +31,6 @@ Form
 
 		VariablesForm
 		{
-			dataSetSelection: true
 			//syntax mode: an option carrying the dataset name to select for this form
 			//(jaspSyntax gates the bound dropdown on it; desktop never sees it)
 			dataSetSelectionOption: "dataSetA"
@@ -51,7 +50,6 @@ Form
 
 		VariablesForm
 		{
-			dataSetSelection: true
 			dataSetSelectionOption: "dataSetB"
 
 			AvailableVariablesList	{ name: "allVariablesB" }

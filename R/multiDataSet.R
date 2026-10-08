@@ -1,7 +1,10 @@
 # Multi-dataset aware analyses (jasp-desktop branch dataSetAwareVarForm, jaspBase branch
 # multiDataSetAware). An analysis whose Description/Analysis entry sets multiDataSetAware gets
-# every dataset it references as `datasets`: a named list keyed by dataset id, with the user
-# facing titles in attr(datasets, "dataSetNames"). Options and data share the ENCODED namespace:
+# every dataset it references as `datasets`: a named list keyed by SLICE id - the resolved
+# filter id of each queued (dataset, filter) pair - with the user facing titles in
+# attr(datasets, "dataSetNames") and each slice's dataset id in attr(datasets, "dataSetIds").
+# A per-form selection option indexes its own slice directly: datasets[[as.character(
+# as.integer(options$dataSetA))]]. jaspTools handouts stay keyed by dataset id. Options and data share the ENCODED namespace:
 # variable options carry names like "JASPColumn_<dataSetId>_<n>_Encoded" and the dataframes'
 # column names are the very same strings (encoded by each dataset's own ColumnEncoder, whose
 # prefix embeds the dataset id), so an analysis indexes with the option value as-is:
@@ -69,24 +72,30 @@ selectedVariablesTable <- function(jaspResults, options, datasets, dataset) {
   table$addColumnInfo("n",          title = "n")
   table$addColumnInfo("values",     title = "mean (scale) / first levels (factor)")
 
-  for (entry in list(list(form = "A", values = .dependentValues(options$dependentA)),
-                     list(form = "B", values = .dependentValues(options$dependentB)))) {
+  for (entry in list(list(form = "A", sel = "dataSetA", values = .dependentValues(options$dependentA)),
+                     list(form = "B", sel = "dataSetB", values = .dependentValues(options$dependentB)))) {
+
+    # The form's own selection (a filter id) indexes its slice directly - that is the whole point
+    # of per-form selection: two forms can run on two filters of the same dataset.
+    selKey    <- .selectionKey(options, datasets, entry$sel)
+    selSlice  <- if (!is.null(selKey)) datasets[[selKey]] else NULL
+
     for (value in entry$values) {
       # value indexes the data as-is in both modes: options and column names share the encoded
-      # namespace (or are both plain, in a jaspTools run). Only the routing to one dataset out
-      # of `datasets` is aware-specific; the non-aware run has exactly the one dataset anyway.
-      columnData <- if (is.null(datasets)) {
-        if (!is.null(dataset) && value %in% names(dataset)) dataset[[value]] else NULL
-      } else {
-        jaspBase::getDataSetColumn(value, datasets)
-      }
+      # namespace (or are both plain, in a jaspTools run). Routing prefers the form's own
+      # selection slice, falling back to the dataset embedded in the name (handout runs carry no
+      # filter-keyed slices); the non-aware run has exactly the one dataset anyway.
+      slice <- if (is.null(datasets)) dataset else if (!is.null(selSlice)) selSlice else jaspBase::getDataSetFor(value, datasets)
+      columnData <- if (!is.null(slice) && value %in% names(slice)) slice[[value]] else NULL
 
       id  <- if (is.null(datasets)) NA_integer_ else jaspBase::dataSetIdFromEncoded(value)
       row <- list(
         source      = entry$form,
         variable    = value,
-        dataSetId   = if (is.null(datasets)) "-" else if (is.na(id)) "none (legacy)" else as.character(id),
-        dataSetName = if (is.null(datasets)) "-" else jaspBase::dataSetNameFromEncoded(value, datasets),
+        dataSetId   = if (!is.null(selKey)) as.character(attr(datasets, "dataSetIds")[[selKey]])
+                      else if (is.null(datasets)) "-" else if (is.na(id)) "none (legacy)" else as.character(id),
+        dataSetName = if (!is.null(selKey)) as.character(attr(datasets, "dataSetNames")[[selKey]])
+                      else if (is.null(datasets)) "-" else jaspBase::dataSetNameFromEncoded(value, datasets),
         n           = NA_integer_, values = "")
 
       if (!is.null(columnData))
@@ -130,6 +139,24 @@ multiDataSetNonAwareInternal <- function(jaspResults, dataset, options) {
   if (is.null(values)) return(character(0))
   values <- unlist(values, recursive = TRUE)
   as.character(values[!is.na(values) & as.character(values) != ""])
+}
+
+# The slice key (a filter id as string) behind a per-form dataset selection option. Options
+# arrive either plain ("42") or in the wrapper default shape list(types="unknown", value="");
+# "" / absent / not-a-listed-slice yields NULL (route by the dataset id embedded in the name).
+.selectionKey <- function(options, datasets, selOption) {
+  selVal <- utils::tail(unlist(options[[selOption]]), 1L)
+
+  if (is.null(selVal) || is.na(selVal))
+    return(NULL)
+
+  selVal <- trimws(as.character(selVal))
+  filterId <- suppressWarnings(as.integer(selVal))
+
+  if (is.na(filterId) || !selVal %in% names(datasets))
+    return(NULL)
+
+  selVal
 }
 
 .fillDescription <- function(entry, columnData) {

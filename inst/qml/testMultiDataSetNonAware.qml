@@ -4,7 +4,7 @@ import "./common"
 
 // Twin of testMultiDataSet.qml for the NON-aware entry (multiDataSetNonAware): same forms and
 // checkboxes, but no dataSetSelectionOption - a non-aware analysis has exactly one (shown)
-// dataset, in the GUI as well as in syntax mode. The dataSetSelection: true stays to demo that
+// dataset, in the GUI as well as in syntax mode. Without a selection option the forms show no
 // the dropdown remains inert when the analysis is not multiDataSetAware.
 Form
 {
@@ -22,7 +22,6 @@ Form
 
 		VariablesForm
 		{
-			dataSetSelection: true
 
 			AvailableVariablesList	{ name: "allVariablesA" }
 			AssignedVariablesList
@@ -38,7 +37,6 @@ Form
 
 		VariablesForm
 		{
-			dataSetSelection: true
 
 			AvailableVariablesList	{ name: "allVariablesB" }
 			AssignedVariablesList
