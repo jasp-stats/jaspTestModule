@@ -40,6 +40,23 @@
   (same spirit as the analysis-global behavior), never dangles (HostFilterSelection validates on
   dataSetRemoved/filtersCountChanged).
 
+## Review round 2026-10-08 (subagent review + user directives) - RESOLVED
+- CRITICAL empty-GUI-tables: module tables were filled row-by-row with `:`-containing keys
+  (poisoned DOM ids -> JS showed nothing though the data was there). Fixed: data.frame + setData
+  (row-major, no custom ids) per user directive. jasp-desktop 841431fae, jaspBase 73ab.., module.
+- CRITICAL save/reload: provenance side table is now per (dataset,filter) PAIR by name, and
+  isFilterSelection-marked option VALUES get remapped on load (unit-tested incl. numeric
+  collision guard). Real file save/reopen test still open (item 2).
+- Mirroring removed (user: mirroring is bad; jaspTools-legacy is the ONLY exception): _encoder()
+  duplication hoisted to BoundControlTextArea, dead variableInfoProvider deleted, selection-key
+  logic centralized in jaspBase.
+- Slices are indexed by FILTER everywhere; dataset-id helper routing ERRORS on multi-slice
+  datasets (never silently first); getSliceKey/getSlice/sliceDataSetId/sliceTitle are the
+  writer-facing API; encoding stays per dataset (names embed ds id).
+- Also: TextAreaBase options now translated by the bridge (optionNames scan), queue dedups
+  equal slice keys + exposes "primary" slice (attr primarySliceKey), VariableInfo emits on
+  first provider, plot decode no longer trips the aware guard.
+
 ## TODO
 1. [verify-manual] GUI smoke test (last resort, everything else is scripted): two CSVs, open
    Test Multi-DataSet, flip BOTH "Data" dropdowns independently, watch tables stay filled and
