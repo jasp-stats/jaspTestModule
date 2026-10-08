@@ -40,6 +40,11 @@
   (same spirit as the analysis-global behavior), never dangles (HostFilterSelection validates on
   dataSetRemoved/filtersCountChanged).
 
+## NEXT PROJECT (approved by CTO 2026-10-08)
+jaspTools ⇄ jaspSyntax full bridge parity (hard dependency, kill the R emulation, encode like
+the engine, decode on exit): plan at
+`/home/virtuoos/.opencode/plan/jaspTools-bridge-parity.md` — STEP 0 there first (hook resolution).
+
 ## Review round 2026-10-08 (subagent review + user directives) - RESOLVED
 - CRITICAL empty-GUI-tables: module tables were filled row-by-row with `:`-containing keys
   (poisoned DOM ids -> JS showed nothing though the data was there). Fixed: data.frame + setData
