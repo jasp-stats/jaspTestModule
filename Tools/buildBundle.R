@@ -214,14 +214,16 @@ archive::archive_extract(file.path(checkdir, jaspBaseHash), dir = pkgdir)
 suppressPackageStartupMessages(library(jaspBase, lib.loc = file.path(checkdir, "lib")))
 
 if (localJaspBase) {
-  expected  <- c("dataSetIdFromEncoded", "dataSetNameFromEncoded", "getDataSetFor",
-                 "storeDataSets")
-  markers   <- stats::setNames(expected %in% getNamespaceExports("jaspBase"), expected)
-  runBody   <- any(grepl("multiDataSet", deparse(body(jaspBase::runJaspResults))))
-  if (!all(markers) || !runBody)
-    stop("bundled jaspBase is MISSING the local multiDataSetAware code (missing exports: ",
-         paste(names(markers)[!markers], collapse = ", "), if (runBody) "" else " + runJaspResults body", ")")
-  message("VERIFIED: bundled jaspBase loads and carries the local multiDataSetAware code.")
+  # Zero-export contract (CTO 2026-10-09): the multi-dataset machinery ships NO accessor
+  # exports - analyses index datasets[[filter-id-key]] directly. Any reappearance fails here.
+  forbidden <- c("getSliceKey", "getSlice", "sliceDataSetId", "sliceTitle", "getDataSetFor",
+                 "getDataSetColumn", "dataSetIdFromEncoded", "dataSetNameFromEncoded", "storeDataSets")
+  leaked    <- intersect(forbidden, getNamespaceExports("jaspBase"))
+  runBody   <- any(grepl("multiDataSetJson", deparse(body(jaspBase::runJaspResults))))
+  if (length(leaked) || !runBody)
+    stop("bundled jaspBase violates the zero-export contract (leaked exports: ",
+         paste(leaked, collapse = ", "), if (runBody) "" else " + runJaspResults has no multiDataSetJson flow", ")")
+  message("VERIFIED: bundled jaspBase loads, queue flow present, zero leaked accessor exports.")
 } else {
   message("bundle jaspBase version: ", as.character(utils::packageVersion("jaspBase", lib.loc = file.path(checkdir, "lib"))))
 }

@@ -41,10 +41,6 @@ multiDataSetFunc <- function(
    options[["version"]] <- NULL
 
 
-   if (!jaspBase::jaspResultsCalledFromJasp() && !is.null(datasets)) {
-      jaspBase::storeDataSets(datasets)
-   }
-
    data <- if (!is.null(datasets) && length(datasets)) datasets[[1]] else NULL
 
    optionsWithFormula <- c("dataSetA", "dataSetB", "dependentA", "dependentB")

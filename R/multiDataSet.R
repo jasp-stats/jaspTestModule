@@ -84,11 +84,14 @@ selectedVariablesTable <- function(jaspResults, options, datasets, dataset) {
                      list(form = "B", sel = "dataSetB", values = .dependentValues(options$dependentB)))) {
 
     for (value in entry$values) {
-      # The form's own selection (a filter id) picks the slice its variables live in - two forms
-      # on one dataset with different filters then see different rows. Handout runs (jaspTools)
-      # carry no filter-keyed selection, so route by the dataset id embedded in the name there
-      # (loudly ambiguous when that dataset has several slices - never silently the first!).
-      key   <- if (is.null(datasets)) NULL else jaspBase::getSliceKey(options, datasets, entry$sel, column = value)
+      # The contract, no accessors: datasets is keyed by FILTER id and the form's dataset
+      # selection option holds exactly that id, so the option IS the key - two forms on one
+      # dataset with different filters index different slices. attrs dataSetIds/dataSetNames
+      # map a key to its dataset (titles are display-only: user-editable, never a key).
+      key <- if (is.null(datasets)) NULL else {
+        sel <- trimws(as.character(utils::tail(unlist(options[[entry$sel]]), 1L)))
+        if (is.na(sel) || !nzchar(sel) || !sel %in% names(datasets)) NULL else sel
+      }
       slice <- if (is.null(datasets)) dataset else if (!is.null(key)) datasets[[key]] else NULL
 
       columnData <- if (!is.null(slice) && value %in% names(slice)) slice[[value]] else NULL
@@ -96,8 +99,8 @@ selectedVariablesTable <- function(jaspResults, options, datasets, dataset) {
       row <- list(
         source      = entry$form,
         variable    = value,
-        dataSetId   = if (is.null(datasets)) "-" else if (is.null(key)) as.character(jaspBase::dataSetIdFromEncoded(value)) else jaspBase::sliceDataSetId(datasets, key),
-        dataSetName = if (is.null(datasets)) "-" else if (is.null(key)) jaspBase::dataSetNameFromEncoded(value, datasets) else jaspBase::sliceTitle(datasets, key),
+        dataSetId   = if (is.null(key)) "-" else as.character(attr(datasets, "dataSetIds")[[key]]),
+        dataSetName = if (is.null(key)) "-" else as.character(attr(datasets, "dataSetNames")[[key]]),
         n           = NA_integer_, values = "")
 
       if (!is.null(columnData))
