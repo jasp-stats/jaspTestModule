@@ -215,7 +215,7 @@ suppressPackageStartupMessages(library(jaspBase, lib.loc = file.path(checkdir, "
 
 if (localJaspBase) {
   expected  <- c("dataSetIdFromEncoded", "dataSetNameFromEncoded", "getDataSetFor",
-                 "getDataSetColumn", "storeDataSets")
+                 "storeDataSets")
   markers   <- stats::setNames(expected %in% getNamespaceExports("jaspBase"), expected)
   runBody   <- any(grepl("multiDataSet", deparse(body(jaspBase::runJaspResults))))
   if (!all(markers) || !runBody)
