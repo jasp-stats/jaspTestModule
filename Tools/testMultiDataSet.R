@@ -125,6 +125,42 @@ check(!grepl("JASPColumn_", raw1), "no encoded tokens anywhere in the returned r
 check(grepl("not available in multi-dataset aware analyses", raw1, fixed = TRUE),
       "guard demo: readDataSet() hard-stopped during the aware run")
 
+# ------------------------------------------------------------------ Bridge ids (Track C) ----
+cat("\n== Bridge boundary: loadDataSets returns dataset ids; selections accept them ==\n")
+# Titles stay the outer-surface sugar; INSIDE the wrapper everything keys on integer ids. The
+# loaders hand back the real database ids so a syntax script can refer to datasets by the
+# invariant instead of a title the user could rename mid-session.
+ids <- jaspSyntax::loadDataSets(list(DataSetA = csvA, DataSetB = csvB))
+check(is.integer(ids) && length(ids) == 2L && identical(names(ids), c("DataSetA", "DataSetB")) && all(ids > 0),
+      "loadDataSets returns the named integer dataset ids")
+
+qmlFile <- file.path(find.package("jaspTestModule"), "qml", "testMultiDataSet.qml")
+parseSelection <- function(selA, selB) {
+  opts <- list(dependentA = c("Score", "Group"), dependentB = c("Score", "Age"),
+               dataSetA = selA, dataSetB = selB,
+               showMeta = FALSE, guardDemo = FALSE, plotWidth = 400, plotHeight = 300)
+  jaspSyntax::loadQmlAndParseOptionsStatus("jaspTestModule", "multiDataSetFunc", qmlFile,
+      as.character(jsonlite::toJSON(opts, auto_unbox = TRUE, digits = NA, null = "null")), "1", TRUE)
+}
+
+stId <- tryCatch(parseSelection(as.integer(ids[[1]]), as.integer(ids[[2]])), error = function(e) e)
+check(!inherits(stId, "error") && nzchar(stId$options), "integer DATASET-id selections parse through the bridge")
+parsed <- jsonlite::fromJSON(stId$options, simplifyVector = FALSE)
+keyA <- as.character(utils::tail(unlist(parsed$dataSetA), 1L))
+keyB <- as.character(utils::tail(unlist(parsed$dataSetB), 1L))
+msj  <- jsonlite::fromJSON(stId$multiDataSetJson)
+check(all(c(keyA, keyB) %in% as.character(msj$ids)) && keyA != keyB,
+      "id selections resolved to two distinct queued slice keys (filter-id key space)")
+check(identical(as.character(msj$dataSetIds[[keyA]]), as.character(ids[[1]])),
+      "the slice an id selected belongs to exactly that dataset")
+
+errBadTitle <- tryCatch({ parseSelection("NoSuchDataSet", as.integer(ids[[2]])); "" }, error = function(e) conditionMessage(e))
+check(grepl("neither the title nor the id", errBadTitle),
+      "an unknown title is rejected loudly (error lists what is loaded)")
+errBadId <- tryCatch({ parseSelection(999L, 998L); "" }, error = function(e) conditionMessage(e))
+check(grepl("neither the title nor the id", errBadId),
+      "an unknown integer is rejected too - no filter-id guessing (1 is not both a dataset and a filter)")
+
 # ------------------------------------------------------------------ Path 2: wrapper call -------
 # The wrapper path is run in a clean Rscript subprocess (no jaspTools runtime in the way):
 cat("\n== Path 2: wrapper (datasets= named list + dataset selection options) ==\n")

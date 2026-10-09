@@ -6,8 +6,8 @@
 #
 # Flow under test: loadDataSets -> workspace (titles, ids, encoders) -> QML binds the selection
 # options first (depends), switching each form; column options then encode per dataset and the
-# bridge queues one slice per dataset; runJaspResults hands the analysis encoded options +
-# encoded slices keyed by (bridge) dataset id, with the user names as titles.
+# bridge queues one slice per distinct filter; runJaspResults hands the analysis encoded options +
+# encoded slices keyed by FILTER id (the selection option value), titles in attr dataSetNames.
 
 moduledir <- normalizePath(file.path(dirname(sub("^--file=", "", grep("^--file=", commandArgs(FALSE), value = TRUE)[[1]])), ".."))
 pkglib    <- Sys.getenv("JASP_TEST_PKGLIB", file.path(moduledir, "ModuleBundleBuildDir", "build_dir", "jaspTestModule"))
