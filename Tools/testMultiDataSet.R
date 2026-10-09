@@ -83,12 +83,14 @@ ovTitle <- columnValues(r1$dataSetOverview, "title")
 ovCols  <- columnValues(r1$dataSetOverview, "cols")
 check(length(ovId) == 2L && all(grepl("^[0-9]+$", unname(ovId))), "overview ids are real (bridge) dataset ids")
 check(setequal(unname(ovTitle), c("DataSetA", "DataSetB")), "overview titles are the names from the datasets list")
-check(all(ovCols == "3"), "both slices reported 3 columns")
+# the queue hands slices trimmed to the columns the options reference (wanted-cols), exactly
+# as the engine's prepareMultiDataSetRun does - not the full csv.
+check(all(ovCols == "2"), "slices arrive trimmed to the referenced columns (engine wanted-cols)")
 
 # the overview shows DECODED names: the analysis saw JASPColumn_* tokens, jaspTools decoded
 # the whole results json on the way out (engine sendString equivalent).
 ovNames <- columnValues(r1$dataSetOverview, "columnNames")
-check(all(c("Score, Age, Group", "Score, Age, Condition") %in% unname(ovNames)),
+check(all(c("Group, Score", "Age, Score") %in% unname(ovNames)),
       "overview column names came back decoded (encode -> decode roundtrip is real)")
 
 sv       <- r1$selectedVariables
@@ -133,7 +135,10 @@ check(any(grepl("MULTIDATASET-WRAPPER-OK", status2, fixed = TRUE)), "wrapper sub
 
 # ------------------------------------------------------------------ Path 3: legacy still OK ----
 cat("\n== Path 3: legacy non-aware run (single dataset, plain names) ==\n")
-res3 <- jaspTools::runAnalysis("multiDataSetFunc", dataset = csvA,
+# The aware analysis ALWAYS gets the bridge slice queue now (engine semantics: multiDataSetJson
+# is produced whenever the Description says aware), so the legacy dataset/readDataSet path is
+# exercised through the module's non-aware counterpart - its qml has no dataset selection.
+res3 <- jaspTools::runAnalysis("multiDataSetNonAware", dataset = csvA,
                                options = list(dependentA = "Score", dependentB = "Age",
                                               showMeta = FALSE, guardDemo = TRUE,
                                               plotWidth = 400, plotHeight = 300),

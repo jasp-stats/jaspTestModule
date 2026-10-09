@@ -40,10 +40,25 @@
   (same spirit as the analysis-global behavior), never dangles (HostFilterSelection validates on
   dataSetRemoved/filtersCountChanged).
 
-## NEXT PROJECT (approved by CTO 2026-10-08)
-jaspTools ⇄ jaspSyntax full bridge parity (hard dependency, kill the R emulation, encode like
-the engine, decode on exit): plan at
-`/home/virtuoos/.opencode/plan/jaspTools-bridge-parity.md` — STEP 0 there first (hook resolution).
+## jaspTools BRIDGE PARITY — DONE 2026-10-09 (plan: /home/virtuoos/.opencode/plan/jaspTools-bridge-parity.md)
+jaspTools::runAnalysis now runs the real SyntaxInterface bridge (hard dep on jaspSyntax):
+data loaded as genuine DataSets, options validated+encoded by the QML form (auto_unbox
+serialization!), filter-keyed slice queue, results decoded on exit via
+jaspSyntax::decodeJsonText. The R emulation (rbridge.R), encodedDataset and the generator's
+regex encoder family are DELETED — generated tests use plain names end to end.
+testMultiDataSet.R now asserts plain-name parity (this file's paths 1&3 were rewritten to it):
+- path 1: aware run through the bridge — real dataset ids, per-form selection honoured,
+  slices trimmed engine-style to the referenced columns (wanted-cols: Group+Score / Age+Score),
+  everything decoded again on exit;
+- path 3: single-dataset legacy semantics go through multiDataSetNonAware — an AWARE analysis
+  ALWAYS gets the slice queue now (correct engine semantics), and the bridge (like syntax mode)
+  rejects empty selection options rather than silently coercing them.
+Fixed on the way (were pre-existing branch bugs): segfault when an unnamed loadDataSet
+destroyed the workspace under cached QML forms (jasp-desktop 476b630dc); ColumnEncoderContext
+now carries the encode prefix so context replay survives dataset changes (jasp-desktop
+9fc29eb59). Known pre-existing, NOT chased: jaspSyntax test-desktop-jasp-contract
+readDatasetFromJaspFile hits a DataSet::dbLoad id assertion in the bridge subprocess (fails
+identically without the parity work); testDbMigration `:memory:` (older news).
 
 ## Review round 2026-10-08 (subagent review + user directives) - RESOLVED
 - CRITICAL empty-GUI-tables: module tables were filled row-by-row with `:`-containing keys
