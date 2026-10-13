@@ -13,6 +13,10 @@ global FilterMenuButton filter). Asserts:
     datasets: 12.50 vs 17.73 - no 'variable compared with itself')
   - the .meta dump shows per-form provenance (dependentA ds1/f1, dependentB ds2/f2)
   - no raw JASPColumn_* anywhere (decode on send)
+And the C3/VERIFY-live block (mds-plan C3/M5): switch one host's selection mid-session and
+assert the next run only shows the LIVE selections - no phantom slice for the abandoned filter,
+no provenance stamps on scalars or on the selection options themselves, column values restamped
+onto the new filter (there and back).
 Exit 0 = all good, 1 = failure (details printed).
 
 Run recipe (scripted crash-repro + verify loop):
@@ -212,6 +216,90 @@ def meta_of(opt):
     return None
 check("meta.dependentA stamped with form A's dataset/filter (1/1)", meta_of("dependentA") == ("1", "1"), str(meta_of("dependentA")))
 check("meta.dependentB stamped with form B's dataset/filter (2/2)", meta_of("dependentB") == ("2", "2"), str(meta_of("dependentB")))
+
+# ----------------------------------------------------------------------------
+# C3/VERIFY-live (mds-plan C3/M5): the phantom-slice class. Switch ONE HOST'S SELECTION
+# mid-session and check the NEXT run's data shows only the LIVE selections: no slice queued
+# for an abandoned filter, no stale filterId stamp left in the options .meta. Scalars and the
+# selection options themselves carry no provenance at all now - only column-bearing values do
+# (BoundControlBase::createMeta gate), and a switching host restamps those (HostFilterSelection
+# ::restampValuesUnderHost). This RPC workspace has one (default) filter per dataset, so the
+# mid-session switch here crosses datasets (form A: f1 -> f2 -> f1); the sharp same-dataset/
+# other-filter case - where no encoded value changes and only the restamp walk can keep .meta
+# honest - is pinned C++/QML-side by
+# Tests/qmlTests/tst_dataSetSelectionVariablesForm.qml::test_midsession_switch_restamps_column_values.
+# ----------------------------------------------------------------------------
+
+def run_and_results(opts, tag):
+    r = call("analysis_run", {"analysisId": aid, "wait": True, "timeoutMs": 120000, "options": opts})
+    check(f"{tag} complete", r.get("status") == "complete", str(r.get("status")))
+    res = call("analysis_results", {"analysisId": aid, "wait": True, "timeoutMs": 60000})
+    return r, res
+
+def overview_ids(res):
+    t = next((x for x in tables(res.get("results", res)).values() if x.get("title") == "Datasets in this run"), None)
+    if not t:
+        return None, None
+    fields, fm, rks = field_maps(t)
+    return sorted(str(fm["id"].get(r)) for r in rks), t
+
+def meta_window(res, opt):
+    """(dataSetId, filterId) of opt's .meta entry as the engine saw it (metaDump), or None."""
+    text = json.dumps(res).replace(chr(92) + chr(34), '"').replace("&quot;", '"').replace("&#34;", '"')
+    i = text.find(f'"{opt}"')
+    while i != -1:
+        window = text[i:i + 400]
+        if "dataSetId" in window and "filterId" in window:
+            m_ds = _re.search(r'"dataSetId":\s*"?(-?\d+)', window)
+            m_fl = _re.search(r'"filterId":\s*"?(-?\d+)', window)
+            if m_ds and m_fl:
+                return m_ds.group(1), m_fl.group(1)
+        i = text.find(f'"{opt}"', i + 1)
+    return None
+
+# switch form A to dataset 2's filter (both forms then sit on DataSet 2):
+r3, res3 = run_and_results({
+    "dataSetA": "2",
+    "dataSetB": "2",
+    "dependentA": {"types": [], "value": ["Score"]},
+    "dependentB": {"types": [], "value": ["Score", "Condition"]},
+    "showMeta": True}, "run 3 (form A switched to filter 2 mid-session)")
+
+ids3, _ = overview_ids(res3)
+check("run 3: no phantom slice - only DataSet 2 loaded", ids3 == ["2"], str(ids3))
+check("run 3: dataSetIds not over-reported", sorted(r3.get("dataSetIds", [])) == [2], str(r3.get("dataSetIds")))
+check("run 3: dependentA restamped onto the live selection (2/2)", meta_window(res3, "dependentA") == ("2", "2"), str(meta_window(res3, "dependentA")))
+check("run 3: scalar showMeta carries no provenance", meta_window(res3, "showMeta") is None, str(meta_window(res3, "showMeta")))
+check("run 3: scalar guardDemo carries no provenance", meta_window(res3, "guardDemo") is None, str(meta_window(res3, "guardDemo")))
+check("run 3: selection option dataSetA carries no provenance", meta_window(res3, "dataSetA") is None, str(meta_window(res3, "dataSetA")))
+
+sv3 = next((t for t in tables(res3.get("results", res3)).values() if t.get("title") == "Selected variables"), None)
+rows3 = []
+if sv3:
+    f3, fm3, rk3 = field_maps(sv3)
+    rows3 = [{f: fm3[f].get(r) for f in f3} for r in rk3]
+a3 = next((x for x in rows3 if x["source"] == "A" and x["variable"] == "Score"), None)
+check("run 3: A:Score routed through the restamped key to DataSet 2 (mean 17.73)",
+      a3 and str(a3["dataSetId"]) == "2" and "17.73" in str(a3["values"]), json.dumps(a3))
+
+# and back: form A returns to filter 1 - DataSet 1 must come back exactly once (no doubled slice):
+r4, res4 = run_and_results({
+    "dataSetA": "1",
+    "dataSetB": "2",
+    "dependentA": {"types": [], "value": ["Score"]},
+    "dependentB": {"types": [], "value": ["Score", "Condition"]},
+    "showMeta": True}, "run 4 (form A switched back to filter 1)")
+
+ids4, _ = overview_ids(res4)
+check("run 4: exactly one slice per dataset again", ids4 == ["1", "2"], str(ids4))
+check("run 4: dataSetIds reports both datasets", sorted(r4.get("dataSetIds", [])) == [1, 2], str(r4.get("dataSetIds")))
+check("run 4: dependentA restamped back onto filter 1 (1/1)", meta_window(res4, "dependentA") == ("1", "1"), str(meta_window(res4, "dependentA")))
+a4 = None
+sv4 = next((t for t in tables(res4.get("results", res4)).values() if t.get("title") == "Selected variables"), None)
+if sv4:
+    f4, fm4, rk4 = field_maps(sv4)
+    a4 = next((x for x in ({f: fm4[f].get(r) for f in f4} for r in rk4) if x["source"] == "A" and x["variable"] == "Score"), None)
+check("run 4: A:Score back on DataSet 1 (mean 12.50)", a4 and str(a4["dataSetId"]) == "1" and "12.50" in str(a4["values"]), json.dumps(a4))
 
 print("\n" + ("ALL CHECKS PASSED" if not fails else f"{len(fails)} FAILURES: {fails}"))
 sys.exit(0 if not fails else 1)
