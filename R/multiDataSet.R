@@ -133,12 +133,11 @@ readDataSetGuardDemo <- function(jaspResults) {
   jaspResults[["guardDemo"]] <- createJaspHtml(message)
 }
 
-# Non-aware counterpart (Description entry func: "multiDataSetNonAware"; the engine appends
-# Internal because hasWrappers is on for the whole module). Same form and body, but reached
-# through the old single-dataset path: no datasets argument, so readDataSet/dataset rule.
-multiDataSetNonAwareInternal <- function(jaspResults, dataset, options) {
-  multiDataSetFuncInternal(jaspResults, dataset, options)
-}
+# The non-aware counterpart (multiDataSetNonAwareInternal + Description entry) was removed by
+# mds-plan C4/M8: every other analysis here is already a plain single-dataset one, and the
+# twin's generated wrapper had a stale qml pointer so its R entry point always errored. The
+# "Non-aware run." branch above stays: it renders whenever `datasets` never arrives (old
+# jaspBase, direct Internal calls).
 
 # ------------------------------------------------------------------ internals
 

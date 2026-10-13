@@ -38,8 +38,11 @@
   entries pointing at removed qml files (test.qml, TestPlotStatus.qml) can't generate
   one, and filteredDataEntry crashes the syntax bridge headlessly (Filter without
   DataSet assertion in CommonData/filter.cpp - a real bridge bug to fix).
-* Non-aware counterpart moved to its own func (`multiDataSetNonAware`), a wrapper may
-  not be generated for a `...Internal` name.
+* The non-aware twin (`multiDataSetNonAware` func/qml/wrapper) is removed again (mds-plan
+  C4/M8): its generated wrapper carried a stale qml pointer so its R entry point always
+  errored, and every other analysis in this module already is a plain single-dataset one.
+  Legacy path 3 of Tools/testMultiDataSet.R now runs through `testEncodingFunc` (whose R body
+  really calls `.readDataSetToEnd`).
 
 
 

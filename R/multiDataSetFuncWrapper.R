@@ -22,8 +22,8 @@
 multiDataSetFunc <- function(
           datasets = NULL,
           version = "1",
-          dataSetA = list(types = "unknown", value = ""),
-          dataSetB = list(types = "unknown", value = ""),
+          dataSetA = "",
+          dataSetB = "",
           dependentA = list(types = list(), value = list()),
           dependentB = list(types = list(), value = list()),
           guardDemo = FALSE,

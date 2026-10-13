@@ -125,14 +125,16 @@ check(!grepl("JASPColumn_", raw1), "no encoded tokens anywhere in the returned r
 check(grepl("not available in multi-dataset aware analyses", raw1, fixed = TRUE),
       "guard demo: readDataSet() hard-stopped during the aware run")
 
-# ------------------------------------------------------------------ Bridge ids (Track C) ----
-cat("\n== Bridge boundary: loadDataSets returns dataset ids; selections accept them ==\n")
-# Titles stay the outer-surface sugar; INSIDE the wrapper everything keys on integer ids. The
-# loaders hand back the real database ids so a syntax script can refer to datasets by the
-# invariant instead of a title the user could rename mid-session.
+# ------------------------------------------------------------------ Bridge surface (C4) ----
+cat("\n== Bridge boundary: loadDataSets returns ids (informational); selections are TITLES ==\n")
+# mds-plan C4: the syntax surface of the dataset selection options is human strings ONLY -
+# the bare TITLE for a dataset's default filter, "title - filterName" for a saved named one.
+# The integer ids the loaders hand back stay useful for logging and for slicing results by,
+# but writing one into a selection option is now a hard error (M4: the old numeric-id
+# acceptance let a title shadow an id and vice versa - gone).
 ids <- jaspSyntax::loadDataSets(list(DataSetA = csvA, DataSetB = csvB))
 check(is.integer(ids) && length(ids) == 2L && identical(names(ids), c("DataSetA", "DataSetB")) && all(ids > 0),
-      "loadDataSets returns the named integer dataset ids")
+      "loadDataSets returns the named integer dataset ids (informational, not selection syntax)")
 
 qmlFile <- file.path(find.package("jaspTestModule"), "qml", "testMultiDataSet.qml")
 parseSelection <- function(selA, selB) {
@@ -143,23 +145,41 @@ parseSelection <- function(selA, selB) {
       as.character(jsonlite::toJSON(opts, auto_unbox = TRUE, digits = NA, null = "null")), "1", TRUE)
 }
 
-stId <- tryCatch(parseSelection(as.integer(ids[[1]]), as.integer(ids[[2]])), error = function(e) e)
-check(!inherits(stId, "error") && nzchar(stId$options), "integer DATASET-id selections parse through the bridge")
-parsed <- jsonlite::fromJSON(stId$options, simplifyVector = FALSE)
+stTitle <- tryCatch(parseSelection("DataSetA", "DataSetB"), error = function(e) e)
+check(!inherits(stTitle, "error") && nzchar(stTitle$options), "title selections parse through the bridge")
+parsed <- jsonlite::fromJSON(stTitle$options, simplifyVector = FALSE)
 keyA <- as.character(utils::tail(unlist(parsed$dataSetA), 1L))
 keyB <- as.character(utils::tail(unlist(parsed$dataSetB), 1L))
-msj  <- jsonlite::fromJSON(stId$multiDataSetJson)
+msj  <- jsonlite::fromJSON(stTitle$multiDataSetJson)
 check(all(c(keyA, keyB) %in% as.character(msj$ids)) && keyA != keyB,
-      "id selections resolved to two distinct queued slice keys (filter-id key space)")
+      "title selections resolved to two distinct queued slice keys (filter-id key space)")
 check(identical(as.character(msj$dataSetIds[[keyA]]), as.character(ids[[1]])),
-      "the slice an id selected belongs to exactly that dataset")
+      "the slice a title selected belongs to exactly that dataset")
 
-errBadTitle <- tryCatch({ parseSelection("NoSuchDataSet", as.integer(ids[[2]])); "" }, error = function(e) conditionMessage(e))
-check(grepl("neither the title nor the id", errBadTitle),
-      "an unknown title is rejected loudly (error lists what is loaded)")
-errBadId <- tryCatch({ parseSelection(999L, 998L); "" }, error = function(e) conditionMessage(e))
-check(grepl("neither the title nor the id", errBadId),
-      "an unknown integer is rejected too - no filter-id guessing (1 is not both a dataset and a filter)")
+errId <- tryCatch({ parseSelection(as.integer(ids[[1]]), as.integer(ids[[2]])); "" }, error = function(e) conditionMessage(e))
+check(grepl("matches no dataset selection string", errId),
+      "integer dataset ids are rejected on the syntax surface (mds-plan C4/M4: no numeric-id acceptance anymore)")
+errBadTitle <- tryCatch({ parseSelection("NoSuchDataSet", "DataSetB"); "" }, error = function(e) conditionMessage(e))
+check(grepl("matches no dataset selection string", errBadTitle) && grepl("available:", errBadTitle),
+      "an unknown title is rejected loudly and the error lists what IS selectable")
+errNamed <- tryCatch({ parseSelection("DataSetA - myfilter", "DataSetB"); "" }, error = function(e) conditionMessage(e))
+check(grepl("matches no dataset selection string", errNamed),
+      "'title - name' fails loudly in full R: freshly loaded datasets have only their default filter")
+errShape <- tryCatch({
+  jaspSyntax::loadQmlAndParseOptionsStatus("jaspTestModule", "multiDataSetFunc", qmlFile,
+    as.character(jsonlite::toJSON(list(
+      dependentA = c("Score", "Group"), dependentB = c("Score", "Age"),
+      dataSetA = list(types = "unknown", value = list("DataSetA", "more")),   # array inside: auto_unbox keeps it an array
+      dataSetB = "DataSetB",
+      showMeta = FALSE, guardDemo = FALSE, plotWidth = 400, plotHeight = 300),
+      auto_unbox = TRUE, digits = NA, null = "null")), "1", TRUE)
+  ""
+}, error = function(e) conditionMessage(e))
+check(grepl("pass the dataset title directly", errShape),
+      "a {types,value} selection with no plain value inside is rejected with the direct-title hint")
+stWrapped <- tryCatch(parseSelection(list(types = "unknown", value = "DataSetA"), "DataSetB"), error = function(e) e)
+check(!inherits(stWrapped, "error"),
+      "the desktop-shaped {types,value} with a plain title inside unwraps (old wrapper defaults stay valid)")
 
 # ------------------------------------------------------------------ Path 2: wrapper call -------
 # The wrapper path is run in a clean Rscript subprocess (no jaspTools runtime in the way):
@@ -172,18 +192,20 @@ check(any(grepl("MULTIDATASET-WRAPPER-OK", status2, fixed = TRUE)), "wrapper sub
 # ------------------------------------------------------------------ Path 3: legacy still OK ----
 cat("\n== Path 3: legacy non-aware run (single dataset, plain names) ==\n")
 # The aware analysis ALWAYS gets the bridge slice queue now (engine semantics: multiDataSetJson
-# is produced whenever the Description says aware), so the legacy dataset/readDataSet path is
-# exercised through the module's non-aware counterpart - its qml has no dataset selection.
-res3 <- jaspTools::runAnalysis("multiDataSetNonAware", dataset = csvA,
-                               options = list(dependentA = "Score", dependentB = "Age",
-                                              showMeta = FALSE, guardDemo = TRUE,
-                                              plotWidth = 400, plotHeight = 300),
+# is produced whenever the Description says aware), so the legacy dataset/readDataSet path runs
+# through a plain non-aware analysis instead of the removed twin (mds-plan C4/M8):
+# testEncodingFunc has no preloadData, so its R body really calls .readDataSetToEnd() and
+# echoes the column values - a live witness that the readDataSet guard stays silent outside
+# aware runs and that data survives the bridge encode->decode round trip.
+res3 <- jaspTools::runAnalysis("testEncodingFunc", dataset = csvA,
+                               options = list(selected = "Score"),
                                view = FALSE, quiet = TRUE)
 raw3 <- jsonlite::toJSON(res3, auto_unbox = TRUE)
 check(identical(res3$status, "complete"), "legacy run completed")
-check(grepl("\\(current\\)", raw3),       "legacy run used the single-dataset path (no multi mode)")
-check(grepl(sprintf("mean %.2f", mean(csvA$Score)), raw3, fixed = TRUE),
-      "legacy run computed DataSetA's Score mean through the bridge roundtrip")
+check(grepl("12.5", raw3, fixed = TRUE),
+      "legacy run read DataSetA's Score values through the (non-aware) readDataSet path")
+check(grepl("encodingsEtc", raw3, fixed = TRUE) && grepl("\"Score\"", raw3, fixed = TRUE),
+      "the plain column name came back decoded (encode -> decode roundtrip on the legacy path too)")
 check(!grepl("JASPColumn_", raw3), "legacy results decoded too")
 check(!grepl("not available in multi-dataset", raw3, fixed = TRUE),
       "guard demo: readDataSet() works normally outside aware runs")

@@ -164,8 +164,7 @@ if (requireNamespace("jaspSyntax", quietly = TRUE)) {
   desc <- readModuleDescription(moduledir)
   stopifnot(!is.null(desc))
   for (check in list(
-      list(func = "multiDataSetFunc",     qml = "testMultiDataSet.qml",         aware = TRUE),
-      list(func = "multiDataSetNonAware", qml = "testMultiDataSetNonAware.qml", aware = FALSE))) {
+      list(func = "multiDataSetFunc",     qml = "testMultiDataSet.qml",         aware = TRUE))) {
     qmlFile <- file.path(moduledir, "inst", "qml", check$qml)
     stopifnot(file.exists(qmlFile))
     parseOptions <- NULL

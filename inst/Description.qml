@@ -95,20 +95,11 @@ Description
 		hasWrapper:			true
 	}
 
-	// Same forms, but NOT aware: data must arrive the old way (dataset/readDataSet) and the dataset
-	// selection must stay inert. Own func name because with hasWrappers the engine appends
-	// "Internal" to every entry's func (and the wrapper name may not *be* an Internal). Own qml too:
-	// the aware form's datasetSelectionOptions would (rightly) demand selections in syntax mode,
-	// which a non-aware analysis neither has nor needs.
-	Analysis
-	{
-		title:				"Test Multi-DataSet (non-aware counterpart)"
-		qml:				"testMultiDataSetNonAware.qml"
-		func:				"multiDataSetNonAware"
-		requiresData:		true
-		preloadData:		true
-		multiDataSetAware:	false
-	}
+	// The old non-aware twin entry (func multiDataSetNonAware / qml testMultiDataSetNonAware)
+	// is gone (mds-plan C4/M8): it existed only to show that selection options stay inert
+	// without multiDataSetAware, but its generated wrapper pointed at the AWARE form and so its
+	// R entry point always errored (REPORT M8). The non-aware code path is covered by the other
+	// (plain, single-dataset) analyses in this module.
 
 	Analysis
 	{

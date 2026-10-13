@@ -61,10 +61,23 @@ def wait_up(max_wait=120):
 
 call = _rpc
 
-import sys, json, time, re as _re
+import sys, json, time, os, re as _re
 
-A_CSV = "/home/virtuoos/Broncode/JASP/jaspTestModule/Tools/testdata/DataSetA.csv"
-B_CSV = "/home/virtuoos/Broncode/JASP/jaspTestModule/Tools/testdata/DataSetB.csv"
+# Locations (mds-plan C4/S9): nothing machine-specific. The module dir is resolved as
+# --module=<dir> (argv) > $JASP_TESTMODULE_DIR > the directory containing this script
+# (it lives in <module>/Tools/, so the default is self-locating).
+def _findModuleDir():
+    for a in sys.argv[1:]:
+        if a.startswith("--module="):
+            return os.path.abspath(a.split("=", 1)[1])
+    env = os.environ.get("JASP_TESTMODULE_DIR")
+    if env:
+        return os.path.abspath(env)
+    return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+_moduleDir = _findModuleDir()
+A_CSV = os.path.join(_moduleDir, "Tools", "testdata", "DataSetA.csv")
+B_CSV = os.path.join(_moduleDir, "Tools", "testdata", "DataSetB.csv")
 
 fails = []
 def check(name, cond, extra=""):

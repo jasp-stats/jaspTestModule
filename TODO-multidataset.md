@@ -50,7 +50,8 @@ testMultiDataSet.R now asserts plain-name parity (this file's paths 1&3 were rew
 - path 1: aware run through the bridge — real dataset ids, per-form selection honoured,
   slices trimmed engine-style to the referenced columns (wanted-cols: Group+Score / Age+Score),
   everything decoded again on exit;
-- path 3: single-dataset legacy semantics go through multiDataSetNonAware — an AWARE analysis
+- path 3: single-dataset legacy semantics run through testEncodingFunc — the multiDataSetNonAware
+  twin was removed (mds-plan C4/M8, its wrapper always errored); an AWARE analysis
   ALWAYS gets the slice queue now (correct engine semantics), and the bridge (like syntax mode)
   rejects empty selection options rather than silently coercing them.
 Fixed on the way (were pre-existing branch bugs): segfault when an unnamed loadDataSet
