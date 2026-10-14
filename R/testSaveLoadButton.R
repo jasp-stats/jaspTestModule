@@ -1,4 +1,4 @@
-testSaveLoadButton <- function(jaspResults, dataset, options)
+testSaveLoadButtonInternal <- function(jaspResults, dataset, options)
 {
   tableOfOptions(jaspResults, options, dataset)
   

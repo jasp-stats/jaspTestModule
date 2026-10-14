@@ -1,4 +1,4 @@
-syntaxhighlightingFunc <- function(jaspResults, dataset, options)
+syntaxhighlightingFuncInternal <- function(jaspResults, dataset, options)
 {   
   tableOfOptions(jaspResults, options, dataset)
 

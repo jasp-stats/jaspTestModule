@@ -1,4 +1,4 @@
-testTableView <- function(jaspResults, dataset, options) {
+testTableViewInternal <- function(jaspResults, dataset, options) {
   tableOfOptions(jaspResults, options, dataset)
   
 

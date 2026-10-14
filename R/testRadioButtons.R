@@ -1,4 +1,4 @@
-radioButtonFunc <- function(jaspResults, dataset, options)
+radioButtonFuncInternal <- function(jaspResults, dataset, options)
 {
   tableOfOptions(jaspResults, options, dataset)
   

@@ -8,7 +8,7 @@ Description
 	icon: 				"test.svg"
 	description: 		qsTr("A module to test stuff with.")
 	requiresData: 		false
-	hasWrappers: 		false
+	hasWrappers: 		true
 	preloadData:		false
 	
 	Timer
@@ -18,7 +18,6 @@ Description
 		{
 			console.log(qsTr("Timer that displays the fact that updating Description.qml from live javascript code works fine."))
 			testModuleDescription.title = qsTr("Test Module?")
-			footnotesEntry.title 		= qsTr("Test Footnotes jaspTable")
 		}
 
 		running: true
@@ -26,13 +25,6 @@ Description
 	}
 
 	GroupTitle	{ title:	"jaspResults stuff"	}
-	Analysis
-	{
-		title:	qsTr("Test Transposed jaspTable")
-		qml:	"test.qml"
-		func:	"testTransposedTableFunc"
-	}
-
 	Analysis
 	{
 		title:	qsTr("Test jaspTable with crappy data")
@@ -46,14 +38,6 @@ Description
 		title:	qsTr("Test jaspTable formatting")
 		qml:	"testTableFormatting.qml"
 		func:	"testTableFormattingFunc"
-	}
-
-	Analysis
-	{
-		id:			footnotesEntry
-		title:		qsTr("Wait for it...")
-		qml:		"test.qml"
-		func:		"testFootnotesTableFunc"
 	}
 
 	Analysis
@@ -79,20 +63,6 @@ Description
 
 	Analysis
 	{
-		title:		qsTr("Test jaspContainer")
-		qml:		"test.qml"
-		func:		"testContainerFunc"
-	}
-
-	Analysis
-	{
-		title:		qsTr("Test Plot Status")
-		qml:		"TestPlotStatus.qml"
-		func:		"testPlotStatus"
-	}
-
-	Analysis
-	{
 		title:		qsTr("Test Variables encoding")
 		qml:		"testEncoding.qml"
 		func:		"testEncodingFunc"
@@ -105,6 +75,31 @@ Description
 		func:		"testEncodingPreloadDataFunc"
 		preloadData	: true
 	}
+
+	Separator {}
+
+	GroupTitle { title: "Multi dataset" }
+
+	// multiDataSetAware: the analysis gets every dataset its options reference as the `datasets`
+	// argument (jaspBase >= the multiDataSetAware branch) and VariablesForm's dataSetSelection
+	// dropdown becomes live. It only kicks in combined with preloadData; without it the engine
+	// logs that the analysis gets its data like a non-aware one.
+	Analysis
+	{
+		title:				"Test Multi-DataSet"
+		qml:				"testMultiDataSet.qml"
+		func:				"multiDataSetFunc"
+		requiresData:		true
+		preloadData:		true
+		multiDataSetAware:	true
+		hasWrapper:			true
+	}
+
+	// The old non-aware twin entry (func multiDataSetNonAware / qml testMultiDataSetNonAware)
+	// is gone (mds-plan C4/M8): it existed only to show that selection options stay inert
+	// without multiDataSetAware, but its generated wrapper pointed at the AWARE form and so its
+	// R entry point always errored (REPORT M8). The non-aware code path is covered by the other
+	// (plain, single-dataset) analyses in this module.
 
 	Analysis
 	{

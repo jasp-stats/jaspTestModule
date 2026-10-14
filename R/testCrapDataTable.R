@@ -1,6 +1,6 @@
 
 
-testCrapDataTable <- function(jaspResults, dataset, options)
+testCrapDataTableInternal <- function(jaspResults, dataset, options)
 {
   tableOfOptions(jaspResults, options, dataset)
   

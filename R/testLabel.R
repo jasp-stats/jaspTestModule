@@ -1,4 +1,4 @@
-testLabelFormatFunc <- function(jaspResults, dataset, options)
+testLabelFormatFuncInternal <- function(jaspResults, dataset, options)
 {
   tableOfOptions(jaspResults, options, dataset)
 }
