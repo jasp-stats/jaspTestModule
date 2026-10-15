@@ -9,13 +9,14 @@ Form
 	ExplanationText
 	{
 		text:
-			"Test the multi-dataset awareness of VariablesForm: each form has its own " +
+			"Test the multi-dataset awareness of the variable lists: each selecting list owns its " +
 			"dataset/filter selection (only live for multiDataSetAware analyses) and the results " +
 			"show per-variable routing to the dataset it came from.<br>" +
 			"<ul>" +
 			"<li>Open a second dataset (e.g. add another CSV) so the selections have something to choose from.</li>" +
-			"<li>Set form A's Data selection to one dataset and form B's to the other: the run should then " +
-			"load <i>both</i> datasets (see the 'Datasets in this run' table).</li>" +
+			"<li>Set section A's Data selection (on its available list) to one dataset and section B's " +
+			"to the other: the run should then load <i>both</i> datasets (see the 'Datasets in this " +
+			"run' table), and the assigned lists inherit their available list's namespace.</li>" +
 			"<li>Drag variables (try the identically named 'Score'!) into both lists: the routing table " +
 			"must attribute each one to its own dataset, filter and column.</li>" +
 			"<li>show .meta: the provenance stamps (dataSetId/filterId) on the bound options.</li>" +
@@ -31,11 +32,14 @@ Form
 
 		VariablesForm
 		{
-			//syntax mode: an option carrying the dataset name to select for this form
-			//(jaspSyntax gates the bound dropdown on it; desktop never sees it)
-			dataSetSelectionOption: "dataSetA"
-
-			AvailableVariablesList	{ name: "allVariablesA" }
+			AvailableVariablesList
+			{
+				name:	"allVariablesA"
+				//List-level dataset selection (mds-plan C10): an option carrying the dataset name
+				//to select for this list (jaspSyntax gates the bound dropdown on it; desktop never
+				//sees it). The assigned lists below inherit this list's namespace.
+				dataSetSelectionOption: "dataSetA"
+			}
 			AssignedVariablesList
 			{
 				name:	"dependentA"
@@ -50,9 +54,11 @@ Form
 
 		VariablesForm
 		{
-			dataSetSelectionOption: "dataSetB"
-
-			AvailableVariablesList	{ name: "allVariablesB" }
+			AvailableVariablesList
+			{
+				name:	"allVariablesB"
+				dataSetSelectionOption: "dataSetB"
+			}
 			AssignedVariablesList
 			{
 				name:	"dependentB"
