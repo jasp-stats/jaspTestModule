@@ -11,7 +11,10 @@ global FilterMenuButton filter). Asserts:
   - 'Datasets in this run' has 2 rows with titles + row/col counts
   - 'Selected variables' rows have n=10 and the right means (Score/Score land on DIFFERENT
     datasets: 12.50 vs 17.73 - no 'variable compared with itself')
-  - the .meta dump shows per-form provenance (dependentA ds1/f1, dependentB ds2/f2)
+  - the metaDump echo audits the post-D3.3 provenance contract as R RECEIVED it:
+    options$.meta carries no dataSetId/filterId (C8) and no .filterIds sidecar survives
+    the engine-boundary strip (C11); per-form routing is proven at the VALUE level
+    (each form's variable resolves against its own selection's slice: 12.50 vs 17.73)
   - no raw JASPColumn_* anywhere (decode on send)
 And the C3/VERIFY-live block (mds-plan C3/M5): switch one host's selection mid-session and
 assert the next run only shows the LIVE selections - no phantom slice for the abandoned filter,
@@ -213,34 +216,35 @@ if sv:
 
 check("analysis references both datasets (dataSetIds in run response)", sorted(r2.get("dataSetIds", [])) == [1, 2], str(r2.get("dataSetIds")))
 
-# T3c: per-form provenance as the engine SAW it - options$.meta must stamp each control with
-# ITS OWN form's dataset/filter (showMeta is on), not one global analysis filter.
+# T3c (mds-plan D3.3 flip): provenance as R sees it - NONE. The generated Engine json keeps
+# .meta provenance-free (C8) and the transient .filterIds sidecar is stripped at the engine
+# boundary (C11); the metaDump html (options$showMeta was on) audits exactly that. Per-form
+# provenance still routes the DATA (two same-named columns, two truths) - pinned value-level
+# above: A:Score 12.50 vs B:Score 17.73.
 meta_text = json.dumps(results).replace(chr(92)+chr(34), '"').replace("&quot;", '"').replace("&#34;", '"')
-def meta_of(opt):
-    i = meta_text.find(f'"{opt}"')
-    while i != -1:
-        window = meta_text[i:i + 400]
-        if "dataSetId" in window and "filterId" in window:
-            m_ds = _re.search(r'"dataSetId":\s*"?(-?\d+)', window)
-            m_fl = _re.search(r'"filterId":\s*"?(-?\d+)', window)
-            if m_ds and m_fl:
-                return m_ds.group(1), m_fl.group(1)
-        i = meta_text.find(f'"{opt}"', i + 1)
-    return None
-check("meta.dependentA stamped with form A's dataset/filter (1/1)", meta_of("dependentA") == ("1", "1"), str(meta_of("dependentA")))
-check("meta.dependentB stamped with form B's dataset/filter (2/2)", meta_of("dependentB") == ("2", "2"), str(meta_of("dependentB")))
+AUDIT_RE = r'filterIdsSeen=(\w+) metaProvenanceKeys=(\d+)'
+def provenance_audit(res):
+    """(filterIdsSeen, metaProvenanceKeys) from the metaDump echo of a results payload."""
+    text = json.dumps(res).replace(chr(92) + chr(34), '"').replace("&quot;", '"').replace("&#34;", '"')
+    m = _re.search(AUDIT_RE, text)
+    return (m.group(1), m.group(2)) if m else (None, None)
+audit2 = provenance_audit(results)
+check("metaDump ran (provenance audit present)", audit2[0] is not None, str(audit2))
+check("R never sees .filterIds (C11 strip at the engine boundary)", audit2 == ("false", audit2[1]), str(audit2))
+check("options$.meta as R received it carries no provenance keys (C8)", audit2[1] == "0", str(audit2))
 
 # ----------------------------------------------------------------------------
 # C3/VERIFY-live (mds-plan C3/M5): the phantom-slice class. Switch ONE HOST'S SELECTION
 # mid-session and check the NEXT run's data shows only the LIVE selections: no slice queued
-# for an abandoned filter, no stale filterId stamp left in the options .meta. Scalars and the
-# selection options themselves carry no provenance at all now - only column-bearing values do
-# (BoundControlBase::createMeta gate), and a switching host restamps those (HostFilterSelection
-# ::restampValuesUnderHost). This RPC workspace has one (default) filter per dataset, so the
+# for an abandoned filter, and the run's provenance still C8/C11-clean (the per-run audit).
+# Since the D3.3 flip the restamp moves the TYPED term filterIds (HostFilterSelection
+# ::restampValuesUnderHost -> ListModel::restampTermsFilterId -> generated `.filterIds`), the
+# .meta half is dead. This RPC workspace has one (default) filter per dataset, so the
 # mid-session switch here crosses datasets (form A: f1 -> f2 -> f1); the sharp same-dataset/
-# other-filter case - where no encoded value changes and only the restamp walk can keep .meta
-# honest - is pinned C++/QML-side by
-# Tests/qmlTests/tst_dataSetSelectionVariablesForm.qml::test_midsession_switch_restamps_column_values.
+# other-filter case - where no encoded value changes and only the restamp walk can keep the
+# sidecar honest - is pinned C++/QML-side by
+# Tests/qmlTests/tst_dataSetSelectionVariablesList.qml::test_midsession_switch_restamps_column_values
+# (and tst_generatedOptionsJsonAware.qml::test_aware_midswitch_sidecar_follows_without_stale_ids).
 # ----------------------------------------------------------------------------
 
 def run_and_results(opts, tag):
@@ -256,20 +260,6 @@ def overview_ids(res):
     fields, fm, rks = field_maps(t)
     return sorted(str(fm["id"].get(r)) for r in rks), t
 
-def meta_window(res, opt):
-    """(dataSetId, filterId) of opt's .meta entry as the engine saw it (metaDump), or None."""
-    text = json.dumps(res).replace(chr(92) + chr(34), '"').replace("&quot;", '"').replace("&#34;", '"')
-    i = text.find(f'"{opt}"')
-    while i != -1:
-        window = text[i:i + 400]
-        if "dataSetId" in window and "filterId" in window:
-            m_ds = _re.search(r'"dataSetId":\s*"?(-?\d+)', window)
-            m_fl = _re.search(r'"filterId":\s*"?(-?\d+)', window)
-            if m_ds and m_fl:
-                return m_ds.group(1), m_fl.group(1)
-        i = text.find(f'"{opt}"', i + 1)
-    return None
-
 # switch form A to dataset 2's filter (both forms then sit on DataSet 2):
 r3, res3 = run_and_results({
     "dataSetA": "2",
@@ -281,10 +271,10 @@ r3, res3 = run_and_results({
 ids3, _ = overview_ids(res3)
 check("run 3: no phantom slice - only DataSet 2 loaded", ids3 == ["2"], str(ids3))
 check("run 3: dataSetIds not over-reported", sorted(r3.get("dataSetIds", [])) == [2], str(r3.get("dataSetIds")))
-check("run 3: dependentA restamped onto the live selection (2/2)", meta_window(res3, "dependentA") == ("2", "2"), str(meta_window(res3, "dependentA")))
-check("run 3: scalar showMeta carries no provenance", meta_window(res3, "showMeta") is None, str(meta_window(res3, "showMeta")))
-check("run 3: scalar guardDemo carries no provenance", meta_window(res3, "guardDemo") is None, str(meta_window(res3, "guardDemo")))
-check("run 3: selection option dataSetA carries no provenance", meta_window(res3, "dataSetA") is None, str(meta_window(res3, "dataSetA")))
+audit3 = provenance_audit(res3)
+check("run 3: still no provenance reaches R after the switch (C8/C11)", audit3 == ("false", "0"), str(audit3))
+# (old stamp-window checks retired with the meta stamps, mds-plan D3.3: the C8 audit above
+# covers scalars and selection options too - NO dataSetId/filterId key may appear ANYWHERE)
 
 sv3 = next((t for t in tables(res3.get("results", res3)).values() if t.get("title") == "Selected variables"), None)
 rows3 = []
@@ -306,7 +296,8 @@ r4, res4 = run_and_results({
 ids4, _ = overview_ids(res4)
 check("run 4: exactly one slice per dataset again", ids4 == ["1", "2"], str(ids4))
 check("run 4: dataSetIds reports both datasets", sorted(r4.get("dataSetIds", [])) == [1, 2], str(r4.get("dataSetIds")))
-check("run 4: dependentA restamped back onto filter 1 (1/1)", meta_window(res4, "dependentA") == ("1", "1"), str(meta_window(res4, "dependentA")))
+audit4 = provenance_audit(res4)
+check("run 4: provenance contract held through the switch-back too (C8/C11)", audit4 == ("false", "0"), str(audit4))
 a4 = None
 sv4 = next((t for t in tables(res4.get("results", res4)).values() if t.get("title") == "Selected variables"), None)
 if sv4:

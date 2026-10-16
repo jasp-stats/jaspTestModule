@@ -115,10 +115,16 @@ selectedVariablesTable <- function(jaspResults, options, datasets, dataset) {
 
 metaDump <- function(jaspResults, options) {
   meta <- options[[".meta"]]
+  metaText <- jsonlite::toJSON(if (is.null(meta)) list() else meta, auto_unbox = TRUE, pretty = 2)
+  # mds-plan D3.3: R must never see provenance - the transient `.filterIds` sidecar is stripped
+  # at the engine boundary (C11) and the send-time `.meta` carries no dataSetId/filterId (C8).
+  # The audit markers echo exactly what arrived so the RPC verifier can assert the contract.
+  provenanceKeys <- sum(lengths(regmatches(metaText, gregexpr("dataSetId|filterId", metaText))))
+  filterIdsSeen <- !is.null(options[[".filterIds"]])
   jaspResults[["metaDump"]] <- createJaspHtml(paste0(
-    "<b>options$.meta</b><br><pre>",
-    jsonlite::toJSON(if (is.null(meta)) list() else meta, auto_unbox = TRUE, pretty = 2),
-    "</pre>"))
+    "<b>PROVENANCE_AUDIT filterIdsSeen=", if (filterIdsSeen) "true" else "false",
+    " metaProvenanceKeys=", provenanceKeys, "</b><br>",
+    "<b>options$.meta</b><br><pre>", metaText, "</pre>"))
 }
 
 readDataSetGuardDemo <- function(jaspResults) {
