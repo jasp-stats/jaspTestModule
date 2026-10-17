@@ -95,6 +95,21 @@ Description
 		hasWrapper:			true
 	}
 
+	// mds-plan D6.1/D6.2: the component zoo under multi-source provenance. Every control family
+	// (assigned list, list-as-host, row-control ComponentsList with same-name twins across filters,
+	// interaction terms, factor levels via encodeThis, textarea with own host, cross-host typed
+	// bindTo copy) reports what it received and where it resolved; the RPC verifier asserts it.
+	Analysis
+	{
+		title:				"Test Multi-DataSet Controls"
+		qml:				"testMultiDataSetControls.qml"
+		func:				"multiDataSetControlsFunc"
+		requiresData:		true
+		preloadData:		true
+		multiDataSetAware:	true
+		hasWrapper:			true
+	}
+
 	// The old non-aware twin entry (func multiDataSetNonAware / qml testMultiDataSetNonAware)
 	// is gone (mds-plan C4/M8): it existed only to show that selection options stay inert
 	// without multiDataSetAware, but its generated wrapper pointed at the AWARE form and so its
