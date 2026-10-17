@@ -305,5 +305,283 @@ if sv4:
     a4 = next((x for x in ({f: fm4[f].get(r) for f in f4} for r in rk4) if x["source"] == "A" and x["variable"] == "Score"), None)
 check("run 4: A:Score back on DataSet 1 (mean 12.50)", a4 and str(a4["dataSetId"]) == "1" and "12.50" in str(a4["values"]), json.dumps(a4))
 
+# ----------------------------------------------------------------------------
+# mds-plan D6.3 - the component zoo (jaspTestModule analysis multiDataSetControlsFunc /
+# testMultiDataSetControls.qml). Every control family echoes what it RECEIVED (encoded names,
+# decoded again on the way out), which slice index each value resolved in, and its row children,
+# so per-item provenance is asserted at the value level. The RPC workspace has one default filter
+# per dataset (ids 1 and 2), which is exactly two distinct namespaces for the twin cases.
+# Checks per family:
+#   - same-name columns across two filters in the SAME list (twins) -> distinct encodings,
+#     correct per-slice values (the 12.50/17.73 trick per family)
+#   - per-row provenance in the TableFields-style row control (row-bearing variables list):
+#     twin rows keep their own keep/shift children (the D6.1 TermRowKey re-keying; pre-fix the
+#     second row clobbered the first)
+#   - FactorLevelList encodeThis roundtrip: factor/level names arrive usable and NOTHING in the
+#     final results leaks a raw JaspExtraOptions_ or JASPColumn_ token
+#   - interaction terms resolve as one unit in a single slice (uniform term-level filterId)
+#   - textarea host: tokens encode through the textarea's own selection and resolve there
+#   - cross-host bindTo (D6.2): a typed copy carrying the SOURCE filterId resolves in the
+#     SOURCE's slice although the destination list selects the other one
+#   - scalars/combos stay plain; PROVENANCE_AUDIT clean on every zoo run
+# ----------------------------------------------------------------------------
+
+zoo = call("analysis_create", {"module": "jaspTestModule", "analysis": "multiDataSetControlsFunc"})
+check("zoo form created, analysis multiDataSetAware", zoo.get("status") == "success" and zoo.get("multiDataSetAware") is True)
+zid = zoo.get("analysisId")
+
+def zoo_run(opts, tag):
+    r = call("analysis_run", {"analysisId": zid, "wait": True, "timeoutMs": 120000, "options": opts})
+    check(f"zoo {tag} complete", r.get("status") == "complete", str(r.get("status")))
+    res = call("analysis_results", {"analysisId": zid, "wait": True, "timeoutMs": 60000})
+    return r, res
+
+def zoo_rows(res):
+    t = next((x for x in tables(res.get("results", res)).values() if x.get("title") == "Controls provenance"), None)
+    if not t:
+        return None
+    fields, fm, rks = field_maps(t)
+    return [{f: fm[f].get(r) for f in fields} for r in rks]
+
+def zoo_slice_ids(res):
+    t = next((x for x in tables(res.get("results", res)).values() if x.get("title") == "Datasets in this run"), None)
+    if not t:
+        return None
+    fields, fm, rks = field_maps(t)
+    return sorted(str(fm["id"].get(r)) for r in rks)
+
+def find(rows, family, pred=lambda r: True):
+    return [r for r in (rows or []) if r["family"] == family and pred(r)]
+
+# analysis_run options are a DELTA (form->parseOptions binds only the given members, everything
+# else keeps its current bound value - verified live): every zoo run below sends the FULL explicit
+# option set (families emptied, hosts deselected) so slice/dataSetIds expectations are exact.
+EMPTY_TERMS = {"types": [], "value": []}
+EMPTY_ROWS  = {"types": [], "value": [], "optionKey": "variable"}
+EMPTY_INTER = {"types": [], "value": [], "optionKey": "components"}
+EMPTY_CODEF = {"modelOriginal": "", "model": "", "columns": []}
+
+def zoo_full_opts(host_a="1", host_b="", host_c="", host_d="", host_f="", host_g="",
+                  assigned_a=None, assigned_b=None, rows_c=None, bound_g=None,
+                  interaction_d=None, factors_e=None, code_f=None, combo_a="",
+                  plain_switch=False, show_meta=True):
+    opts = {
+        "dataSetA": host_a, "dataSetB": host_b, "dataSetC": host_c,
+        "dataSetD": host_d, "dataSetF": host_f, "dataSetG": host_g,
+        "assignedA": assigned_a or dict(EMPTY_TERMS),
+        "assignedB": assigned_b or dict(EMPTY_TERMS),
+        "rowsC":     rows_c or dict(EMPTY_ROWS),
+        "boundG":    bound_g or {"value": []},
+        "interactionD": interaction_d or dict(EMPTY_INTER),
+        "factorsE":  factors_e or [],
+        "codeF":     code_f or dict(EMPTY_CODEF),
+        "comboA": combo_a, "comboG": "first", "plainSwitch": plain_switch,
+    }
+    if show_meta:
+        opts["showMeta"] = True
+    return opts
+
+# --- zoo run 1: sanity - plain list through host A, audit on -------------------------------------
+zr1, zres1 = zoo_run({
+    "dataSetA": "1",
+    "assignedA": {"types": ["scale"], "value": ["Score"]},
+    "showMeta": True}, "run 1 (plain list via host A)")
+z1 = zoo_rows(zres1)
+check("zoo run 1: provenance table present", z1 is not None)
+a1 = find(z1, "assigned-list")
+check("zoo run 1: assignedA Score resolves in slice 1 (12.50)",
+      len(a1) == 1 and str(a1[0]["slice"]) == "1" and "12.50" in str(a1[0]["values"]), json.dumps(a1))
+auditz1 = provenance_audit(zres1)
+check("zoo run 1: PROVENANCE_AUDIT clean (C8/C11)", auditz1 == ("false", "0"), str(auditz1))
+zslices1 = zoo_slice_ids(zres1) or []
+check("zoo run 1: slice 1 queued (host A), nothing beyond the workspace's two slices",
+      "1" in zslices1 and set(zslices1) <= {"1", "2"}, str(zslices1))
+
+# --- zoo run 2: the whole zoo ---------------------------------------------------------------------
+# rowsC arrives in the STORAGE term-object shape: same-name twin rows 'Score' behind filter 1
+# (keep=true, shift=1) and filter 2 (keep=false, shift=7). The applier must keep BOTH rows' own
+# children (D6.1) and each token must encode/resolve through ITS filter's view.
+# boundG receives a typed copy of a list on filter 1 (Score@1) while its OWN selection is filter 2:
+# the destination rule must not requalify the foreign stamp (D6.2) - it resolves in slice 1.
+# codeF's host selects filter 1 while the workspace's SHOWN dataset is B (filter 2): the textarea's
+# bind-time encodeRScript must go through the HOST's view (C13 host-bound) - a Score token
+# resolving in slice 1 (12.50) proves it; the analysis-level fallback would have yielded 17.73.
+zr2, zres2 = zoo_run(zoo_full_opts(
+    host_a="1", host_b="2", host_d="1", host_f="1", host_g="2",
+    assigned_a={"types": ["scale"], "value": ["Score"]},
+    assigned_b={"types": ["nominal"], "value": ["Condition"]},
+    rows_c={"value": [{"variable": {"name": "Score", "types": ["scale"], "filterId": 1}, "keep": True, "shift": 1},
+                      {"variable": {"name": "Score", "types": ["scale"], "filterId": 2}, "keep": False, "shift": 7}],
+            "optionKey": "variable"},
+    bound_g={"value": [{"name": "Score", "types": ["scale"], "filterId": 1}]},
+    interaction_d={"types": [["scale", "scale"]], "value": [{"components": ["Score", "Age"]}], "optionKey": "components"},
+    factors_e=[{"name": "Group", "levels": ["A", "B"]}],
+    code_f={"modelOriginal": "Score + Age", "model": "Score + Age", "columns": []},
+    combo_a="Score", plain_switch=True), "run 2 (full zoo)")
+z2 = zoo_rows(zres2)
+dump2 = json.dumps(z2) if z2 is not None else ""
+check("zoo run 2: provenance table present", z2 is not None)
+print("zoo run 2 rows:")
+for r in (z2 or []):
+    print("   ", json.dumps(r))
+
+# components-rows: the D6.1 flagship - twins with OWN children, distinct slices + values
+rc = find(z2, "components-rows")
+rc1 = next((r for r in rc if str(r["slice"]) == "1"), None)
+rc2 = next((r for r in rc if str(r["slice"]) == "2"), None)
+check("zoo run 2: rowsC twin rows kept DISTINCT encodings (two rows, slices 1 and 2)",
+      len(rc) == 2 and rc1 is not None and rc2 is not None, dump2[:400])
+check("zoo run 2: twin row @1 carries its OWN children keep=true shift=1 (+ 12.50)",
+      rc1 and "keep=TRUE" in rc1["rowChild"] and "shift=1," in rc1["rowChild"] + "," and "12.50" in rc1["values"], json.dumps(rc1))
+check("zoo run 2: twin row @2 carries its OWN children keep=false shift=7 (+ 17.73)",
+      rc2 and "keep=FALSE" in rc2["rowChild"] and "shift=7" in rc2["rowChild"] and "17.73" in rc2["values"], json.dumps(rc2))
+check("zoo run 2: decoded names, no raw JASPColumn_* in any row", "JASPColumn" not in dump2, dump2[:300])
+
+# cross-host bindTo (D6.2)
+bg = find(z2, "bindto-cross-host")
+check("zoo run 2: boundG typed copy resolves in the SOURCE slice 1 (12.50) while its own host selects filter 2",
+      len(bg) == 1 and str(bg[0]["slice"]) == "1" and "12.50" in str(bg[0]["values"]), json.dumps(bg))
+
+# assigned-host (Zoo B)
+ab = find(z2, "assigned-host")
+check("zoo run 2: assignedB (own host) Condition resolves in slice 2 with its levels",
+      len(ab) == 1 and str(ab[0]["slice"]) == "2" and ab[0]["values"].startswith("X"), json.dumps(ab))
+
+# combobox (Zoo A): plain string value; NOTE the namespace finding - a DropDown is not a list
+# host (no dataSetSelectionOption, resolvedSelectionHost stays the analysis level per C13), so
+# its value encodes through the FORM namespace (shown filter = DataSet 2 here), not zooVarsA's.
+# The zoo asserts the honest contract: value stays a plain string (never term-objectified,
+# landmine 4) and roundtrips encoded->decoded intact.
+ca = find(z2, "combobox-host")
+check("zoo run 2: comboA 'Score' stays plain and resolves in exactly one slice (analysis-level namespace)",
+      len(ca) == 1 and ca[0]["received"] == "Score" and str(ca[0]["slice"]) in ("1", "2"), json.dumps(ca))
+
+# interaction (Zoo D): one term, components share the slice
+itr = find(z2, "interaction-list")
+check("zoo run 2: interaction Score:Age (host D=1) resolves as one unit in slice 1",
+      len(itr) == 1 and str(itr[0]["slice"]) == "1" and "share slice 1" in str(itr[0]["values"]), json.dumps(itr))
+
+# factor levels (Zoo E): extras roundtrip - names usable, decoded, no leakage
+fe = find(z2, "factor-levels")
+check("zoo run 2: factorsE echoes Group with levels A, B (decoded and usable)",
+      len(fe) == 1 and fe[0]["received"] == "Group" and "A, B" in fe[0]["rowChild"], json.dumps(fe))
+
+# textarea host (Zoo F): tokens resolved through dataSetF's slice (1) - the SHARP host-bound proof:
+# the workspace's shown dataset is B (filter 2), so 17.73 here would mean the analysis-level
+# fallback won and the host declaration was ignored.
+tf = find(z2, "textarea-host")
+tf_scores = [r for r in tf if r["received"] == "Score"]
+tf_ages   = [r for r in tf if r["received"] == "Age"]
+tf_texts  = [r for r in tf if r["option"] == "codeF(text)"]
+check("zoo run 2: codeF host-1 tokens: Score resolves in slice 1 (12.50, NOT the shown-dataset 17.73)",
+      len(tf_scores) >= 1 and all(str(r["slice"]) == "1" for r in tf_scores) and any("12.50" in r["values"] for r in tf_scores), json.dumps(tf_scores))
+check("zoo run 2: codeF host-1 tokens: Age resolves in slice 1",
+      len(tf_ages) >= 1 and all(str(r["slice"]) == "1" for r in tf_ages) and any(r["values"] not in ("", "None", None) for r in tf_ages), json.dumps(tf_ages))
+check("zoo run 2: codeF model text round-trips (decoded on the way out)",
+      len(tf_texts) == 1 and tf_texts[0]["received"] == "Score + Age", json.dumps(tf_texts))
+
+# scalars stay plain (M5): echo rows exist with the plain values
+sc = find(z2, "scalar")
+cg = find(z2, "combobox-plain")
+check("zoo run 2: scalar plainSwitch echoes plain true (never provenanced)", len(sc) == 1 and sc[0]["received"].upper() == "TRUE", json.dumps(sc))
+check("zoo run 2: plain combo comboG echoes 'first' (never term-objectified)", len(cg) == 1 and cg[0]["received"] == "first", json.dumps(cg))
+
+# slices: hosts on filters 1+2 (A,D on 1; B,F,G on 2) + every referenced value's slice
+zslices2 = zoo_slice_ids(zres2)
+check("zoo run 2: both slices present, no phantom", zslices2 == ["1", "2"], str(zslices2))
+auditz2 = provenance_audit(zres2)
+check("zoo run 2: PROVENANCE_AUDIT clean", auditz2 == ("false", "0"), str(auditz2))
+fullres2 = json.dumps(zres2)
+check("zoo run 2: NO raw JASPColumn_* anywhere in results", "JASPColumn" not in fullres2)
+check("zoo run 2: NO raw JaspExtraOptions_ leakage anywhere in results", "JaspExtraOptions" not in fullres2)
+
+# --- zoo run 3: same-name twins in the PLAIN assigned list (storage term objects) -----------------
+zr3, zres3 = zoo_run(zoo_full_opts(
+    host_a="1",
+    assigned_a={"value": [{"name": "Score", "types": ["scale"], "filterId": 1},
+                          {"name": "Score", "types": ["scale"], "filterId": 2}]},
+    show_meta=False), "run 3 (plain-list twins, everything else reset)")
+z3 = zoo_rows(zres3)
+al = find(z3, "assigned-list")
+t1 = next((r for r in al if str(r["slice"]) == "1"), None)
+t2 = next((r for r in al if str(r["slice"]) == "2"), None)
+check("zoo run 3: assignedA twin rows distinct (both 'Score', two slices, two truths)",
+      len(al) == 2 and t1 and t2 and "12.50" in t1["values"] and "17.73" in t2["values"], json.dumps(al))
+check("zoo run 3: dataSetIds covers both datasets", sorted(zr3.get("dataSetIds", [])) == [1, 2], str(zr3.get("dataSetIds")))
+
+# --- zoo run 4: reset to a single plain family on host A (baseline for the mid-session switch) ----
+zr4, zres4 = zoo_run(zoo_full_opts(host_a="1",
+                                   assigned_a={"types": ["scale"], "value": ["Score"]}),
+                     "run 4 (reset: plain list only, host A=1)")
+z4 = zoo_rows(zres4)
+a4z = find(z4, "assigned-list")
+check("zoo run 4: assignedA Score on slice 1 (12.50)",
+      len(a4z) == 1 and "12.50" in a4z[0]["values"] and str(a4z[0]["slice"]) == "1", json.dumps(a4z))
+
+# --- zoo run 5: mid-session host switch (delta run: only the host option changes) -----------------
+# NB: the value IS re-sent (same terms as run 4) - analysis_run options are a delta, but the
+# point here is the RE-ENCODE through the NEW host namespace, which only happens when the option
+# is part of the run (an untouched option keeps its already-encoded value). The zoo's primary
+# slice (the analysis' own dataset) is queued besides the sidecar, so only "no dataset beyond
+# the workspace's two" can be asserted here - the sharp claim is the row: Score must now resolve
+# in slice 2 (17.73), i.e. the restamp walk + sidecar followed host A to DataSet 2.
+zr5, zres5 = zoo_run(zoo_full_opts(host_a="2",
+                                   assigned_a={"types": ["scale"], "value": ["Score"]}),
+                     "run 5 (mid-session switch host A -> filter 2)")
+z5 = zoo_rows(zres5)
+a5z = find(z5, "assigned-list")
+check("zoo run 5: mid-session switch re-encoded the value to slice 2 (17.73)",
+      len(a5z) == 1 and str(a5z[0]["slice"]) == "2" and "17.73" in a5z[0]["values"], json.dumps(a5z))
+check("zoo run 5: slice 2 queued, nothing beyond the workspace's two datasets",
+      "2" in (zoo_slice_ids(zres5) or []) and set(zoo_slice_ids(zres5) or []) <= {"1", "2"}, str(zoo_slice_ids(zres5)))
+check("zoo run 5: dataSetIds covers DataSet 2 and nothing else",
+      2 in zr5.get("dataSetIds", []) and set(zr5.get("dataSetIds", [])) <= {1, 2}, str(zr5.get("dataSetIds")))
+auditz5 = provenance_audit(zres5)
+check("zoo run 5: PROVENANCE_AUDIT clean after the switch", auditz5 == ("false", "0"), str(auditz5))
+
+# --- zoo run 6: and back ---------------------------------------------------------------------------
+zr6, zres6 = zoo_run(zoo_full_opts(host_a="1",
+                                   assigned_a={"types": ["scale"], "value": ["Score"]}),
+                     "run 6 (switch back host A -> filter 1)")
+z6 = zoo_rows(zres6)
+a6z = find(z6, "assigned-list")
+check("zoo run 6: switched back, Score resolves in slice 1 again (12.50)",
+      len(a6z) == 1 and str(a6z[0]["slice"]) == "1" and "12.50" in a6z[0]["values"], json.dumps(a6z))
+
+# --- zoo runs 7/8 (D6.2): the cross-host typed copy against live host switches ---------------------
+# run 7: source host A on filter 2, destination host G on filter 1; assignedA binds unqualified
+# (intake stamps it @2) and boundG receives the typed copy Score@2. Both values must resolve in
+# slice 2 - the copy through its SOURCE stamp, not through its own host's filter 1.
+zr7, zres7 = zoo_run(zoo_full_opts(
+    host_a="2", host_g="1",
+    assigned_a={"types": ["scale"], "value": ["Score"]},
+    bound_g={"value": [{"name": "Score", "types": ["scale"], "filterId": 2}]}), "run 7 (D6.2: copy @2, dest host on 1)")
+z7 = zoo_rows(zres7)
+a7z = find(z7, "assigned-list")
+bg7 = find(z7, "bindto-cross-host")
+check("zoo run 7: assignedA (own host A=2) resolves in slice 2 (17.73)",
+      len(a7z) == 1 and str(a7z[0]["slice"]) == "2" and "17.73" in a7z[0]["values"], json.dumps(a7z))
+check("zoo run 7: boundG typed copy keeps the SOURCE stamp: slice 2 (17.73) although its own host G=1",
+      len(bg7) == 1 and str(bg7[0]["slice"]) == "2" and "17.73" in bg7[0]["values"], json.dumps(bg7))
+check("zoo run 7: dataSetIds covers source (ds2) and destination host (ds1)", sorted(zr7.get("dataSetIds", [])) == [1, 2], str(zr7.get("dataSetIds")))
+auditz7 = provenance_audit(zres7)
+check("zoo run 7: PROVENANCE_AUDIT clean", auditz7 == ("false", "0"), str(auditz7))
+
+# run 8: switch the SOURCE host A back to filter 1 (delta run: boundG is NOT re-sent, its typed
+# term state carries the foreign stamp 2). The owns-the-stamp rule (D3.5) must restamp ONLY the
+# host-owned term: assignedA follows A to slice 1, boundG stays on the SOURCE stamp @2 - the copy
+# is a stable stamp, not a live reference; requalification to the (now matching) filter 1 would
+# show up as 12.50 and fail here.
+zr8, zres8 = zoo_run({"dataSetA": "1", "showMeta": True}, "run 8 (D6.2: source host switched, copy not re-sent)")
+z8 = zoo_rows(zres8)
+a8z = find(z8, "assigned-list")
+bg8 = find(z8, "bindto-cross-host")
+check("zoo run 8: assignedA followed its OWN host to slice 1 (12.50)",
+      len(a8z) == 1 and str(a8z[0]["slice"]) == "1" and "12.50" in a8z[0]["values"], json.dumps(a8z))
+check("zoo run 8: boundG foreign stamp NOT requalified by the source-host switch (still slice 2, 17.73)",
+      len(bg8) == 1 and str(bg8[0]["slice"]) == "2" and "17.73" in bg8[0]["values"], json.dumps(bg8))
+auditz8 = provenance_audit(zres8)
+check("zoo run 8: PROVENANCE_AUDIT clean", auditz8 == ("false", "0"), str(auditz8))
+
 print("\n" + ("ALL CHECKS PASSED" if not fails else f"{len(fails)} FAILURES: {fails}"))
 sys.exit(0 if not fails else 1)

@@ -7,7 +7,9 @@
 # (each dataset's own ColumnEncoder, prefix embeds the dataset id) and the dataframes' columns are
 # the very same strings, so a value indexes its column directly: slice[[value]]. Two differently
 # filtered versions of one dataset are two slices, both available; which one a form uses is the
-# filter id in its selection option (jaspBase::getSelectionSlice). Result strings are decoded back
+# filter id in its selection option - index the list with that id directly, no accessor needed
+# (jaspBase's slice-accessor family, e.g. getSelectionSlice, was retired with the zero-export
+# datasets contract). Result strings are decoded back
 # to the original names on the way to the GUI, so putting encoded names in tables/plots is not
 # just allowed, it is how provenance survives.
 # While such a run is active, readDataSet* stops: one 'current dataset' is meaningless here.
