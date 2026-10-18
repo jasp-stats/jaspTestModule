@@ -19,6 +19,12 @@
 
 #' Test Multi-DataSet
 #'
+#' @param datasets a named list of data.frames keyed by DATASET TITLE - the titles the
+#'   dataset selection options of this form carry (their defaults below, rendered as the
+#'   selection surface, e.g. "Iris" or "Iris - myfilter"). Every entry is loaded standalone
+#'   into the bridge workspace (runWrappedAnalysis stores them via jaspSyntax::loadDataSets,
+#'   each under its own name as the dataset title); the analysis itself receives its slices
+#'   keyed by filter id - the jaspBase datasets contract (see jaspBase::runJaspResults).
 multiDataSetFunc <- function(
           datasets = NULL,
           version = "1",
@@ -41,7 +47,29 @@ multiDataSetFunc <- function(
    options[["version"]] <- NULL
 
 
-   data <- if (!is.null(datasets) && length(datasets)) datasets[[1]] else NULL
+   # mds-plan D8.3: `datasets` must be a named list of data.frames keyed by DATASET TITLE - the
+   # titles the dataset selection options of this form carry (e.g. list(Iris = iris, Sleep = sleep)).
+   # No positional pin: the dataset that plays `data` (the frame the formula machinery evaluates
+   # against) is the first selection option whose effective value names one of the loaded datasets,
+   # resolved at run time from `options`. Every entry is loaded standalone by runWrappedAnalysis
+   # (jaspBase::storeDataSets -> jaspSyntax::loadDataSets, each under its own name as the dataset
+   # title); the analysis itself receives its slices keyed by filter id (jaspBase datasets contract).
+   selectionOptions <- c("dataSetA", "dataSetB")
+   data <- NULL
+   if (!is.null(datasets) && length(datasets)) {
+      for (selectionOption in selectionOptions) {
+         selectionValue <- options[[selectionOption]]
+         if (!is.character(selectionValue) || length(selectionValue) != 1L || is.na(selectionValue) || !nzchar(selectionValue)) next
+         if (selectionValue %in% names(datasets)) { data <- datasets[[selectionValue]]; break }
+         bareTitle <- sub(" - [^-]*$", "", selectionValue) # 'Title - filterName' surface: bare-title fallback, best effort
+         if (bareTitle %in% names(datasets)) { data <- datasets[[bareTitle]]; break }
+      }
+   if (is.null(data)) {
+      if (length(selectionOptions))
+         stop("`datasets` must be a named list keyed by dataset title (e.g. list(Iris = iris)): the dataset selection option(s) ", paste(selectionOptions, collapse = ", "), " select a title matching none of: ", paste(names(datasets), collapse = ", "))
+      data <- datasets[[1L]] # this form has no dataset selection surface: the first entry is the documented primary (jaspSyntax::loadDataSets)
+   }
+   }
 
    optionsWithFormula <- c("dataSetA", "dataSetB", "dependentA", "dependentB")
    for (name in optionsWithFormula) {

@@ -1,18 +1,41 @@
 # Multi-dataset aware analyses (jasp-desktop branch dataSetAwareVarForm, jaspBase branch
 # multiDataSetAware). An analysis whose Description/Analysis entry sets multiDataSetAware gets
-# every dataset it references as `datasets`. Engine runs key that list by SLICE id (the resolved
-# filter id of each queued dataset+filter pair, attrs "dataSetIds"/"dataSetNames" map a key back),
-# jaspTools handouts key it by dataset id - both are indexed safely through jaspBase's helpers.
-# Encoding stays PER DATASET: variable options carry names like "JASPColumn_<dataSetId>_<n>_Encoded"
-# (each dataset's own ColumnEncoder, prefix embeds the dataset id) and the dataframes' columns are
-# the very same strings, so a value indexes its column directly: slice[[value]]. Two differently
-# filtered versions of one dataset are two slices, both available; which one a form uses is the
-# filter id in its selection option - index the list with that id directly, no accessor needed
-# (jaspBase's slice-accessor family, e.g. getSelectionSlice, was retired with the zero-export
-# datasets contract). Result strings are decoded back
-# to the original names on the way to the GUI, so putting encoded names in tables/plots is not
-# just allowed, it is how provenance survives.
-# While such a run is active, readDataSet* stops: one 'current dataset' is meaningless here.
+# every dataset its options reference as `datasets`. Engine runs AND jaspTools::runAnalysis
+# handouts both key that list by SLICE id - the resolved filter id of each queued dataset+filter
+# pair (attrs "dataSetIds"/"dataSetNames" map a key back to its dataset) - so both are indexed
+# the same way: the form's dataset selection option holds exactly that id, `datasets[[key]]` is
+# the whole API, no accessor needed (jaspBase's slice-accessor family, e.g. getSelectionSlice,
+# was retired with the zero-export datasets contract).
+# Encoding stays PER FILTER: variable options carry names like
+# "JASPColumn_D<dsId>_F<filterId>_<n>_Encoded" (the filter's encoder-view prefix embeds both
+# ids) and the dataframes' columns are the very same strings, so a value indexes its column
+# directly: slice[[value]]. Two differently filtered versions of one dataset are two slices,
+# both available. Result strings are decoded back to the original names on the way to the GUI
+# (Engine::sendString and the rbridge callbacks, all consumers of the one global strict decode
+# table), so putting encoded names in tables/plots is not just allowed, it is how provenance
+# survives: THE PROVENANCE IS IN THE NAME (mds-plan C1/C8), never in a side channel. While such
+# a run is active, readDataSet* stops: one 'current dataset' is meaningless here.
+#
+# Options contract (mds-plan C8/C11, the Phase-3 flip): `options$.meta` is GENERATED at send
+# time and carries no dataSetId/filterId; the transient `.filterIds` sidecar is stripped at the
+# engine boundary before R sees anything. metaDump() below echoes both facts as the
+# PROVENANCE_AUDIT marker the RPC verifier asserts on every run.
+#
+# Qualified column references (mds-plan plan §5, cards D8.1/D8.2/D8.4): a TERM option may
+# arrive with qualified surface forms ("Dataset"."Filter"."Column"("Type"), minimal per
+# context); the C++ appliers parse them into typed terms with filterIds before the run, so R
+# receives them as ordinary encoded names - no R-side grammar (C14). A STRING option (plain
+# text input) receives the qualified form verbatim - the D8.4 v1 stance: it passes through and
+# modules slice on it or not, at their choice; module code that needs to interpret one uses
+# the echo pattern of multiDataSetControlsInternal (report what was received, then resolve on
+# demand) and never re-implements the token grammar.
+#
+# The two aware analyses here: multiDataSetFuncInternal (form testMultiDataSet.qml - two
+# per-list dataset selection options dataSetA/dataSetB, the D8.3 wrapper fixture) and
+# multiDataSetControlsInternal (the component zoo testMultiDataSetControls.qml, mds-plan
+# D6.1/D6.2: assigned lists, row controls with same-name twins, interactions, factor levels
+# via encodeThis, a textarea host, a cross-host typed bindTo copy - each reports what it
+# received and where it resolved).
 
 multiDataSetFuncInternal <- function(jaspResults, dataset, options, datasets = NULL) {
   aware <- !is.null(datasets)
