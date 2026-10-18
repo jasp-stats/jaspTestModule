@@ -1,4 +1,16 @@
 # Multi-dataset aware feature — status (2026-10-08, post FilterSelect refactor)
+>
+> **SUPERSEDED (2026-10-18, mds-plan D9.1).** This is a historical snapshot of the pre-plan
+> (2026-10-08) FilterSelect-refactor era. Several mechanisms it names were replaced by the
+> mds-plan implementation (the typed per-term provenance, per-filter encoder views, the one
+> global strict decode table, generated send-time `.meta`): `JASPControl::effectiveVarInfo()`
+> / `effectiveSelectionFilter()` / `varInfoForItem()` (walk deleted, D4.1 — successors:
+> `resolvedSelectionHost()`/`resolvedVarInfo()`), `createMeta` stamps (generated send-time
+> `.meta` + the transient `.filterIds` sidecar, C8/C11), `.sliceKeyForDataSet` (retired with
+> the zero-export datasets contract), and "jaspTools handouts keyed by dataset id" (stale —
+> both engine runs and jaspTools handouts key the datasets list by the resolved filter id).
+> The current module-author contract lives in `R/multiDataSet.R`; the "Done" section below is
+> the commit log of that era and is kept verbatim as history.
 
 ## Decided design (ground truth, v2 — supersedes the linked-dropdown v1)
 - Options and dataset slices share the ENCODED namespace (`JASPColumn_<dsId>_<n>_Encoded`);
