@@ -362,21 +362,33 @@ EMPTY_INTER = {"types": [], "value": [], "optionKey": "components"}
 EMPTY_CODEF = {"modelOriginal": "", "model": "", "columns": []}
 
 def zoo_full_opts(host_a="1", host_b="", host_c="", host_d="", host_f="", host_g="",
-                  assigned_a=None, assigned_b=None, rows_c=None, bound_g=None,
-                  interaction_d=None, factors_e=None, code_f=None, combo_a="",
+                  host_j="", host_k="",
+                  assigned_a=None, assigned_b=None, assigned_k=None, rows_c=None, bound_g=None,
+                  interaction_d=None, factors_e=None, factors_k=None, pairs_j=None, code_f=None,
+                  combo_a="", combo_i="", text_h="", rows_h=5, double_h=1.5, slider_h=0.5,
+                  radio_h="mean", gate_h=False, gated_h=10.0, table_l=None,
                   plain_switch=False, show_meta=True):
     opts = {
         "dataSetA": host_a, "dataSetB": host_b, "dataSetC": host_c,
         "dataSetD": host_d, "dataSetF": host_f, "dataSetG": host_g,
+        "dataSetJ": host_j, "dataSetK": host_k,
         "assignedA": assigned_a or dict(EMPTY_TERMS),
         "assignedB": assigned_b or dict(EMPTY_TERMS),
+        "assignedK": assigned_k or dict(EMPTY_TERMS),
         "rowsC":     rows_c or dict(EMPTY_ROWS),
         "boundG":    bound_g or {"value": []},
         "interactionD": interaction_d or dict(EMPTY_INTER),
         "factorsE":  factors_e or [],
+        "factorsK":  factors_k or [],
+        "pairsJ":    pairs_j or dict(EMPTY_TERMS),
         "codeF":     code_f or dict(EMPTY_CODEF),
-        "comboA": combo_a, "comboG": "first", "plainSwitch": plain_switch,
+        "comboA": combo_a, "comboI": combo_i, "comboG": "first",
+        "textH": text_h, "rowsH": rows_h, "doubleH": double_h, "sliderH": slider_h,
+        "radioH": radio_h, "gateH": gate_h, "gatedH": gated_h,
+        "plainSwitch": plain_switch,
     }
+    if table_l is not None:
+        opts["tableL"] = table_l
     if show_meta:
         opts["showMeta"] = True
     return opts
@@ -447,11 +459,13 @@ ab = find(z2, "assigned-host")
 check("zoo run 2: assignedB (own host) Condition resolves in slice 2 with its levels",
       len(ab) == 1 and str(ab[0]["slice"]) == "2" and ab[0]["values"].startswith("X"), json.dumps(ab))
 
-# combobox (Zoo A): plain string value; NOTE the namespace finding - a DropDown is not a list
-# host (no dataSetSelectionOption, resolvedSelectionHost stays the analysis level per C13), so
-# its value encodes through the FORM namespace (shown filter = DataSet 2 here), not zooVarsA's.
-# The zoo asserts the honest contract: value stays a plain string (never term-objectified,
-# landmine 4) and roundtrips encoded->decoded intact.
+# combobox (Zoo A): plain string value. NB the namespace finding, UPDATED by the mds-zoo
+# expansion: comboA's `source` used to be a broken QML binding (`source: zooVarsA` - a bare
+# identifier that does not exist; ReferenceError in the runtime log), so the dropdown silently
+# had no option list and its value encoded through the analysis-level namespace. With the source
+# fixed to the string-name form ("zooVarsA") a dropdown INHERITS ITS SOURCE's host namespace:
+# the value now encodes through zooVarsA's host (dataSetA). Run 9 pins that strictly; this
+# legacy check keeps its tolerance (the value stays plain and roundtrips either way).
 ca = find(z2, "combobox-host")
 check("zoo run 2: comboA 'Score' stays plain and resolves in exactly one slice (analysis-level namespace)",
       len(ca) == 1 and ca[0]["received"] == "Score" and str(ca[0]["slice"]) in ("1", "2"), json.dumps(ca))
@@ -582,6 +596,416 @@ check("zoo run 8: boundG foreign stamp NOT requalified by the source-host switch
       len(bg8) == 1 and str(bg8[0]["slice"]) == "2" and "17.73" in bg8[0]["values"], json.dumps(bg8))
 auditz8 = provenance_audit(zres8)
 check("zoo run 8: PROVENANCE_AUDIT clean", auditz8 == ("false", "0"), str(auditz8))
+
+# ----------------------------------------------------------------------------
+# mds-zoo expansion - the NEW control families (Zoo H-L), the RESULTS side and
+# the option flows. The point of the expansion: data and flows must be VISIBLE
+# and the verifier must assert RESULTS-SIDE content, not just option roundtrips.
+#
+# Results inventory asserted below:
+#   "Loaded data - <title> (slice <key>...)"  the actual loaded DATA per slice:
+#       every column's decoded name AND its first `rowsH` values (head per slice)
+#   "Controls provenance"        extended with the new families
+#   "Scalar & simple control echoes"  scalar families as received + used-in
+#   "Option flows"               the flow demonstrations
+#   "Cross-slice computations"   computations across slices/lists of different provenance
+#   "encodeThis recode demo"     Zoo E's levels APPLIED to a real column
+#   "Gated sub-result"           EXISTS ONLY while gateH is on (a gate means absence)
+#
+# Flows (trigger -> effect, each verified by a delta run + results-side diff):
+#   F1 assignedA content  -> comboI's option list & effective selection (dependent dropdown)
+#   F2 gateH checkbox     -> the gated sub-result exists / vanishes; gatedH shifts its numbers
+#   F3 rowsH integer      -> preview row count AND Zoo L's table row count
+#   F4 interactionD terms -> the interaction-product rows of the cross-slice table
+#   F5 tableL cells       -> the multiplier statistic (cells are USED, not just echoed)
+#   F6 radioH             -> the radio-driven statistic (sum vs mean)
+#
+# Expected statistics are computed from the same CSVs the datasets load, so the
+# assertions are value-level. Slice column composition follows from the stamped
+# namespaces (each asserted row documents where its term was stamped).
+# ----------------------------------------------------------------------------
+
+import csv as _csvmod
+
+def _read_columns(path):
+    with open(path) as f:
+        rows = list(_csvmod.DictReader(f))
+    cols = {}
+    for k in rows[0].keys():
+        vals = [r[k] for r in rows]
+        try:
+            cols[k] = [float(v) for v in vals]
+        except ValueError:
+            cols[k] = vals
+    return cols
+
+A = _read_columns(A_CSV)
+B = _read_columns(B_CSV)
+
+def fmt(x, nd=2): return f"{x:.{nd}f}"
+def mean(v): return sum(v) / len(v)
+
+# the analysis-level namespace of a fresh RPC session: the SHOWN dataset is the last loaded one
+# (DataSet 2, filter 2) - hostless panels (the FactorsForm's) stamp there.
+ANALYSIS_SLICE = "2"
+
+def find_table(res, title_prefix):
+    return next((t for t in tables(res.get("results", res)).values()
+                 if str(t.get("title", "")).startswith(title_prefix)), None)
+
+import html as _htmlmod
+
+def table_rows(t):
+    if not t: return []
+    fields, fm, rks = field_maps(t)
+    # jaspBase HTML-escapes string cells ("->" arrives as "-&gt;"); unescape for assertions
+    return [{f: _htmlmod.unescape(str(fm[f].get(r))) if isinstance(fm[f].get(r), str) else fm[f].get(r)
+             for f in fields} for r in rks]
+
+def no_raw_tokens(res, tag):
+    raw = json.dumps(res)
+    check(f"{tag}: no raw JASPColumn_* in results", "JASPColumn" not in raw)
+    check(f"{tag}: no raw JaspExtraOptions_* in results", "JaspExtraOptions" not in raw)
+
+# --- zoo run 9: the expanded zoo, all new families populated --------------------------------------
+# Provenance story (fresh RPC session, shown dataset = DataSet 2):
+#   assignedA Score via host A(1) -> slice 1 | assignedB Score via host B(2) -> slice 2
+#   assignedK Group+Age via host K(1) -> slice 1 (Group feeds the encodeThis demo, Age is the
+#   factor term's source) | pairsJ Score+Age via host J(1) -> slice 1
+#   interactionD Score:Age via host D(1) -> slice 1 | factorsK Age -> hostless panel ->
+#   ANALYSIS-level namespace (slice 2) - the D3.2 deferral, pinned as behaviour
+zr9, zres9 = zoo_run(zoo_full_opts(
+    host_a="1", host_b="2", host_d="1", host_f="1", host_g="2", host_j="1", host_k="1",
+    assigned_a={"types": ["scale"], "value": ["Score"]},
+    assigned_b={"types": ["scale"], "value": ["Score"]},
+    # NB: the FactorsForm's factors can only hold terms that are in its SOURCE list (assignedK):
+    # a term outside the source is silently dropped by the form's model sync (verified live, run
+    # 9 originally sent Age here while assignedK held only Group -> "(none)"). Group is needed in
+    # the slice for the encodeThis demo, Age for the factor term, so the source carries both.
+    assigned_k={"types": ["nominal", "scale"], "value": ["Group", "Age"]},
+    interaction_d={"types": [["scale", "scale"]], "value": [{"components": ["Score", "Age"]}], "optionKey": "components"},
+    factors_e=[{"name": "Group", "levels": ["A", "B"]}],
+    factors_k=[{"name": "Fac1", "title": "Factor 1", "indicators": {"value": ["Age"], "types": [["scale"]]}}],
+    pairs_j={"types": ["scale", "scale"], "value": ["Score", "Age"]},
+    combo_a="Score", combo_i="Score", text_h="hello zoo", rows_h=4, double_h=2.0, slider_h=0.3,
+    radio_h="sum", gate_h=True, gated_h=12.0), "run 9 (expanded zoo: all new families)")
+
+z9 = zoo_rows(zres9)
+check("zoo run 9: provenance table present", z9 is not None)
+
+# (a) THE LOADED DATA - per-slice previews with real column names and values
+pv1 = find_table(zres9, "Loaded data - DataSet 1")
+pv2 = find_table(zres9, "Loaded data - DataSet 2")
+check("zoo run 9: loaded-data preview for slice 1 present", pv1 is not None,
+      str([t.get('title') for t in tables(zres9.get('results', zres9)).values()]))
+check("zoo run 9: loaded-data preview for slice 2 present", pv2 is not None)
+if pv1 and pv2:
+    check("zoo run 9: preview titles say 'first 4 rows' (rowsH flow)",
+          "first 4 rows" in pv1["title"] and "first 4 rows" in pv2["title"],
+          f"{pv1['title']!r} / {pv2['title']!r}")
+    r1, r2 = table_rows(pv1), table_rows(pv2)
+    check("zoo run 9: preview row count == rowsH (4)", len(r1) == 4 and len(r2) == 4,
+          f"{len(r1)}/{len(r2)}")
+    # values: slice 1 is DataSetA, slice 2 is DataSetB - the whole point
+    check("zoo run 9: slice 1 shows DataSetA's Score values (12.5, 9.1, ...)",
+          any(abs((row.get("Score") or -999) - A["Score"][i]) < 1e-9 for i, row in enumerate(r1)),
+          json.dumps(r1)[:200])
+    check("zoo run 9: slice 2 shows DataSetB's Score values (22.4, 14.8, ...) - NOT a repeat of A",
+          any(abs((row.get("Score") or -999) - B["Score"][i]) < 1e-9 for i, row in enumerate(r2)),
+          json.dumps(r2)[:200])
+    check("zoo run 9: slice 1 shows the Group levels (nominal values, not numbers)",
+          any(row.get("Group") in ("A", "B", "C") for row in r1), json.dumps(r1)[:200])
+    check("zoo run 9: previews carry decoded names, no raw tokens (fields)",
+          all("JASPColumn" not in f for f in [f["name"] for f in pv1["schema"]["fields"]] +
+              [f["name"] for f in pv2["schema"]["fields"]]))
+
+# (b) per-family provenance echoes for the new families
+dep = find(z9, "dropdown-dependent")
+check("zoo run 9: dependent dropdown comboI='Score' resolves in slice 1 via its SOURCE host (12.50)",
+      len(dep) == 1 and dep[0]["received"] == "Score" and str(dep[0]["slice"]) == "1" and "12.50" in dep[0]["values"],
+      json.dumps(dep))
+ca9 = find(z9, "combobox-host")
+check("zoo run 9: comboA (fixed source binding) encodes through its SOURCE host namespace -> slice 1",
+      len(ca9) == 1 and str(ca9[0]["slice"]) == "1" and "12.50" in ca9[0]["values"], json.dumps(ca9))
+
+pj = find(z9, "pairs-list")
+check("zoo run 9: pairsJ one PAIR 'Score + Age', both components in slice 1 (host J)",
+      len(pj) == 1 and pj[0]["received"] == "Score + Age" and str(pj[0]["slice"]) == "1", json.dumps(pj))
+import statistics as _stats
+_r = _stats.correlation(A["Score"], A["Age"])
+check("zoo run 9: pairsJ echo computes the pair correlation r=%.3f" % _r,
+      len(pj) == 1 and f"r = {fmt(_r, 3)}" in str(pj[0]["values"]), json.dumps(pj))
+
+fk = find(z9, "factors-form")
+check("zoo run 9: factorsK Fac1 received with title and var Age",
+      len(fk) == 1 and fk[0]["received"] == "Fac1" and "title=Factor 1" in fk[0]["rowChild"]
+      and "Age" in fk[0]["rowChild"], json.dumps(fk))
+check("zoo run 9: factorsK var Age resolves in the ANALYSIS-level namespace (slice 2) - the D3.2 hostless-panel deferral",
+      len(fk) == 1 and str(fk[0]["slice"]) == ANALYSIS_SLICE and "slices: 2" in str(fk[0]["values"]), json.dumps(fk))
+
+fs = [r for r in z9 if r["family"] == "factors-source" and r["received"] == "Group"]
+check("zoo run 9: assignedK Group (the factor SOURCE) resolves in ITS OWN host's slice 1 with levels",
+      len(fs) == 1 and str(fs[0]["slice"]) == "1" and fs[0]["values"].startswith("A, B, C"), json.dumps(fs))
+fs_age = [r for r in z9 if r["family"] == "factors-source" and r["received"] == "Age"]
+check("zoo run 9: assignedK Age (second source var) resolves in slice 1 with its values (31, 45, ...)",
+      len(fs_age) == 1 and str(fs_age[0]["slice"]) == "1" and str(fs_age[0]["values"]).startswith("31, 45, 28"),
+      json.dumps(fs_age))
+
+tv = find(z9, "tableview")
+check("zoo run 9: tableL echo '4 rows x 2 cols' (row count follows rowsH=4 via the QML binding)",
+      len(tv) == 1 and "4 rows x 2 cols" in tv[0]["received"], json.dumps(tv))
+
+# (c) scalar echoes
+se = table_rows(find_table(zres9, "Scalar & simple control echoes"))
+se_map = {r["option"]: r for r in se}
+check("zoo run 9: scalar echo table has all 7 scalar families",
+      set(se_map) == {"textH", "rowsH", "doubleH", "sliderH", "radioH", "gateH", "gatedH"}, str(sorted(se_map)))
+check("zoo run 9: textH echoes verbatim", se_map.get("textH", {}).get("received") == "hello zoo", json.dumps(se))
+check("zoo run 9: rowsH/doubleH/sliderH/radioH echo as received",
+      se_map.get("rowsH", {}).get("received") == "4" and abs(float(se_map.get("doubleH", {}).get("received") or 0) - 2.0) < 1e-9
+      and se_map.get("sliderH", {}).get("received") == "0.3" and se_map.get("radioH", {}).get("received") == "sum",
+      json.dumps([se_map.get(k) for k in ("rowsH", "doubleH", "sliderH", "radioH")]))
+check("zoo run 9: gateH true and gatedH annotated 'gate OPEN'",
+      se_map.get("gateH", {}).get("received") == "TRUE" and "gate OPEN" in str(se_map.get("gatedH", {}).get("received")),
+      json.dumps([se_map.get("gateH"), se_map.get("gatedH")]))
+
+# (d) flows table
+fl = table_rows(find_table(zres9, "Option flows"))
+fl_map = {r["flow"]: r for r in fl}
+check("zoo run 9: flows table has the 5 flow rows",
+      set(fl_map) == {"dependent dropdown", "checkbox gate", "number field -> shown rows",
+                      "radio -> statistic", "variables list -> interaction terms"}, str(sorted(fl_map)))
+check("zoo run 9: dependent-dropdown flow observed 'Score -> slice 1'",
+      '"Score" -> slice 1' in str(fl_map.get("dependent dropdown", {}).get("observed")), json.dumps(fl))
+check("zoo run 9: gate flow observed OPEN", "gate OPEN" in str(fl_map.get("checkbox gate", {}).get("observed")), json.dumps(fl))
+check("zoo run 9: rows flow observed rowsH=4, previews 4 rows, tableL 4 rows",
+      "rowsH=4" in str(fl_map.get("number field -> shown rows", {}).get("observed"))
+      and "4 rows" in str(fl_map.get("number field -> shown rows", {}).get("observed")), json.dumps(fl))
+
+# (e) cross-slice computations - value-level, computed from the CSVs
+cs = table_rows(find_table(zres9, "Cross-slice computations"))
+cs_map = {r["computation"]: r for r in cs}
+_exp_prod = mean([a * b for a, b in zip(A["Score"], A["Age"])])
+check("zoo run 9: interaction product mean(Score*Age) in slice 1 = %s" % fmt(_exp_prod, 3),
+      f"mean of product {fmt(_exp_prod, 3)}" in str(cs_map.get("interaction product", {}).get("value")), json.dumps(cs))
+_exp_cross = mean([a * b for a, b in zip(A["Score"], B["Score"])])
+check("zoo run 9: cross-host product Score@1 x Score@2 = %s (two different truths, one number)" % fmt(_exp_cross, 3),
+      f"mean of product {fmt(_exp_cross, 3)}" in str(cs_map.get("cross-host column product", {}).get("value"))
+      and "DataSet 1" in str(cs_map.get("cross-host column product", {}).get("inputs"))
+      and "DataSet 2" in str(cs_map.get("cross-host column product", {}).get("inputs")), json.dumps(cs))
+# slice 1's first numeric column is Age (wanted-cols are set-sorted): Age mean 38.00
+check("zoo run 9: tableview multipliers mean([1,2,3,4])=2.5 x mean(Age@1)=38.00 -> 95.000",
+      "scaled mean 95.000" in str(cs_map.get("tableview multipliers", {}).get("value")), json.dumps(cs))
+check("zoo run 9: doubleH=2.0 scaling -> 76.000", "scaled mean 76.000" in str(cs_map.get("real-field scaling", {}).get("value")), json.dumps(cs))
+check("zoo run 9: radio-driven statistic sum(Score@1) = 125.00",
+      "sum 125.00" in str(cs_map.get("radio-driven statistic", {}).get("value")), json.dumps(cs))
+
+# (f) encodeThis recode demo: factorsE levels APPLIED to the Group column of slice 1
+ed = table_rows(find_table(zres9, "encodeThis recode demo"))
+ed_map = {r["oldValue"]: r for r in ed}
+check("zoo run 9: encodeDemo decodes the extras factor name to 'Group' and finds it in slice 1",
+      all(r["slice"] == "1" for r in ed) and len(ed) == 3, json.dumps(ed))
+check("zoo run 9: encodeDemo recode A->A (n=4), B->B (n=3), C->B (n=3) - levels applied in order, capped",
+      ed_map.get("A", {}).get("newLabel") == "A" and ed_map.get("A", {}).get("n") == 4
+      and ed_map.get("B", {}).get("newLabel") == "B" and ed_map.get("B", {}).get("n") == 3
+      and ed_map.get("C", {}).get("newLabel") == "B" and ed_map.get("C", {}).get("n") == 3, json.dumps(ed))
+
+# (g) gated sub-result EXISTS while the gate is open; first numeric column of each slice is Age
+g9 = table_rows(find_table(zres9, "Gated sub-result"))
+def _gated_map(g):
+    # slice cell is "1 (DataSet 1)"; meanAbove arrives as a number
+    return {(str(r["slice"]).split(" ")[0], r["column"]): r for r in g}
+
+# (g) gated sub-result EXISTS while the gate is open. "First scale column" per slice:
+#     slice 1's is Age (scale); slice 2's factor-term Age arrives ORDINAL (the FactorsForm
+#     re-types its terms - documented finding) hence as an R factor, so firstScaleColumn
+#     picks Score there. Both deterministic.
+g9_map = _gated_map(g9)
+check("zoo run 9: gated sub-result present with threshold 12 in the title",
+      find_table(zres9, "Gated sub-result") is not None
+      and "12" in find_table(zres9, "Gated sub-result")["title"], json.dumps(g9))
+check("zoo run 9: gated Age@1: all 10 rows above 12 (mean 38.00)",
+      g9_map.get(("1", "Age"), {}).get("nAbove") == 10
+      and abs((g9_map.get(("1", "Age"), {}).get("meanAbove") or -999) - mean(A["Age"])) < 5e-3, json.dumps(g9))
+check("zoo run 9: gated Score@2 (factor-term Age arrives ordinal/factor, skipped): n=8 mean 19.45",
+      g9_map.get(("2", "Score"), {}).get("nAbove") == 8
+      and abs((g9_map.get(("2", "Score"), {}).get("meanAbove") or -999) - mean([s for s in B["Score"] if s > 12])) < 5e-3,
+      json.dumps(g9))
+
+check("zoo run 9: dataSetIds covers both datasets", sorted(zr9.get("dataSetIds", [])) == [1, 2], str(zr9.get("dataSetIds")))
+auditz9 = provenance_audit(zres9)
+check("zoo run 9: PROVENANCE_AUDIT clean (C8/C11)", auditz9 == ("false", "0"), str(auditz9))
+no_raw_tokens(zres9, "zoo run 9")
+
+# --- zoo run 10 (FLOW F1): the dependent dropdown follows its source -------------------------------
+# assignedA flips to Condition (host A=2): comboI's option list must follow, its effective
+# selection re-encodes through the source's NEW namespace (slice 2), and the RESULTS change.
+zr10, zres10 = zoo_run(zoo_full_opts(
+    host_a="2", host_b="2", host_d="1", host_f="1", host_g="2", host_j="1", host_k="1",
+    assigned_a={"types": ["nominal"], "value": ["Condition"]},
+    assigned_k={"types": ["nominal"], "value": ["Group"]},
+    factors_e=[{"name": "Group", "levels": ["A", "B"]}],
+    combo_i="Condition", text_h="hello zoo", rows_h=4, double_h=2.0, slider_h=0.3,
+    radio_h="sum", gate_h=True, gated_h=12.0), "run 10 (F1: dependent dropdown follows reassigned source)")
+z10 = zoo_rows(zres10)
+dep10 = find(z10, "dropdown-dependent")
+check("zoo run 10: comboI='Condition' received (option list followed assignedA)",
+      len(dep10) == 1 and dep10[0]["received"] == "Condition", json.dumps(dep10))
+check("zoo run 10: comboI resolves in the source's NEW namespace (slice 2, levels X, Y, Z)",
+      len(dep10) == 1 and str(dep10[0]["slice"]) == "2" and str(dep10[0]["values"]).startswith("X, Y, Z"), json.dumps(dep10))
+fl10 = {r["flow"]: r for r in table_rows(find_table(zres10, "Option flows"))}
+check("zoo run 10: flow row observed the flipped source list and selection",
+      "[Condition]" in str(fl10.get("dependent dropdown", {}).get("observed"))
+      and '"Condition" -> slice 2' in str(fl10.get("dependent dropdown", {}).get("observed")), json.dumps(fl10))
+auditz10 = provenance_audit(zres10)
+check("zoo run 10: PROVENANCE_AUDIT clean", auditz10 == ("false", "0"), str(auditz10))
+no_raw_tokens(zres10, "zoo run 10")
+
+# --- zoo run 11 (FLOW F2a): gate closed -> the gated sub-result must NOT exist ---------------------
+zr11, zres11 = zoo_run(zoo_full_opts(
+    host_a="1", host_b="2", host_d="1", host_f="1", host_g="2", host_j="1", host_k="1",
+    assigned_a={"types": ["scale"], "value": ["Score"]},
+    assigned_k={"types": ["nominal"], "value": ["Group"]},
+    factors_e=[{"name": "Group", "levels": ["A", "B"]}],
+    combo_a="Score", combo_i="Score", text_h="hello zoo", rows_h=4, double_h=2.0, slider_h=0.3,
+    radio_h="sum", gate_h=False, gated_h=12.0), "run 11 (F2a: gate closed)")
+check("zoo run 11: NO 'Gated sub-result' table while gateH is off (a gate means absence)",
+      find_table(zres11, "Gated sub-result") is None,
+      str([t.get("title") for t in tables(zres11.get("results", zres11)).values()]))
+se11 = {r["option"]: r for r in table_rows(find_table(zres11, "Scalar & simple control echoes"))}
+check("zoo run 11: gatedH still RECEIVED but annotated 'gate closed'",
+      "gate closed" in str(se11.get("gatedH", {}).get("received")), json.dumps(se11))
+fl11 = {r["flow"]: r for r in table_rows(find_table(zres11, "Option flows"))}
+check("zoo run 11: gate flow row says closed -> no gated sub-result",
+      "gate closed" in str(fl11.get("checkbox gate", {}).get("observed")), json.dumps(fl11))
+no_raw_tokens(zres11, "zoo run 11")
+
+# --- zoo run 12 (FLOW F2b): gate open with a different threshold -> numbers move --------------------
+zr12, zres12 = zoo_run(zoo_full_opts(
+    host_a="1", host_b="2", host_d="1", host_f="1", host_g="2", host_j="1", host_k="1",
+    assigned_a={"types": ["scale"], "value": ["Score"]},
+    assigned_k={"types": ["nominal", "scale"], "value": ["Group", "Age"]},
+    factors_e=[{"name": "Group", "levels": ["A", "B"]}],
+    factors_k=[{"name": "Fac1", "title": "Factor 1", "indicators": {"value": ["Age"], "types": [["scale"]]}}],
+    combo_a="Score", combo_i="Score", text_h="hello zoo", rows_h=4, double_h=2.0, slider_h=0.3,
+    radio_h="sum", gate_h=True, gated_h=40.0), "run 12 (F2b: gate open, threshold 40)")
+g12 = table_rows(find_table(zres12, "Gated sub-result"))
+g12_map = _gated_map(g12)
+_a1_above = [a for a in A["Age"] if a > 40]
+check("zoo run 12: threshold 40 in the title", "40" in find_table(zres12, "Gated sub-result")["title"], json.dumps(g12))
+check("zoo run 12: gated Age@1 n=%d mean %s (threshold moved the numbers)" % (len(_a1_above), fmt(mean(_a1_above))),
+      g12_map.get(("1", "Age"), {}).get("nAbove") == len(_a1_above)
+      and abs((g12_map.get(("1", "Age"), {}).get("meanAbove") or -999) - mean(_a1_above)) < 5e-3, json.dumps(g12))
+check("zoo run 12: NO slice-2 row (its factor-term Age arrives ordinal/factor; nothing numeric survives the threshold)",
+      all(not str(r["slice"]).startswith("2") for r in g12), json.dumps(g12))
+no_raw_tokens(zres12, "zoo run 12")
+
+# --- zoo run 13/14 (FLOW F3): the integer field drives the shown row count --------------------------
+zr13, zres13 = zoo_run(zoo_full_opts(
+    host_a="1", host_b="2", host_d="1", host_f="1", host_g="2", host_j="1", host_k="1",
+    assigned_a={"types": ["scale"], "value": ["Score"]},
+    assigned_k={"types": ["nominal"], "value": ["Group"]},
+    factors_e=[{"name": "Group", "levels": ["A", "B"]}],
+    combo_a="Score", combo_i="Score", text_h="hello zoo", rows_h=3, double_h=2.0, slider_h=0.3,
+    radio_h="sum", gate_h=True, gated_h=12.0), "run 13 (F3: rowsH=3)")
+pv13 = find_table(zres13, "Loaded data - DataSet 1")
+check("zoo run 13: preview title says 'first 3 rows'", pv13 is not None and "first 3 rows" in pv13["title"],
+      pv13["title"] if pv13 else None)
+check("zoo run 13: preview DATA has 3 rows", pv13 is not None and len(table_rows(pv13)) == 3)
+tv13 = find(z13 := zoo_rows(zres13), "tableview")
+check("zoo run 13: Zoo L table shrank to 3 rows (the same integer drives it)",
+      len(tv13) == 1 and "3 rows x 2 cols" in tv13[0]["received"], json.dumps(tv13))
+fl13 = {r["flow"]: r for r in table_rows(find_table(zres13, "Option flows"))}
+check("zoo run 13: rows flow observed rowsH=3", "rowsH=3" in str(fl13.get("number field -> shown rows", {}).get("observed")), json.dumps(fl13))
+no_raw_tokens(zres13, "zoo run 13")
+
+zr14, zres14 = zoo_run(zoo_full_opts(
+    host_a="1", host_b="2", host_d="1", host_f="1", host_g="2", host_j="1", host_k="1",
+    assigned_a={"types": ["scale"], "value": ["Score"]},
+    assigned_k={"types": ["nominal"], "value": ["Group"]},
+    factors_e=[{"name": "Group", "levels": ["A", "B"]}],
+    combo_a="Score", combo_i="Score", text_h="hello zoo", rows_h=7, double_h=2.0, slider_h=0.3,
+    radio_h="sum", gate_h=True, gated_h=12.0), "run 14 (F3: rowsH=7)")
+pv14 = find_table(zres14, "Loaded data - DataSet 1")
+check("zoo run 14: preview back to 7 rows (both directions of the flow verified)",
+      pv14 is not None and len(table_rows(pv14)) == 7 and "first 7 rows" in pv14["title"])
+no_raw_tokens(zres14, "zoo run 14")
+
+# --- zoo run 15 (FLOW F6): the radio group switches the statistic -----------------------------------
+zr15, zres15 = zoo_run(zoo_full_opts(
+    host_a="1", host_b="2", host_d="1", host_f="1", host_g="2", host_j="1", host_k="1",
+    assigned_a={"types": ["scale"], "value": ["Score"]},
+    assigned_k={"types": ["nominal"], "value": ["Group"]},
+    factors_e=[{"name": "Group", "levels": ["A", "B"]}],
+    combo_a="Score", combo_i="Score", text_h="hello zoo", rows_h=4, double_h=2.0, slider_h=0.3,
+    radio_h="mean", gate_h=True, gated_h=12.0), "run 15 (F6: radio -> mean)")
+cs15 = {r["computation"]: r for r in table_rows(find_table(zres15, "Cross-slice computations"))}
+check("zoo run 15: radio-driven statistic switched to mean(Score@1) = 12.50 (was sum 125.00 in run 9)",
+      "mean 12.50" in str(cs15.get("radio-driven statistic", {}).get("value")), json.dumps(cs15))
+se15 = {r["option"]: r for r in table_rows(find_table(zres15, "Scalar & simple control echoes"))}
+check("zoo run 15: radioH echo shows 'mean'", se15.get("radioH", {}).get("received") == "mean", json.dumps(se15))
+no_raw_tokens(zres15, "zoo run 15")
+
+# --- zoo run 16 (FLOW F4): the variables list drives the interaction terms --------------------------
+zr16, zres16 = zoo_run(zoo_full_opts(
+    host_a="1", host_b="2", host_d="1", host_f="1", host_g="2", host_j="1", host_k="1",
+    assigned_a={"types": ["scale"], "value": ["Score"]},
+    assigned_k={"types": ["nominal"], "value": ["Group"]},
+    factors_e=[{"name": "Group", "levels": ["A", "B"]}],
+    interaction_d={"types": [["scale"]], "value": [{"components": ["Score"]}], "optionKey": "components"},
+    combo_a="Score", combo_i="Score", text_h="hello zoo", rows_h=4, double_h=2.0, slider_h=0.3,
+    radio_h="sum", gate_h=True, gated_h=12.0), "run 16 (F4: interaction reduced to a single component)")
+cs16 = table_rows(find_table(zres16, "Cross-slice computations"))
+check("zoo run 16: interaction-product row GONE after the list changed (single-component terms make no product)",
+      all(r["computation"] != "interaction product" for r in cs16), json.dumps(cs16))
+itr16 = find(zoo_rows(zres16), "interaction-list")
+check("zoo run 16: the provenance echo still shows the received term (order=1)",
+      len(itr16) == 1 and "order=1" in itr16[0]["rowChild"], json.dumps(itr16))
+fl16 = {r["flow"]: r for r in table_rows(find_table(zres16, "Option flows"))}
+check("zoo run 16: flow row observed '1 term(s) received'",
+      "1 term(s) received" in str(fl16.get("variables list -> interaction terms", {}).get("observed")), json.dumps(fl16))
+no_raw_tokens(zres16, "zoo run 16")
+
+# --- zoo run 17 (FLOW F5): tableL cells are USED, not just echoed ------------------------------------
+zr17, zres17 = zoo_run(zoo_full_opts(
+    host_a="1", host_b="2", host_d="1", host_f="1", host_g="2", host_j="1", host_k="1",
+    assigned_a={"types": ["scale"], "value": ["Score"]},
+    assigned_k={"types": ["nominal"], "value": ["Group"]},
+    factors_e=[{"name": "Group", "levels": ["A", "B"]}],
+    combo_a="Score", combo_i="Score", text_h="hello zoo", rows_h=4, double_h=2.0, slider_h=0.3,
+    radio_h="sum", gate_h=True, gated_h=12.0,
+    table_l=[{"name": "Multiplier", "levels": ["r1", "r2", "r3", "r4"], "values": [2, 2, 2, 2]},
+             {"name": "Offset",    "levels": ["r1", "r2", "r3", "r4"], "values": [0, 0, 0, 0]}]),
+    "run 17 (F5: explicit tableL multipliers)")
+tv17 = find(zoo_rows(zres17), "tableview")
+check("zoo run 17: tableL echo shows the SENT cells (2, 2, 2, 2)",
+      len(tv17) == 1 and "2, 2, 2, 2" in tv17[0]["rowChild"], json.dumps(tv17))
+cs17 = {r["computation"]: r for r in table_rows(find_table(zres17, "Cross-slice computations"))}
+check("zoo run 17: multiplier mean 2.00 x mean(Age@1)=38.00 -> scaled mean 76.000 (cells entered the computation)",
+      "scaled mean 76.000" in str(cs17.get("tableview multipliers", {}).get("value")), json.dumps(cs17))
+no_raw_tokens(zres17, "zoo run 17")
+
+# --- zoo run 18 (REGRESSION, mds-plan post): nominal factor term in a namespace lacking the column --
+# Pre-fix this FATALed the whole run (rbridge_readDataSetRequested: "gets 'Group.nominal' but its
+# not a columnname at all"): the FactorsForm panel is hostless, its term stamps at the ANALYSIS
+# level (DataSet 2, which has no Group), and the collector queued a column that dataset does not
+# have. The collector now refuses to queue nonexistent columns; the run must complete with an
+# honest unresolved row.
+zr18, zres18 = zoo_run(zoo_full_opts(
+    host_a="1", host_b="2", host_d="1", host_f="1", host_g="2", host_j="1", host_k="1",
+    assigned_a={"types": ["scale"], "value": ["Score"]},
+    assigned_k={"types": ["nominal"], "value": ["Group"]},
+    factors_e=[{"name": "Group", "levels": ["A", "B"]}],
+    factors_k=[{"name": "Fac1", "title": "Factor 1", "indicators": {"value": ["Group"], "types": [["nominal"]]}}],
+    combo_a="Score", combo_i="Score", text_h="hello zoo", rows_h=4, double_h=2.0, slider_h=0.3,
+    radio_h="sum", gate_h=True, gated_h=12.0), "run 18 (regression: nominal factor term, namespace lacks the column)")
+check("zoo run 18: the previously-fatal run COMPLETES", zr18.get("status") == "complete", str(zr18.get("status")))
+fk18 = find(zoo_rows(zres18), "factors-form")
+check("zoo run 18: the factor's Group term arrives unresolved (honest '-' row, no phantom resolution)",
+      len(fk18) == 1 and "Group" in fk18[0]["rowChild"] and str(fk18[0]["slice"]) == "-", json.dumps(fk18))
+auditz18 = provenance_audit(zres18)
+check("zoo run 18: PROVENANCE_AUDIT clean after the regression case", auditz18 == ("false", "0"), str(auditz18))
+no_raw_tokens(zres18, "zoo run 18")
 
 print("\n" + ("ALL CHECKS PASSED" if not fails else f"{len(fails)} FAILURES: {fails}"))
 sys.exit(0 if not fails else 1)
