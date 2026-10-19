@@ -30,23 +30,37 @@ multiDataSetControlsFunc <- function(
           version = "1",
           assignedA = list(types = list(), value = list()),
           assignedB = list(types = list(), value = list()),
+          assignedK = list(types = list(), value = list()),
           boundG = list(types = list(), value = list()),
           codeF = list(columns = list(), model = "", modelOriginal = ""),
           comboA = list(types = "unknown", value = ""),
           comboG = "first",
+          comboI = list(types = "unknown", value = ""),
           dataSetA = "",
           dataSetB = "",
           dataSetC = "",
           dataSetD = "",
           dataSetF = "",
           dataSetG = "",
+          dataSetJ = "",
+          dataSetK = "",
+          doubleH = 1.5,
           factorsE = list(),
+          factorsK = list(list(indicators = list(), name = "Fac1", title = "Factor 1")),
+          gateH = FALSE,
+          gatedH = 10,
           interactionD = list(optionKey = "components", types = list(), value = list()),
+          pairsJ = list(),
           plainSwitch = FALSE,
           plotHeight = 320,
           plotWidth = 480,
+          radioH = "mean",
           rowsC = list(optionKey = "variable", types = list(), value = list()),
-          showMeta = FALSE) {
+          rowsH = 5,
+          showMeta = FALSE,
+          sliderH = 0.5,
+          tableL = list(list(levels = list("Row 0", "Row 1", "Row 2", "Row 3", "Row 4"), name = "data 1", values = list(1, 2, 3, 4, 5)), list(levels = list("Row 0", "Row 1", "Row 2", "Row 3", "Row 4"), name = "data 2", values = list(0.5, 1, 1.5, 2, 2.5))),
+          textH = "") {
 
    defaultArgCalls <- formals(jaspTestModule::multiDataSetControlsFunc)
    defaultArgs <- lapply(defaultArgCalls, eval)
@@ -65,7 +79,7 @@ multiDataSetControlsFunc <- function(
    # resolved at run time from `options`. Every entry is loaded standalone by runWrappedAnalysis
    # (jaspBase::storeDataSets -> jaspSyntax::loadDataSets, each under its own name as the dataset
    # title); the analysis itself receives its slices keyed by filter id (jaspBase datasets contract).
-   selectionOptions <- c("dataSetB", "dataSetG", "dataSetF", "dataSetC", "dataSetA", "dataSetD")
+   selectionOptions <- c("dataSetB", "dataSetK", "dataSetG", "dataSetF", "dataSetJ", "dataSetC", "dataSetA", "dataSetD")
    data <- NULL
    if (!is.null(datasets) && length(datasets)) {
       for (selectionOption in selectionOptions) {
@@ -82,7 +96,7 @@ multiDataSetControlsFunc <- function(
    }
    }
 
-   optionsWithFormula <- c("assignedA", "assignedB", "boundG", "codeF", "comboA", "comboG", "dataSetA", "dataSetB", "dataSetC", "dataSetD", "dataSetF", "dataSetG", "factorsE", "interactionD", "rowsC")
+   optionsWithFormula <- c("assignedA", "assignedB", "assignedK", "boundG", "codeF", "comboA", "comboG", "comboI", "dataSetA", "dataSetB", "dataSetC", "dataSetD", "dataSetF", "dataSetG", "dataSetJ", "dataSetK", "factorsE", "factorsK", "interactionD", "pairsJ", "rowsC", "tableL")
    for (name in optionsWithFormula) {
       if ((name %in% optionsWithFormula) && inherits(options[[name]], "formula")) options[[name]] = jaspBase::jaspFormula(options[[name]], data)   }
 

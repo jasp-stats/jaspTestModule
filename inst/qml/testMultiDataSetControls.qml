@@ -56,7 +56,17 @@ Form
 			"<li>Zoo E: factor/level names roundtrip through the extras encoder.</li>" +
 			"<li>Zoo F: the R-code textarea encodes its tokens through its own host.</li>" +
 			"<li>Zoo G: a typed copy bound across differently-selected hosts keeps the SOURCE filterId.</li>" +
+			"<li>Zoo H: scalar families (text / integer / real / slider / radio / checkbox-gated field) echo " +
+			"as plain values AND drive results: the integer sets the preview row count, the radio picks the " +
+			"flow statistic, the checkbox gates a sub-result.</li>" +
+			"<li>Zoo I: a DEPENDENT dropdown - its option list is driven by Zoo A's assigned list.</li>" +
+			"<li>Zoo J: a paired variables list (own selection); the pair is one term over two columns.</li>" +
+			"<li>Zoo K: a FactorsForm (the FactorsList family) fed by an assigned list with its own selection.</li>" +
+			"<li>Zoo L: a bound TableView whose row count follows Zoo H's integer field.</li>" +
 			"</ul>" +
+			"The results panel shows the LOADED DATA per slice (head of every column, row count = Zoo H's " +
+			"integer), the per-family provenance echo, the scalar echoes, the flow demonstrations and the " +
+			"cross-slice computations." +
 			"'Show options .meta' adds the PROVENANCE_AUDIT (R must never see provenance: C8/C11)."
 	}
 
@@ -79,12 +89,15 @@ Form
 			}
 			// a combobox served by the same host: values stay PLAIN strings (never term objects)
 			// while the selection resolves through the host namespace (landmine: no
-			// term-objectification of combos).
+			// term-objectification of combos). NB: the source must be the STRING NAME of the
+			// control - a bare `source: zooVarsA` is a QML ReferenceError (the id does not exist;
+			// found via the runtime log: "ReferenceError: zooVarsA is not defined") and the
+			// dropdown silently ran with an empty option list until fixed.
 			DropDown
 			{
 				name:			"comboA"
-				label:			qsTr("Column combo")
-				source:			zooVarsA
+				label:			qsTr("Column combo (options from the available list)")
+				source:			"zooVarsA"
 				addEmptyValue:	true
 			}
 		}
@@ -194,6 +207,167 @@ Form
 			name:					"boundG"
 			title:					qsTr("Bound from assignedA (typed copy)")
 			dataSetSelectionOption:	"dataSetG"
+		}
+	}
+
+	// ---- Zoo H: scalar control families -----------------------------------------------------------
+	// Every scalar family a real form binds, each with an R-side consumer that actually USES the
+	// value (not just echoes it): the integer drives the data-preview row count and Zoo L's row
+	// count, the radio picks the flow statistic, the checkbox gates a whole sub-result, the real
+	// and the gated field enter the cross-slice computations. Slider is echo-only (a fraction has
+	// no sensible computation here - documented in R/multiDataSetControls.R, not faked).
+	Section {
+		title: qsTr("Zoo H - scalar controls (text / integer / real / slider / radio / gated)")
+
+		columns: 2
+
+		TextField
+		{
+			name:			"textH"
+			label:			qsTr("Text field (echoed verbatim)")
+			placeholderText: qsTr("echo me")
+		}
+		IntegerField
+		{
+			id:				rowsH
+			name:			"rowsH"
+			label:			qsTr("Preview rows (drives data previews + Zoo L)")
+			defaultValue:	5
+			min:			1
+			max:			10
+		}
+		DoubleField
+		{
+			name:			"doubleH"
+			label:			qsTr("Scale factor (real number)")
+			defaultValue:	1.5
+			min:			0
+			max:			100
+			decimals:		2
+		}
+		Slider
+		{
+			name:			"sliderH"
+			label:			qsTr("Slider fraction (echo only)")
+			value:			0.5			// Slider has no defaultValue property: the initial bound value IS `value`
+			min:			0
+			max:			1
+			stepSize:		0.1
+		}
+		RadioButtonGroup
+		{
+			name:	"radioH"
+			title:	qsTr("Flow statistic")
+
+			RadioButton { value: "mean"; label: qsTr("Mean"); checked: true }
+			RadioButton { value: "sum";  label: qsTr("Sum") }
+		}
+		CheckBox
+		{
+			name:	"gateH"
+			label:	qsTr("Gate: produce the gated sub-result")
+
+			DoubleField
+			{
+				name:			"gatedH"
+				label:			qsTr("Gated threshold")
+				defaultValue:	10.0
+				min:			0
+				max:			100
+				decimals:		1
+			}
+		}
+	}
+
+	// ---- Zoo I: dependent dropdown -----------------------------------------------------------------
+	// The option LIST of this dropdown is driven by another control's value: source is Zoo A's
+	// assigned list, so its choices are exactly the terms currently in assignedA (and follow every
+	// change of that list - the RPC verifier flips assignedA and asserts the effective selection
+	// follows). Value stays a PLAIN string (never term-objectified, landmine 4).
+	Section {
+		title: qsTr("Zoo I - dependent dropdown (options driven by Zoo A's assigned list)")
+
+		DropDown
+		{
+			name:			"comboI"
+			label:			qsTr("Pick a column from Assigned A")
+			source:			"assignedA"
+			addEmptyValue:	true
+		}
+	}
+
+	// ---- Zoo J: paired variables list ---------------------------------------------------------------
+	// The paired-list family: AssignedPairsVariablesList is a VariablesList preset (2 columns,
+	// drop-replace) whose model PAIRS its columns into 2-component terms (bound value
+	// [["Score","Age"]]). Own selection host, so the pair's components stamp together under that
+	// host's filter (C9 uniform-carry); the R side echoes each pair and computes per pair.
+	Section {
+		title: qsTr("Zoo J - paired variables list (own selection)")
+
+		AssignedPairsVariablesList
+		{
+			name:					"pairsJ"
+			title:					qsTr("Pairs (own Data selection)")
+			dataSetSelectionOption:	"dataSetJ"
+		}
+	}
+
+	// ---- Zoo K: factors form (the FactorsList family) ------------------------------------------------
+	// FactorsList is one panel of a FactorsForm; the serialized shape is the form's: per factor
+	// {name, title, indicators}. Two findings (pinned by the verifier):
+	// 1. The form's inner panels are NOT hosts and do not inherit the source list's filter stamp -
+	//    their unqualified terms encode through the ANALYSIS-level namespace (the D3.2 NOTE in
+	//    factorsformbase.cpp leaves nested per-factor provenance to the repeated-measures exercise).
+	// 2. A factor term must be a member of the form's SOURCE list (assignedK): a term outside it is
+	//    silently dropped by the form's model sync, and a term the form keeps is RE-TYPED by the
+	//    form (Age arrived ordinal here although sent scale, so the engine slice receives it as an
+	//    R factor). A term whose column the analysis-level namespace lacks (e.g. nominal Group
+	//    while DataSet 2 is shown) used to FATAL the run - the mds-plan post existence guard in
+	//    Common/columnencoder.cpp now refuses to queue columns a namespace does not have, and the
+	//    verifier pins the honest unresolved row (run 18) instead of a fatal.
+	Section {
+		title: qsTr("Zoo K - factors form (FactorsList panels over an assigned source)")
+
+		AssignedVariablesList
+		{
+			name:					"assignedK"
+			title:					qsTr("Assigned K (factor source, own Data selection)")
+			dataSetSelectionOption:	"dataSetK"
+		}
+		FactorsForm
+		{
+			name:				"factorsK"
+			initNumberFactors:	1
+			baseName:			"Fac"
+			baseTitle:			"Factor"
+			allowedColumns:		["scale", "ordinal", "nominal"]
+			availableVariablesList.source: "assignedK"
+		}
+	}
+
+	// ---- Zoo L: bound table view ---------------------------------------------------------------------
+	// The BoundControlTableView family: a bound SimpleTableView whose ROW COUNT is driven by Zoo
+	// H's integer field (initialRowCount + tableView.rowCount follow rowsH, exactly the
+	// testTableView.qml pattern). Its cells are plain values (no provenance - a tableview option
+	// is not a Terms option) and the R side USES them: the multiplier column rescales the assigned
+	// columns of every slice in the cross-slice computation.
+	Section {
+		title: qsTr("Zoo L - bound table view (row count driven by Zoo H's integer field)")
+
+		SimpleTableView
+		{
+			name:				"tableL"
+			cornerText:			qsTr("Par")
+			initialRowCount:	rowsH.value
+			tableView.rowCount:	rowsH.value
+			initialColumnCount:	2
+			columnNames:		[qsTr("Multiplier"), qsTr("Offset")]
+			itemTypePerColumn:	[JASP.Double, JASP.Double]
+
+			function getDefaultValue(columnIndex, rowIndex)
+			{
+				return columnIndex === 0 ? 1.0 + rowIndex : 0.5 * (rowIndex + 1);
+			}
 		}
 	}
 
