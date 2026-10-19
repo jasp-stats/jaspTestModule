@@ -27,20 +27,27 @@
 #                                 2-component terms (bound value [["Score","Age"]]); per-pair
 #                                 resolution + correlation
 #   factors-form         Zoo K - FactorsForm (the FactorsList family): per factor name/title +
-#                                 terms. FINDING: the form's inner panels are not hosts - their
-#                                 terms encode through the ANALYSIS-level namespace, NOT the
-#                                 source list's host (nested provenance is explicitly future
-#                                 work, see factorsformbase.cpp D3.2 NOTE); pinned, not faked.
+#                                 terms. The form's inner panels are not hosts, but the per-factor
+#                                 sidecar (FactorsFormBase::createFilterIds, mds-plan post) now
+#                                 transports each term's OWN filterId per factor and per term: a
+#                                 factor term carries the stamp of the host its source list synced
+#                                 it from (here assignedK -> filter 1) and encodes through THAT
+#                                 filter's view - resolved slice by slice, no analysis-level
+#                                 fallback (the D3.2 hostless-panel deferral is CLOSED; pinned
+#                                 here, not faked).
 #                                 REGRESSION PINNED C++-SIDE (mds-plan post): a factor term whose
-#                                 column the analysis-level namespace lacks (e.g. a NOMINAL Group
-#                                 term while the shown dataset is DataSet 2) used to FATAL the
-#                                 whole run - rbridge_readDataSetRequested refused "Group.nominal"
+#                                 column the resolved namespace lacks (e.g. a NOMINAL Group term
+#                                 while the shown dataset is DataSet 2) used to FATAL the whole
+#                                 run - rbridge_readDataSetRequested refused "Group.nominal"
 #                                 ("not a columnname at all") because the collector inserted
 #                                 explicitly-typed terms without an existence check (pre-existing
 #                                 gap, reachable only since the aware stamping). The collector now
 #                                 refuses to queue columns the resolved namespace does not have
-#                                 (Common/columnencoder.cpp) and the zoo asserts the honest
-#                                 unresolved row instead of a fatal.
+#                                 (Common/columnencoder.cpp); with the per-factor sidecar the term
+#                                 resolves in its OWN namespace (where the column exists), so the
+#                                 phantom-namespace route is gone entirely - the zoo pins the
+#                                 resolved row + clean audit instead of the old honest unresolved
+#                                 row.
 #   tableview            Zoo L - bound TableView (row count driven by Zoo H's integer); cells
 #                                 are plain values (no provenance - not a Terms option) and are
 #                                 USED in the cross-slice computation, not just echoed

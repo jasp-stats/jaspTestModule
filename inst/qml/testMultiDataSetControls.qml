@@ -314,17 +314,19 @@ Form
 
 	// ---- Zoo K: factors form (the FactorsList family) ------------------------------------------------
 	// FactorsList is one panel of a FactorsForm; the serialized shape is the form's: per factor
-	// {name, title, indicators}. Two findings (pinned by the verifier):
-	// 1. The form's inner panels are NOT hosts and do not inherit the source list's filter stamp -
-	//    their unqualified terms encode through the ANALYSIS-level namespace (the D3.2 NOTE in
-	//    factorsformbase.cpp leaves nested per-factor provenance to the repeated-measures exercise).
+	// {name, title, indicators}. Findings (pinned by the verifier):
+	// 1. The form's inner panels are NOT hosts, but the per-factor sidecar
+	//    (FactorsFormBase::createFilterIds, mds-plan post) transports each term's OWN filterId
+	//    per factor and per term: a term keeps the stamp its source list synced onto it
+	//    (assignedK -> filter 1) and encodes through THAT filter's view - resolved slice by
+	//    slice, no analysis-level fallback (the D3.2 hostless-panel deferral is CLOSED).
 	// 2. A factor term must be a member of the form's SOURCE list (assignedK): a term outside it is
 	//    silently dropped by the form's model sync, and a term the form keeps is RE-TYPED by the
 	//    form (Age arrived ordinal here although sent scale, so the engine slice receives it as an
-	//    R factor). A term whose column the analysis-level namespace lacks (e.g. nominal Group
-	//    while DataSet 2 is shown) used to FATAL the run - the mds-plan post existence guard in
-	//    Common/columnencoder.cpp now refuses to queue columns a namespace does not have, and the
-	//    verifier pins the honest unresolved row (run 18) instead of a fatal.
+	//    R factor). A term whose column the resolved namespace lacks used to FATAL the run - the
+	//    mds-plan post existence guard in Common/columnencoder.cpp refuses to queue columns a
+	//    namespace does not have; with the per-factor sidecar the term resolves in its OWN
+	//    namespace instead (verifier run 18 pins the resolved row + clean audit).
 	Section {
 		title: qsTr("Zoo K - factors form (FactorsList panels over an assigned source)")
 

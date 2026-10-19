@@ -645,10 +645,6 @@ B = _read_columns(B_CSV)
 def fmt(x, nd=2): return f"{x:.{nd}f}"
 def mean(v): return sum(v) / len(v)
 
-# the analysis-level namespace of a fresh RPC session: the SHOWN dataset is the last loaded one
-# (DataSet 2, filter 2) - hostless panels (the FactorsForm's) stamp there.
-ANALYSIS_SLICE = "2"
-
 def find_table(res, title_prefix):
     return next((t for t in tables(res.get("results", res)).values()
                  if str(t.get("title", "")).startswith(title_prefix)), None)
@@ -672,8 +668,10 @@ def no_raw_tokens(res, tag):
 #   assignedA Score via host A(1) -> slice 1 | assignedB Score via host B(2) -> slice 2
 #   assignedK Group+Age via host K(1) -> slice 1 (Group feeds the encodeThis demo, Age is the
 #   factor term's source) | pairsJ Score+Age via host J(1) -> slice 1
-#   interactionD Score:Age via host D(1) -> slice 1 | factorsK Age -> hostless panel ->
-#   ANALYSIS-level namespace (slice 2) - the D3.2 deferral, pinned as behaviour
+#   interactionD Score:Age via host D(1) -> slice 1 | factorsK Age -> the per-factor sidecar
+#   (FactorsFormBase::createFilterIds, mds-plan post) transports the term's OWN filterId per
+#   factor and per term -> slice 1 (the term's stamp comes from its source host assignedK; the
+#   D3.2 hostless-panel deferral - analysis-level namespace, slice 2 - is CLOSED, pinned here)
 zr9, zres9 = zoo_run(zoo_full_opts(
     host_a="1", host_b="2", host_d="1", host_f="1", host_g="2", host_j="1", host_k="1",
     assigned_a={"types": ["scale"], "value": ["Score"]},
@@ -740,8 +738,10 @@ fk = find(z9, "factors-form")
 check("zoo run 9: factorsK Fac1 received with title and var Age",
       len(fk) == 1 and fk[0]["received"] == "Fac1" and "title=Factor 1" in fk[0]["rowChild"]
       and "Age" in fk[0]["rowChild"], json.dumps(fk))
-check("zoo run 9: factorsK var Age resolves in the ANALYSIS-level namespace (slice 2) - the D3.2 hostless-panel deferral",
-      len(fk) == 1 and str(fk[0]["slice"]) == ANALYSIS_SLICE and "slices: 2" in str(fk[0]["values"]), json.dumps(fk))
+check("zoo run 9: factorsK var Age resolves in ITS OWN term filter's namespace (slice 1) - the per-factor sidecar closed the D3.2 hostless-panel deferral",
+      len(fk) == 1 and str(fk[0]["slice"]) == "1" and "slices: 1" in str(fk[0]["values"]), json.dumps(fk))
+check("zoo run 9: factorsK resolution is TERM-level inside the factor object (rowChild carries the per-term slice key 'Age(1)')",
+      len(fk) == 1 and "vars: Age(1)" in str(fk[0]["rowChild"]), json.dumps(fk))
 
 fs = [r for r in z9 if r["family"] == "factors-source" and r["received"] == "Group"]
 check("zoo run 9: assignedK Group (the factor SOURCE) resolves in ITS OWN host's slice 1 with levels",
@@ -987,10 +987,14 @@ no_raw_tokens(zres17, "zoo run 17")
 
 # --- zoo run 18 (REGRESSION, mds-plan post): nominal factor term in a namespace lacking the column --
 # Pre-fix this FATALed the whole run (rbridge_readDataSetRequested: "gets 'Group.nominal' but its
-# not a columnname at all"): the FactorsForm panel is hostless, its term stamps at the ANALYSIS
+# not a columnname at all"): the FactorsForm panel is hostless, its term stamped at the ANALYSIS
 # level (DataSet 2, which has no Group), and the collector queued a column that dataset does not
-# have. The collector now refuses to queue nonexistent columns; the run must complete with an
-# honest unresolved row.
+# have. The collector now refuses to queue nonexistent columns. Since the per-factor sidecar
+# (FactorsFormBase::createFilterIds, mds-plan post) transports the term's OWN filterId, the term
+# no longer falls back to the analysis-level namespace at all: it encodes through its source
+# host's view (filter 1, DataSet 1, which HAS the nominal Group) and resolves in slice 1 - the
+# phantom-namespace route is gone. The run completes with a RESOLVED row and a clean audit; the
+# existence guard itself stays pinned C++-side (Common/columnencoder.cpp).
 zr18, zres18 = zoo_run(zoo_full_opts(
     host_a="1", host_b="2", host_d="1", host_f="1", host_g="2", host_j="1", host_k="1",
     assigned_a={"types": ["scale"], "value": ["Score"]},
@@ -1001,8 +1005,10 @@ zr18, zres18 = zoo_run(zoo_full_opts(
     radio_h="sum", gate_h=True, gated_h=12.0), "run 18 (regression: nominal factor term, namespace lacks the column)")
 check("zoo run 18: the previously-fatal run COMPLETES", zr18.get("status") == "complete", str(zr18.get("status")))
 fk18 = find(zoo_rows(zres18), "factors-form")
-check("zoo run 18: the factor's Group term arrives unresolved (honest '-' row, no phantom resolution)",
-      len(fk18) == 1 and "Group" in fk18[0]["rowChild"] and str(fk18[0]["slice"]) == "-", json.dumps(fk18))
+check("zoo run 18: the factor's Group term resolves in ITS OWN term filter's namespace (slice 1) - the phantom-namespace route is gone with the per-factor sidecar",
+      len(fk18) == 1 and "Group" in fk18[0]["rowChild"] and str(fk18[0]["slice"]) == "1" and "slices: 1" in str(fk18[0]["values"]), json.dumps(fk18))
+check("zoo run 18: the resolution is TERM-level inside the factor object (rowChild carries the per-term slice key 'Group(1)')",
+      len(fk18) == 1 and "vars: Group(1)" in str(fk18[0]["rowChild"]), json.dumps(fk18))
 auditz18 = provenance_audit(zres18)
 check("zoo run 18: PROVENANCE_AUDIT clean after the regression case", auditz18 == ("false", "0"), str(auditz18))
 no_raw_tokens(zres18, "zoo run 18")
