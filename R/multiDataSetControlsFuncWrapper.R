@@ -29,21 +29,22 @@ multiDataSetControlsFunc <- function(
           datasets = NULL,
           version = "1",
           assignedA = list(types = list(), value = list()),
-          assignedB = list(types = list(), value = list()),
+          assignedDefault = list(types = list(), value = list()),
+          assignedDerived = list(types = list(), value = list()),
           assignedK = list(types = list(), value = list()),
+          assignedThree = list(types = list(), value = list()),
           boundG = list(types = list(), value = list()),
           codeF = list(columns = list(), model = "", modelOriginal = ""),
           comboA = list(types = "unknown", value = ""),
           comboG = "first",
           comboI = list(types = "unknown", value = ""),
           dataSetA = "",
-          dataSetB = "",
-          dataSetC = "",
           dataSetD = "",
           dataSetF = "",
           dataSetG = "",
           dataSetJ = "",
           dataSetK = "",
+          dataSetM3 = "",
           doubleH = 1.5,
           factorsE = list(),
           factorsK = list(list(indicators = list(), name = "Fac1", title = "Factor 1")),
@@ -79,7 +80,7 @@ multiDataSetControlsFunc <- function(
    # resolved at run time from `options`. Every entry is loaded standalone by runWrappedAnalysis
    # (jaspBase::storeDataSets -> jaspSyntax::loadDataSets, each under its own name as the dataset
    # title); the analysis itself receives its slices keyed by filter id (jaspBase datasets contract).
-   selectionOptions <- c("dataSetB", "dataSetK", "dataSetG", "dataSetF", "dataSetJ", "dataSetC", "dataSetA", "dataSetD")
+   selectionOptions <- c("dataSetK", "dataSetG", "dataSetF", "dataSetJ", "dataSetM3", "dataSetA", "dataSetD")
    data <- NULL
    if (!is.null(datasets) && length(datasets)) {
       for (selectionOption in selectionOptions) {
@@ -96,7 +97,7 @@ multiDataSetControlsFunc <- function(
    }
    }
 
-   optionsWithFormula <- c("assignedA", "assignedB", "assignedK", "boundG", "codeF", "comboA", "comboG", "comboI", "dataSetA", "dataSetB", "dataSetC", "dataSetD", "dataSetF", "dataSetG", "dataSetJ", "dataSetK", "factorsE", "factorsK", "interactionD", "pairsJ", "rowsC", "tableL")
+   optionsWithFormula <- c("assignedA", "assignedDefault", "assignedDerived", "assignedK", "assignedThree", "boundG", "codeF", "comboA", "comboG", "comboI", "dataSetA", "dataSetD", "dataSetF", "dataSetG", "dataSetJ", "dataSetK", "dataSetM3", "factorsE", "factorsK", "interactionD", "pairsJ", "rowsC", "tableL")
    for (name in optionsWithFormula) {
       if ((name %in% optionsWithFormula) && inherits(options[[name]], "formula")) options[[name]] = jaspBase::jaspFormula(options[[name]], data)   }
 

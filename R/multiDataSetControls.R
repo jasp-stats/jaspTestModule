@@ -9,11 +9,23 @@
 # Families (see inst/qml/testMultiDataSetControls.qml):
 #   assigned-list        Zoo A - plain assigned list under a selecting available list
 #   combobox-host        Zoo A - DropDown served by the same host: value stays a PLAIN STRING
-#   assigned-host        Zoo B - assigned list that IS its own selection host
 #   components-rows      Zoo C - row-bearing variables list (the TableFields shape; shared
-#                                 RowControls/TermRowKey machinery): per-row term + keep + shift;
-#                                 same-name twin rows from two filters keep their OWN
-#                                 children (the D6.1 TermRowKey re-keying)
+#                                 RowControls/TermRowKey machinery), sourced from a
+#                                 default-provider pool (every assigned list has >= 1 source -
+#                                 owner rule; the bare standalone list died with Zoo B):
+#                                 per-row term + keep + shift; same-name twin rows from two
+#                                 filters keep their OWN children (the D6.1 TermRowKey
+#                                 re-keying); the pool's key is -1, so the stamped twins are
+#                                 never swept by any reset
+#   pool-hostless        Zoo M - the default-provider pool's companion (no host selection,
+#                                 participation key -1): sent-BARE terms resolve through the
+#                                 analysis-level fallback (the C13 use-time resolution),
+#                                 sent-stamped terms keep their own stamp
+#   pool-f3              Zoo M - the EXTRA SOURCE's companion: the pool hosted by the THIRD
+#                                 filter of the same test dataset (f3-origin terms carry its
+#                                 stamp; the anchor scenario's namespace)
+#   derived-pool         Zoo N - the derived pool's companion: refs from assignedA +
+#                                 assignedDefault (mixed provenance), each keeping its own stamp
 #   interaction-list     Zoo D - combination terms: all components share the term filterId
 #   factor-levels        Zoo E - encodeThis -> extras roundtrip (names never slice columns;
 #                                 they must come back decoded, no raw JaspExtraOptions_ leakage)
@@ -235,12 +247,14 @@ controlsProvenanceTable <- function(jaspResults, options, datasets) {
                          stringsAsFactors = FALSE, check.names = FALSE))
   }
 
-  # --- plain term lists: Zoo A / Zoo B / Zoo G / Zoo K's source -----------------------------------
+  # --- plain term lists: Zoo A / Zoo G / Zoo K's source / Zoo M / Zoo N ---------------------------
   for (entry in list(
-      list(fam = "assigned-list",       opt = "assignedA", vals = .dependentValues(options$assignedA)),
-      list(fam = "assigned-host",       opt = "assignedB", vals = .dependentValues(options$assignedB)),
-      list(fam = "factors-source",      opt = "assignedK", vals = .dependentValues(options$assignedK)),
-      list(fam = "bindto-cross-host",   opt = "boundG",    vals = .dependentValues(options$boundG)))) {
+      list(fam = "assigned-list",       opt = "assignedA",         vals = .dependentValues(options$assignedA)),
+      list(fam = "factors-source",      opt = "assignedK",         vals = .dependentValues(options$assignedK)),
+      list(fam = "bindto-cross-host",   opt = "boundG",            vals = .dependentValues(options$boundG)),
+      list(fam = "pool-hostless",       opt = "assignedDefault",   vals = .dependentValues(options$assignedDefault)),
+      list(fam = "pool-f3",             opt = "assignedThree",     vals = .dependentValues(options$assignedThree)),
+      list(fam = "derived-pool",        opt = "assignedDerived",   vals = .dependentValues(options$assignedDerived)))) {
     for (value in entry$vals) {
       key  <- .resolveSlice(value, datasets)
       desc <- .describeValue(key, value, datasets)
@@ -577,9 +591,11 @@ crossSliceTable <- function(jaspResults, options, datasets) {
     }
   }
 
-  # 2. cross-host column product: assignedA's first scale column x assignedB's first scale column
+  # 2. cross-host column product: assignedA's first scale column x assignedDefault's first scale
+  #    column (the default-provider list - a bare -1 reference resolves through the analysis
+  #    fallback, so the product joins a stamped slice with the fallback slice)
   colA <- .firstAssignedScale(options$assignedA, datasets)
-  colB <- .firstAssignedScale(options$assignedB, datasets)
+  colB <- .firstAssignedScale(options$assignedDefault, datasets)
   if (!is.null(colA) && !is.null(colB)) {
     value <- if (length(colA$values) != length(colB$values))
       paste0("row lengths differ (", length(colA$values), " vs ", length(colB$values),

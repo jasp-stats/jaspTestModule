@@ -309,8 +309,11 @@ check("run 4: A:Score back on DataSet 1 (mean 12.50)", a4 and str(a4["dataSetId"
 # mds-plan D6.3 - the component zoo (jaspTestModule analysis multiDataSetControlsFunc /
 # testMultiDataSetControls.qml). Every control family echoes what it RECEIVED (encoded names,
 # decoded again on the way out), which slice index each value resolved in, and its row children,
-# so per-item provenance is asserted at the value level. The RPC workspace has one default filter
-# per dataset (ids 1 and 2), which is exactly two distinct namespaces for the twin cases.
+# so per-item provenance is asserted at the value level. The RPC workspace starts with one
+# default filter per dataset (ids 1 and 2) - exactly two distinct namespaces for the twin cases.
+# The zoo form BOOTSTRAPS a third filter on dataset 1 ("Filter 0", all-rows) at form load, because
+# the RPC has no filter-creation method and the mds-plan post zoo correction needs a THIRD pool
+# hosted by it (the f3-origin namespace for the anchor scenario); its id is discovered below.
 # Checks per family:
 #   - same-name columns across two filters in the SAME list (twins) -> distinct encodings,
 #     correct per-slice values (the 12.50/17.73 trick per family)
@@ -361,20 +364,28 @@ EMPTY_ROWS  = {"types": [], "value": [], "optionKey": "variable"}
 EMPTY_INTER = {"types": [], "value": [], "optionKey": "components"}
 EMPTY_CODEF = {"modelOriginal": "", "model": "", "columns": []}
 
-def zoo_full_opts(host_a="1", host_b="", host_c="", host_d="", host_f="", host_g="",
+def zoo_full_opts(host_a="1", host_m3="", host_d="", host_f="", host_g="",
                   host_j="", host_k="",
-                  assigned_a=None, assigned_b=None, assigned_k=None, rows_c=None, bound_g=None,
+                  assigned_a=None, assigned_default=None, assigned_k=None, rows_c=None, bound_g=None,
+                  assigned_three=None, assigned_derived=None,
                   interaction_d=None, factors_e=None, factors_k=None, pairs_j=None, code_f=None,
                   combo_a="", combo_i="", text_h="", rows_h=5, double_h=1.5, slider_h=0.5,
                   radio_h="mean", gate_h=False, gated_h=10.0, table_l=None,
                   plain_switch=False, show_meta=True):
+    # NB: dataSetB/dataSetC are GONE (mds-plan post zoo correction): Zoo B is REMOVED entirely (a
+    # bare assigned list - no source at all - is a malformed configuration, owner rule) and Zoo C
+    # is a normal form over a default-provider pool now - neither has a host option to send.
+    # dataSetM3 is Zoo M's extra-source pool (the THIRD filter of dataset 1, bootstrapped by the
+    # zoo form itself - see the discovery check right after zoo run 1).
     opts = {
-        "dataSetA": host_a, "dataSetB": host_b, "dataSetC": host_c,
+        "dataSetA": host_a, "dataSetM3": host_m3,
         "dataSetD": host_d, "dataSetF": host_f, "dataSetG": host_g,
         "dataSetJ": host_j, "dataSetK": host_k,
         "assignedA": assigned_a or dict(EMPTY_TERMS),
-        "assignedB": assigned_b or dict(EMPTY_TERMS),
         "assignedK": assigned_k or dict(EMPTY_TERMS),
+        "assignedDefault": assigned_default or dict(EMPTY_TERMS),
+        "assignedThree":    assigned_three or dict(EMPTY_TERMS),
+        "assignedDerived":  assigned_derived or dict(EMPTY_TERMS),
         "rowsC":     rows_c or dict(EMPTY_ROWS),
         "boundG":    bound_g or {"value": []},
         "interactionD": interaction_d or dict(EMPTY_INTER),
@@ -409,6 +420,17 @@ zslices1 = zoo_slice_ids(zres1) or []
 check("zoo run 1: slice 1 queued (host A), nothing beyond the workspace's two slices",
       "1" in zslices1 and set(zslices1) <= {"1", "2"}, str(zslices1))
 
+# --- the zoo fixture's THIRD filter (mds-plan post zoo correction) --------------------------------
+# The zoo form bootstraps "Filter 0" on dataset 1 at form load (zoo run 1 forced the form to
+# load, so the bootstrap has run by now). Discover its id via data_info - the verifier must not
+# hardcode 3 (a re-run in a workspace that already had extra filters would shift it).
+_zi1 = call("data_info", {"dataSetId": 1})
+_zf3 = next((f for f in _zi1.get("filters", []) if not f.get("isDefault")), None)
+check("zoo fixture: the form bootstrapped a third filter on dataset 1", _zf3 is not None,
+      json.dumps(_zi1.get("filters", [])))
+F3 = str(_zf3["filterId"]) if _zf3 else "3"
+check("zoo fixture: third filter id discovered", F3.isdigit() and F3 not in ("1", "2"), F3)
+
 # --- zoo run 2: the whole zoo ---------------------------------------------------------------------
 # rowsC arrives in the STORAGE term-object shape: same-name twin rows 'Score' behind filter 1
 # (keep=true, shift=1) and filter 2 (keep=false, shift=7). The applier must keep BOTH rows' own
@@ -419,9 +441,9 @@ check("zoo run 1: slice 1 queued (host A), nothing beyond the workspace's two sl
 # bind-time encodeRScript must go through the HOST's view (C13 host-bound) - a Score token
 # resolving in slice 1 (12.50) proves it; the analysis-level fallback would have yielded 17.73.
 zr2, zres2 = zoo_run(zoo_full_opts(
-    host_a="1", host_b="2", host_d="1", host_f="1", host_g="2",
+    host_a="1", host_d="1", host_f="1", host_g="2",
     assigned_a={"types": ["scale"], "value": ["Score"]},
-    assigned_b={"types": ["nominal"], "value": ["Condition"]},
+    assigned_default={"types": ["nominal"], "value": ["Condition"]},
     rows_c={"value": [{"variable": {"name": "Score", "types": ["scale"], "filterId": 1}, "keep": True, "shift": 1},
                       {"variable": {"name": "Score", "types": ["scale"], "filterId": 2}, "keep": False, "shift": 7}],
             "optionKey": "variable"},
@@ -454,9 +476,10 @@ bg = find(z2, "bindto-cross-host")
 check("zoo run 2: boundG typed copy resolves in the SOURCE slice 1 (12.50) while its own host selects filter 2",
       len(bg) == 1 and str(bg[0]["slice"]) == "1" and "12.50" in str(bg[0]["values"]), json.dumps(bg))
 
-# assigned-host (Zoo B)
-ab = find(z2, "assigned-host")
-check("zoo run 2: assignedB (own host) Condition resolves in slice 2 with its levels",
+# default-provider pool's list (Zoo M): a bare sent term resolves through the analysis-level
+# fallback, which is the shown dataset (DataSet 2, filter 2)
+ab = find(z2, "pool-hostless")
+check("zoo run 2: assignedDefault (bare) Condition resolves via the analysis fallback in slice 2 with its levels",
       len(ab) == 1 and str(ab[0]["slice"]) == "2" and ab[0]["values"].startswith("X"), json.dumps(ab))
 
 # combobox (Zoo A): plain string value. NB the namespace finding, UPDATED by the mds-zoo
@@ -642,6 +665,15 @@ def _read_columns(path):
 A = _read_columns(A_CSV)
 B = _read_columns(B_CSV)
 
+# Age imports ORDINAL in DataSetA (integer-valued column; data_info: Age=ordinal, Score=scale,
+# Group=nominal). A term sent as scale is re-typed to the column's real type at intake (the
+# established zoo finding, pinned in Zoo K), so any Age slice arrives as an R factor and the
+# echo describes it as its unique-value listing - never as a mean. The anchor checks (runs
+# 19/20) therefore assert the listing, computed exactly like R's .fillDescription does:
+with open(A_CSV) as _f:
+    _age_raw = [r["Age"] for r in _csvmod.DictReader(_f)]
+_age_listing = ", ".join(list(dict.fromkeys(_age_raw))[:5])
+
 def fmt(x, nd=2): return f"{x:.{nd}f}"
 def mean(v): return sum(v) / len(v)
 
@@ -665,7 +697,8 @@ def no_raw_tokens(res, tag):
 
 # --- zoo run 9: the expanded zoo, all new families populated --------------------------------------
 # Provenance story (fresh RPC session, shown dataset = DataSet 2):
-#   assignedA Score via host A(1) -> slice 1 | assignedB Score via host B(2) -> slice 2
+#   assignedA Score via host A(1) -> slice 1 | assignedDefault bare Score -> analysis fallback
+#   (shown dataset = DataSet 2) -> slice 2
 #   assignedK Group+Age via host K(1) -> slice 1 (Group feeds the encodeThis demo, Age is the
 #   factor term's source) | pairsJ Score+Age via host J(1) -> slice 1
 #   interactionD Score:Age via host D(1) -> slice 1 | factorsK Age -> the per-factor sidecar
@@ -673,9 +706,9 @@ def no_raw_tokens(res, tag):
 #   factor and per term -> slice 1 (the term's stamp comes from its source host assignedK; the
 #   D3.2 hostless-panel deferral - analysis-level namespace, slice 2 - is CLOSED, pinned here)
 zr9, zres9 = zoo_run(zoo_full_opts(
-    host_a="1", host_b="2", host_d="1", host_f="1", host_g="2", host_j="1", host_k="1",
+    host_a="1", host_d="1", host_f="1", host_g="2", host_j="1", host_k="1",
     assigned_a={"types": ["scale"], "value": ["Score"]},
-    assigned_b={"types": ["scale"], "value": ["Score"]},
+    assigned_default={"types": ["scale"], "value": ["Score"]},
     # NB: the FactorsForm's factors can only hold terms that are in its SOURCE list (assignedK):
     # a term outside the source is silently dropped by the form's model sync (verified live, run
     # 9 originally sent Age here while assignedK held only Group -> "(none)"). Group is needed in
@@ -841,7 +874,7 @@ no_raw_tokens(zres9, "zoo run 9")
 # assignedA flips to Condition (host A=2): comboI's option list must follow, its effective
 # selection re-encodes through the source's NEW namespace (slice 2), and the RESULTS change.
 zr10, zres10 = zoo_run(zoo_full_opts(
-    host_a="2", host_b="2", host_d="1", host_f="1", host_g="2", host_j="1", host_k="1",
+    host_a="2", host_d="1", host_f="1", host_g="2", host_j="1", host_k="1",
     assigned_a={"types": ["nominal"], "value": ["Condition"]},
     assigned_k={"types": ["nominal"], "value": ["Group"]},
     factors_e=[{"name": "Group", "levels": ["A", "B"]}],
@@ -863,7 +896,7 @@ no_raw_tokens(zres10, "zoo run 10")
 
 # --- zoo run 11 (FLOW F2a): gate closed -> the gated sub-result must NOT exist ---------------------
 zr11, zres11 = zoo_run(zoo_full_opts(
-    host_a="1", host_b="2", host_d="1", host_f="1", host_g="2", host_j="1", host_k="1",
+    host_a="1", host_d="1", host_f="1", host_g="2", host_j="1", host_k="1",
     assigned_a={"types": ["scale"], "value": ["Score"]},
     assigned_k={"types": ["nominal"], "value": ["Group"]},
     factors_e=[{"name": "Group", "levels": ["A", "B"]}],
@@ -882,7 +915,7 @@ no_raw_tokens(zres11, "zoo run 11")
 
 # --- zoo run 12 (FLOW F2b): gate open with a different threshold -> numbers move --------------------
 zr12, zres12 = zoo_run(zoo_full_opts(
-    host_a="1", host_b="2", host_d="1", host_f="1", host_g="2", host_j="1", host_k="1",
+    host_a="1", host_d="1", host_f="1", host_g="2", host_j="1", host_k="1",
     assigned_a={"types": ["scale"], "value": ["Score"]},
     assigned_k={"types": ["nominal", "scale"], "value": ["Group", "Age"]},
     factors_e=[{"name": "Group", "levels": ["A", "B"]}],
@@ -902,7 +935,7 @@ no_raw_tokens(zres12, "zoo run 12")
 
 # --- zoo run 13/14 (FLOW F3): the integer field drives the shown row count --------------------------
 zr13, zres13 = zoo_run(zoo_full_opts(
-    host_a="1", host_b="2", host_d="1", host_f="1", host_g="2", host_j="1", host_k="1",
+    host_a="1", host_d="1", host_f="1", host_g="2", host_j="1", host_k="1",
     assigned_a={"types": ["scale"], "value": ["Score"]},
     assigned_k={"types": ["nominal"], "value": ["Group"]},
     factors_e=[{"name": "Group", "levels": ["A", "B"]}],
@@ -920,7 +953,7 @@ check("zoo run 13: rows flow observed rowsH=3", "rowsH=3" in str(fl13.get("numbe
 no_raw_tokens(zres13, "zoo run 13")
 
 zr14, zres14 = zoo_run(zoo_full_opts(
-    host_a="1", host_b="2", host_d="1", host_f="1", host_g="2", host_j="1", host_k="1",
+    host_a="1", host_d="1", host_f="1", host_g="2", host_j="1", host_k="1",
     assigned_a={"types": ["scale"], "value": ["Score"]},
     assigned_k={"types": ["nominal"], "value": ["Group"]},
     factors_e=[{"name": "Group", "levels": ["A", "B"]}],
@@ -933,7 +966,7 @@ no_raw_tokens(zres14, "zoo run 14")
 
 # --- zoo run 15 (FLOW F6): the radio group switches the statistic -----------------------------------
 zr15, zres15 = zoo_run(zoo_full_opts(
-    host_a="1", host_b="2", host_d="1", host_f="1", host_g="2", host_j="1", host_k="1",
+    host_a="1", host_d="1", host_f="1", host_g="2", host_j="1", host_k="1",
     assigned_a={"types": ["scale"], "value": ["Score"]},
     assigned_k={"types": ["nominal"], "value": ["Group"]},
     factors_e=[{"name": "Group", "levels": ["A", "B"]}],
@@ -948,7 +981,7 @@ no_raw_tokens(zres15, "zoo run 15")
 
 # --- zoo run 16 (FLOW F4): the variables list drives the interaction terms --------------------------
 zr16, zres16 = zoo_run(zoo_full_opts(
-    host_a="1", host_b="2", host_d="1", host_f="1", host_g="2", host_j="1", host_k="1",
+    host_a="1", host_d="1", host_f="1", host_g="2", host_j="1", host_k="1",
     assigned_a={"types": ["scale"], "value": ["Score"]},
     assigned_k={"types": ["nominal"], "value": ["Group"]},
     factors_e=[{"name": "Group", "levels": ["A", "B"]}],
@@ -968,7 +1001,7 @@ no_raw_tokens(zres16, "zoo run 16")
 
 # --- zoo run 17 (FLOW F5): tableL cells are USED, not just echoed ------------------------------------
 zr17, zres17 = zoo_run(zoo_full_opts(
-    host_a="1", host_b="2", host_d="1", host_f="1", host_g="2", host_j="1", host_k="1",
+    host_a="1", host_d="1", host_f="1", host_g="2", host_j="1", host_k="1",
     assigned_a={"types": ["scale"], "value": ["Score"]},
     assigned_k={"types": ["nominal"], "value": ["Group"]},
     factors_e=[{"name": "Group", "levels": ["A", "B"]}],
@@ -996,7 +1029,7 @@ no_raw_tokens(zres17, "zoo run 17")
 # phantom-namespace route is gone. The run completes with a RESOLVED row and a clean audit; the
 # existence guard itself stays pinned C++-side (Common/columnencoder.cpp).
 zr18, zres18 = zoo_run(zoo_full_opts(
-    host_a="1", host_b="2", host_d="1", host_f="1", host_g="2", host_j="1", host_k="1",
+    host_a="1", host_d="1", host_f="1", host_g="2", host_j="1", host_k="1",
     assigned_a={"types": ["scale"], "value": ["Score"]},
     assigned_k={"types": ["nominal"], "value": ["Group"]},
     factors_e=[{"name": "Group", "levels": ["A", "B"]}],
@@ -1012,6 +1045,95 @@ check("zoo run 18: the resolution is TERM-level inside the factor object (rowChi
 auditz18 = provenance_audit(zres18)
 check("zoo run 18: PROVENANCE_AUDIT clean after the regression case", auditz18 == ("false", "0"), str(auditz18))
 no_raw_tokens(zres18, "zoo run 18")
+
+# ----------------------------------------------------------------------------
+# mds-plan post zoo correction - the three pools, the ds1/f1 -> ds1/f3 ANCHOR and the
+# derived pool. Zoo M holds three pools over the same test dataset: the hostless pool
+# (no host selection, participation key -1), Zoo A's pool on the existing selection
+# (dataSetA) and the EXTRA SOURCE zooPoolThree on the bootstrapped third filter
+# (dataSetM3 = F3). f3-origin terms carry the filter-3 stamp (JASPColumn_D1_F3_).
+# ----------------------------------------------------------------------------
+
+# --- zoo run 19: the three pools populated ----------------------------------------------------------
+#   assignedThree Score@3 -> the f3 namespace -> slice F3 (12.50: filter 3 is all-rows on ds1)
+#   assignedDefault bare Score -> the analysis-level fallback (shown = DataSet 2) -> slice 2
+# assignedA is pre-loaded with the anchor's three-term state: Score@1 (f1-origin), Score@2
+# (the ds2 twin) and Age@3 (an f3-ORIGIN term - the one a dataset-scoped sweep would kill).
+zr19, zres19 = zoo_run(zoo_full_opts(
+    host_a="1", host_m3=F3,
+    assigned_a={"value": [{"name": "Score", "types": ["scale"], "filterId": 1},
+                          {"name": "Score", "types": ["scale"], "filterId": 2},
+                          {"name": "Age",   "types": ["scale"], "filterId": int(F3)}]},
+    assigned_three={"value": [{"name": "Score", "types": ["scale"], "filterId": int(F3)}]},
+    assigned_default={"types": ["scale"], "value": ["Score"]}), "run 19 (three pools: f3 pool + default-provider pool + anchor pre-state)")
+z19 = zoo_rows(zres19)
+f3row = find(z19, "pool-f3")
+check("zoo run 19: assignedThree Score@3 resolves in the f3 namespace (slice %s, 12.50)" % F3,
+      len(f3row) == 1 and str(f3row[0]["slice"]) == F3 and "12.50" in str(f3row[0]["values"]), json.dumps(f3row))
+hl = find(z19, "pool-hostless")
+check("zoo run 19: assignedDefault bare Score resolves via the analysis fallback (slice 2, 17.73)",
+      len(hl) == 1 and str(hl[0]["slice"]) == "2" and "17.73" in str(hl[0]["values"]), json.dumps(hl))
+a19 = find(z19, "assigned-list")
+_a19_by = {(r["received"], str(r["slice"])): r for r in a19}
+check("zoo run 19: assignedA holds the three-term anchor pre-state (Score@1 12.50, Score@2 17.73, Age@3 as its ordinal values)",
+      len(a19) == 3
+      and "12.50" in str(_a19_by.get(("Score", "1"), {}).get("values"))
+      and "17.73" in str(_a19_by.get(("Score", "2"), {}).get("values"))
+      and _age_listing in str(_a19_by.get(("Age", F3), {}).get("values")), json.dumps(a19))
+auditz19 = provenance_audit(zres19)
+check("zoo run 19: PROVENANCE_AUDIT clean", auditz19 == ("false", "0"), str(auditz19))
+no_raw_tokens(zres19, "zoo run 19")
+
+# --- zoo run 20 (THE ANCHOR): switch Zoo A's pool ds1/f1 -> ds1/f3, assignedA NOT re-sent ------------
+# Delta run (only dataSetA changes, exactly like run 8's pattern): the pool's universe becomes
+# filter 3's view and availableTermsReset fires with filterIdToUpdate = 1 (the OLD selection -
+# the participation key). Expected per the origin-authoritative rule:
+#   Score@1 participates (1 == 1) -> replaced by the delivered universe term Score@3 (slice F3)
+#   Score@2 does not (2 != 1)     -> survives untouched (slice 2, 17.73)
+#   Age@3   does not (3 != 1)     -> SURVIVES: the anchor. Both filters sit on the SAME dataset,
+#                                    so a dataset-scoped participation would have swept it.
+zr20, zres20 = zoo_run({"dataSetA": "3", "showMeta": True}, "run 20 (ANCHOR: host A f1->f3, terms not re-sent)")
+z20 = zoo_rows(zres20)
+a20 = find(z20, "assigned-list")
+_a20_by = {(r["received"], str(r["slice"])): r for r in a20}
+check("zoo run 20: ANCHOR - Age@3 (f3-origin) NOT swept by the f1->f3 switch (still present, slice %s, ordinal values)" % F3,
+      ("Age", F3) in _a20_by and _age_listing in str(_a20_by[("Age", F3)].get("values")), json.dumps(a20))
+check("zoo run 20: ANCHOR - Score@2 (foreign stamp) still present (slice 2, 17.73)",
+      ("Score", "2") in _a20_by and "17.73" in str(_a20_by[("Score", "2")].get("values")), json.dumps(a20))
+check("zoo run 20: Score@1 FOLLOWED the switch (re-stamped to f3: now slice %s, 12.50)" % F3,
+      ("Score", F3) in _a20_by and "12.50" in str(_a20_by[("Score", F3)].get("values"))
+      and ("Score", "1") not in _a20_by, json.dumps(a20))
+check("zoo run 20: exactly 3 assignedA rows (one moved, two survived)",
+      len(a20) == 3, json.dumps(a20))
+check("zoo run 20: dataSetIds still just the workspace's two datasets (filter %s is dataset 1's)" % F3,
+      sorted(zr20.get("dataSetIds", [])) == [1, 2], str(zr20.get("dataSetIds")))
+auditz20 = provenance_audit(zres20)
+check("zoo run 20: PROVENANCE_AUDIT clean after the anchor switch", auditz20 == ("false", "0"), str(auditz20))
+no_raw_tokens(zres20, "zoo run 20")
+
+# --- zoo run 21: the derived pool (mixed provenance) -------------------------------------------------
+# Zoo N's pool sources assignedA + assignedDefault; its companion assignedDerived receives refs with
+# MIXED stamps. Each ref must encode through its OWN stamp (no host of its own): Score@1 in
+# slice 1, Condition@2 in slice 2 - one list, two truths.
+zr21, zres21 = zoo_run(zoo_full_opts(
+    host_a="1",
+    assigned_a={"types": ["scale"], "value": ["Score"]},
+    assigned_default={"types": ["nominal"], "value": ["Condition"]},
+    assigned_derived={"value": [{"name": "Score",     "types": ["scale"],   "filterId": 1},
+                                {"name": "Condition", "types": ["nominal"], "filterId": 2}]}),
+    "run 21 (derived pool: mixed-provenance refs)")
+z21 = zoo_rows(zres21)
+dv = find(z21, "derived-pool")
+_dv_by = {r["received"]: r for r in dv}
+check("zoo run 21: derived ref Score@1 resolves in slice 1 (12.50)",
+      len(dv) == 2 and "12.50" in str(_dv_by.get("Score", {}).get("values"))
+      and str(_dv_by.get("Score", {}).get("slice")) == "1", json.dumps(dv))
+check("zoo run 21: derived ref Condition@2 resolves in slice 2 (levels X, Y, Z)",
+      "X, Y, Z" in str(_dv_by.get("Condition", {}).get("values"))
+      and str(_dv_by.get("Condition", {}).get("slice")) == "2", json.dumps(dv))
+auditz21 = provenance_audit(zres21)
+check("zoo run 21: PROVENANCE_AUDIT clean", auditz21 == ("false", "0"), str(auditz21))
+no_raw_tokens(zres21, "zoo run 21")
 
 print("\n" + ("ALL CHECKS PASSED" if not fails else f"{len(fails)} FAILURES: {fails}"))
 sys.exit(0 if not fails else 1)

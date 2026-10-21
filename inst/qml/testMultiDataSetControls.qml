@@ -5,17 +5,22 @@
 //         (the D2.2 list-level pattern) feeding an AssignedVariablesList, plus a DropDown
 //         served by the same host (comboboxes stay PLAIN strings - never term objects -
 //         while their value still resolves through the host namespace).
-//  Zoo B  ASSIGNED list as its own host: an AssignedVariablesList with its own
-//         dataSetSelectionOption (C10 says any VariablesListBase can host; this is the
-//         second-source case the design must support).
+//  Zoo B  REMOVED (mds-plan post zoo correction, owner): a bare assigned list - an assigned
+//         list with no source at all - is a malformed configuration, not a supported one:
+//         every real assigned list sits in a form with a pool. Its two real pins moved: the
+//         -1 analysis-fallback resolution is pinned on the default-provider pool's assigned
+//         list (Zoo M, verifier run 19), foreign-stamp survival on the anchor runs.
 //  Zoo C  TableFields-style ROW-CONTROL list: JASP.TableFields does not exist in this
 //         codebase and ComponentsList (its closest named relative) cannot carry a selection,
 //         so this is the row family as TableFields actually is it: an AssignedVariablesList
-//         with a rowComponent (a keep checkbox and a shift integer) plus its own selection.
-//         Same-name twin rows behind DIFFERENT filters (the C9 twins, set by the RPC verifier
-//         through the Storage term-object shape) must keep their own children - the D6.1
+//         with a rowComponent (a keep checkbox and a shift integer), in its own form over a
+//         default-provider pool (every assigned list has >= 1 source - owner rule). Same-name
+//         twin rows behind DIFFERENT filters (the C9 twins, set by the RPC verifier through
+//         the Storage term-object shape) must keep their own children - the D6.1
 //         RelatedValuesPerTerm/RowControls re-keying (TermRowKey = value + filterId) is what
-//         makes that work; pre-fix the second row silently clobbered the first.
+//         makes that work; pre-fix the second row silently clobbered the first. The pool's
+//         key is -1, so the stamped twins are never swept by a universe reset: each twin
+//         follows only its own stamp.
 //  Zoo D  interaction terms: a VariablesList in Interaction mode - components of one
 //         combination term share the term-level filterId (mds-plan C9 uniform-carry rule).
 //  Zoo E  FactorLevelList: encodeThis -> extras-encoder roundtrip (factor/level names encode
@@ -28,6 +33,24 @@
 //         UNQUALIFIED terms (D5.1 intake guard) and the restamp walk never touches foreign
 //         stamps (D3.5 owns-the-stamp), so the value must encode and resolve through the
 //         SOURCE's slice even though this list's own dropdown selects another one.
+//  Zoo M  THREE pools over the same test dataset (the mds-plan post zoo correction): a
+//         hostless pool (no dataSetSelectionOption at all - the default-provider pool whose
+//         participation key is -1), Zoo A's pool hosted by the existing filter selection
+//         (dataSetA, filter 1), and the EXTRA SOURCE: a new AvailableVariablesList hosted by
+//         the THIRD filter of the same test dataset. The third filter does not exist in a
+//         fresh RPC workspace (data_load mints one default filter per dataset and the RPC has
+//         no filter-creation method), so this form bootstraps it itself - see the guard in
+//         Zoo M (module-side test fixture: the test provides its own filters). f3-origin terms
+//         carry its stamp, which is what makes the anchor scenario assertable: switching Zoo
+//         A's pool from ds1/f1 to ds1/f3 must move the f1-stamped terms (their participation
+//         key is the OLD selection id) while an f3-origin term in the same list survives
+//         untouched - a dataset-scoped sweep would wrongly have swept it, because both
+//         filters sit on the SAME dataset.
+//  Zoo N  DERIVED pool: an AvailableVariablesList whose source is TWO assigned lists
+//         (assignedA + assignedDefault, mixed provenance). Its terms are references that keep
+//         each source term's OWN stamp; the known limitation (the reason the `to` scalar was
+//         dropped from the reset signal) is that mixed-source refs do not follow a
+//         source-list host switch this pass.
 //
 // The R echo (R/multiDataSetControls.R) reports for every received value: the (encoded) name
 // as received, WHICH slice index it resolved in, and the row children - so provenance is
@@ -49,8 +72,10 @@ Form
 			"slice each value resolved in and its row children.<br>" +
 			"<ul>" +
 			"<li>Zoo A: selection on the available list drives the assigned list and the combobox.</li>" +
-			"<li>Zoo B: an ASSIGNED list hosts a selection of its own.</li>" +
-			"<li>Zoo C: row-control list (row-bearing variables list, the TableFields shape): same-name twin rows " +
+			"<li>Zoo B: removed - a bare assigned list (no source) is malformed; its pins live on the " +
+			"default-provider pool's list (Zoo M).</li>" +
+			"<li>Zoo C: row-control list (row-bearing variables list, the TableFields shape), sourced " +
+			"from the default-provider pool: same-name twin rows " +
 			"from two filters keep their OWN row values.</li>" +
 			"<li>Zoo D: interaction terms share one filterId over all components.</li>" +
 			"<li>Zoo E: factor/level names roundtrip through the extras encoder.</li>" +
@@ -60,9 +85,11 @@ Form
 			"as plain values AND drive results: the integer sets the preview row count, the radio picks the " +
 			"flow statistic, the checkbox gates a sub-result.</li>" +
 			"<li>Zoo I: a DEPENDENT dropdown - its option list is driven by Zoo A's assigned list.</li>" +
-			"<li>Zoo J: a paired variables list (own selection); the pair is one term over two columns.</li>" +
-			"<li>Zoo K: a FactorsForm (the FactorsList family) fed by an assigned list with its own selection.</li>" +
+			"<li>Zoo J: a paired variables list over the pool on dataSetJ; the pair is one term over two columns.</li>" +
+			"<li>Zoo K: a FactorsForm (the FactorsList family) fed by an assigned list over the pool on dataSetK.</li>" +
 			"<li>Zoo L: a bound TableView whose row count follows Zoo H's integer field.</li>" +
+			"<li>Zoo M: three pools over DataSet 1 - hostless (-1), Zoo A's pool on filter 1, and the extra source on the third filter; switching Zoo A from f1 to f3 must not sweep an f3-origin term.</li>" +
+			"<li>Zoo N: a derived pool whose options come from Zoo A's and the default pool's assigned lists (mixed provenance).</li>" +
 			"</ul>" +
 			"The results panel shows the LOADED DATA per slice (head of every column, row count = Zoo H's " +
 			"integer), the per-family provenance echo, the scalar echoes, the flow demonstrations and the " +
@@ -103,46 +130,42 @@ Form
 		}
 	}
 
-	// ---- Zoo B: the ASSIGNED list is its own host ------------------------------------------------
-	Section {
-		title: qsTr("Zoo B - assigned list as second source (own selection)")
-
-		AssignedVariablesList
-		{
-			name:					"assignedB"
-			title:					qsTr("Assigned B (own Data selection)")
-			dataSetSelectionOption:	"dataSetB"
-		}
-	}
-
 	// ---- Zoo C: TableFields-style row controls --------------------------------------------------
 	// JASP.TableFields does not exist in this codebase; ComponentsList is its closest NAMED
-	// relative but is not a VariablesListBase (no dataSetSelectionOption possible, and without a
-	// source relation its values never encode). The row machinery RowControls/TermRowKey is shared
+	// relative but is not a VariablesListBase. The row machinery RowControls/TermRowKey is shared
 	// with the row-bearing variables list, which is also what TableFields actually is (term rows +
 	// per-row controls) - so the zoo exercises the row family through an AssignedVariablesList
-	// with a rowComponent and its own selection host.
+	// with a rowComponent, in its own form over a default-provider pool (every assigned list has
+	// >= 1 source - owner rule; the bare standalone form died with Zoo B). Its pool's key is -1,
+	// so the stamped twin rows below are never swept by any reset - each twin follows only its
+	// own stamp, which is exactly the C9 case.
 	Section {
-		title: qsTr("Zoo C - row controls: per-row term + per-row values (own selection)")
+		title: qsTr("Zoo C - row controls: per-row term + per-row values (default-provider source)")
 
-		AssignedVariablesList
+		VariablesForm
 		{
-			name:					"rowsC"
-			title:					qsTr("Rows (term + keep + shift)")
-			dataSetSelectionOption:	"dataSetC"
-			optionKey:				"variable"
-
-			rowComponent: Row
+			AvailableVariablesList
 			{
-				CheckBox
+				name:	"zooPoolC"		// default-provider pool: no selection, participation key -1
+			}
+			AssignedVariablesList
+			{
+				name:		"rowsC"
+				title:		qsTr("Rows (term + keep + shift)")
+				optionKey:	"variable"
+
+				rowComponent: Row
 				{
-					name:	"keep"
-				}
-				IntegerField
-				{
-					name:	"shift"
-					min:	-999
-					max:	999
+					CheckBox
+					{
+						name:	"keep"
+					}
+					IntegerField
+					{
+						name:	"shift"
+						min:	-999
+						max:	999
+					}
 				}
 			}
 		}
@@ -199,14 +222,28 @@ Form
 	}
 
 	// ---- Zoo G: cross-host bindTo (D6.2) ---------------------------------------------------------
+	// The selection lives on the POOL now (the per-list dataSetSelectionOption crutch is gone,
+	// same correction as B/C): boundG sits in a form over the pool hosted by dataSetG's filter,
+	// so every assigned list has its source. The cross-host pin is unchanged: the verifier binds
+	// a typed copy of a filter-1 term into boundG while the pool selects filter 2 - the copy
+	// keeps the SOURCE filterId and encodes through the SOURCE's slice (D6.2), origin
+	// -authoritative: a stamp is born at Storage/bindTo and is not requalified by a destination.
 	Section {
 		title: qsTr("Zoo G - typed copy bound from Zoo A keeps the SOURCE filter")
 
-		AssignedVariablesList
+		VariablesForm
 		{
-			name:					"boundG"
-			title:					qsTr("Bound from assignedA (typed copy)")
-			dataSetSelectionOption:	"dataSetG"
+			AvailableVariablesList
+			{
+				name:					"zooPoolG"
+				dataSetSelectionOption:	"dataSetG"
+			}
+			AssignedVariablesList
+			{
+				name:		"boundG"
+				title:		qsTr("Bound from assignedA (typed copy)")
+				depends:	"dataSetG"
+			}
 		}
 	}
 
@@ -299,16 +336,25 @@ Form
 	// ---- Zoo J: paired variables list ---------------------------------------------------------------
 	// The paired-list family: AssignedPairsVariablesList is a VariablesList preset (2 columns,
 	// drop-replace) whose model PAIRS its columns into 2-component terms (bound value
-	// [["Score","Age"]]). Own selection host, so the pair's components stamp together under that
-	// host's filter (C9 uniform-carry); the R side echoes each pair and computes per pair.
+	// [["Score","Age"]]). Served by the pool hosted on dataSetJ's filter, so the pair's
+	// components stamp together under that pool's filter (C9 uniform-carry); the R side echoes
+	// each pair and computes per pair.
 	Section {
-		title: qsTr("Zoo J - paired variables list (own selection)")
+		title: qsTr("Zoo J - paired variables list (pool on dataSetJ)")
 
-		AssignedPairsVariablesList
+		VariablesForm
 		{
-			name:					"pairsJ"
-			title:					qsTr("Pairs (own Data selection)")
-			dataSetSelectionOption:	"dataSetJ"
+			AvailableVariablesList
+			{
+				name:					"zooPoolJ"
+				dataSetSelectionOption:	"dataSetJ"
+			}
+			AssignedPairsVariablesList
+			{
+				name:		"pairsJ"
+				title:		qsTr("Pairs (pool on dataSetJ)")
+				depends:	"dataSetJ"
+			}
 		}
 	}
 
@@ -330,11 +376,19 @@ Form
 	Section {
 		title: qsTr("Zoo K - factors form (FactorsList panels over an assigned source)")
 
-		AssignedVariablesList
+		VariablesForm
 		{
-			name:					"assignedK"
-			title:					qsTr("Assigned K (factor source, own Data selection)")
-			dataSetSelectionOption:	"dataSetK"
+			AvailableVariablesList
+			{
+				name:					"zooPoolK"
+				dataSetSelectionOption:	"dataSetK"
+			}
+			AssignedVariablesList
+			{
+				name:		"assignedK"
+				title:		qsTr("Assigned K (factor source)")
+				depends:	"dataSetK"
+			}
 		}
 		FactorsForm
 		{
@@ -369,6 +423,90 @@ Form
 			function getDefaultValue(columnIndex, rowIndex)
 			{
 				return columnIndex === 0 ? 1.0 + rowIndex : 0.5 * (rowIndex + 1);
+			}
+		}
+	}
+
+	// ---- Zoo M: three pools over one dataset (hostless / f1 / f3) --------------------------------
+	// The mds-plan post zoo correction. The EXTRA SOURCE is zooPoolThree: an AvailableVariablesList
+	// whose host selection is the THIRD filter of the same test dataset. A fresh RPC workspace has
+	// only the two default filters (data_load mints one per dataset; the RPC has no filter-creation
+	// method), so the form bootstraps the third filter itself, once, guarded: only when the
+	// workspace is exactly the zoo fixture shape (a dataset with id 1 that has no "Filter 0" yet).
+	// filterModel/workspace are root-context properties and module QML loads under the root
+	// context, so both are visible here. filterModel.addFilter(1) is the same invokable the filter
+	// editor uses (DataSet::addFilter -> named "Filter 0", default all-rows rFilter, its own
+	// data-table column and its own encoder namespace JASPColumn_D1_F3_).
+	//
+	// The three pools and their participation keys:
+	//   zooPoolHostless  no dataSetSelectionOption  -> key -1 (default provider)
+	//   zooVarsA (Zoo A) dataSetA                   -> key = whatever dataSetA holds (f1 -> f3 anchor)
+	//   zooPoolThree     dataSetM3                  -> key 3 (the f3-origin namespace)
+	Component.onCompleted: {
+		// Zoo fixture bootstrap (test-only): ensure the third filter exists on the existing test
+		// dataset. No-op in any other workspace shape; no-op once it exists (verifier re-runs).
+		// NB: the 'workspace' ROOT CONTEXT PROPERTY is only set from onWorkspaceChanged() and was
+		// observed UNDEFINED at form load in an RPC session - route through dataSetPackage's
+		// workspace Q_PROPERTY instead, which loadQML() always installs.
+		var ws = (typeof dataSetPackage !== "undefined" && dataSetPackage) ? dataSetPackage.workspace : null
+		if (typeof filterModel !== "undefined" && ws && ws.filterIdByName(1, "Filter 0") < 0)
+			console.log("ZOO BOOTSTRAP: creating the third filter on dataset 1 -> id " +
+						(function(){ filterModel.addFilter(1); return ws.filterIdByName(1, "Filter 0"); })())
+	}
+
+	Section {
+		title: qsTr("Zoo M - the extra source: pool on the third filter (+ the hostless pool)")
+
+		VariablesForm
+		{
+			// the default-provider pool: NO host selection, participation key -1
+			AvailableVariablesList
+			{
+				name:	"zooPoolHostless"
+			}
+			AssignedVariablesList
+			{
+				name:	"assignedDefault"
+				title:	qsTr("Assigned (default-provider pool)")
+			}
+		}
+		VariablesForm
+		{
+			// THE EXTRA SOURCE: hosted by the third filter of the same test dataset; its universe
+			// terms carry the f3 stamp (JASPColumn_D1_F3_ namespace)
+			AvailableVariablesList
+			{
+				name:					"zooPoolThree"
+				dataSetSelectionOption:	"dataSetM3"
+			}
+			AssignedVariablesList
+			{
+				name:	"assignedThree"
+				title:	qsTr("Assigned (third-filter pool)")
+			}
+		}
+	}
+
+	// ---- Zoo N: derived pool (mixed sources) ------------------------------------------------------
+	// An AvailableVariablesList whose source is TWO assigned lists: its listed terms are
+	// references carrying each source term's OWN stamp (mixed provenance). Known limitation
+	// (documented in the mds-plan post): mixed-source refs do not follow a source-list host
+	// switch this pass - that is exactly why the reset signal carries the participation key
+	// instead of a `to` scalar.
+	Section {
+		title: qsTr("Zoo N - derived pool (source: assignedA + assignedDefault)")
+
+		VariablesForm
+		{
+			AvailableVariablesList
+			{
+				name:	"zooPoolDerived"
+				source:	["assignedA", "assignedDefault"]
+			}
+			AssignedVariablesList
+			{
+				name:	"assignedDerived"
+				title:	qsTr("Assigned (derived pool)")
 			}
 		}
 	}
