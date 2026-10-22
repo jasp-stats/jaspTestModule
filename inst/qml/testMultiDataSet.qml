@@ -35,7 +35,7 @@ Form
 			AvailableVariablesList
 			{
 				name:	"allVariablesA"
-				//List-level dataset selection (mds-plan C10): an option carrying the dataset name
+				//List-level dataset selection: an option carrying the dataset name
 				//to select for this list (jaspSyntax gates the bound dropdown on it; desktop never
 				//sees it). The assigned lists below inherit this list's namespace.
 				dataSetSelectionOption: "dataSetA"

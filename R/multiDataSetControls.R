@@ -1,4 +1,4 @@
-# mds-plan D6.1 - the component-zoo echo. Receives the generated options + the per-slice
+# the component-zoo echo. Receives the generated options + the per-slice
 # `datasets` (contract: keyed by SLICE/filter id, attrs dataSetIds/dataSetNames map a key back
 # to its dataset - see multiDataSet.R for the full contract notes) and reports, per control
 # family, EVERY value exactly as received: the encoded name (results are decoded on the way out,
@@ -40,14 +40,14 @@
 #                                 resolution + correlation
 #   factors-form         Zoo K - FactorsForm (the FactorsList family): per factor name/title +
 #                                 terms. The form's inner panels are not hosts, but the per-factor
-#                                 sidecar (FactorsFormBase::createFilterIds, mds-plan post) now
+# sidecar (FactorsFormBase::createFilterIds) now
 #                                 transports each term's OWN filterId per factor and per term: a
 #                                 factor term carries the stamp of the host its source list synced
 #                                 it from (here assignedK -> filter 1) and encodes through THAT
 #                                 filter's view - resolved slice by slice, no analysis-level
 #                                 fallback (the D3.2 hostless-panel deferral is CLOSED; pinned
 #                                 here, not faked).
-#                                 REGRESSION PINNED C++-SIDE (mds-plan post): a factor term whose
+# REGRESSION PINNED C++-SIDE: a factor term whose
 #                                 column the resolved namespace lacks (e.g. a NOMINAL Group term
 #                                 while the shown dataset is DataSet 2) used to FATAL the whole
 #                                 run - rbridge_readDataSetRequested refused "Group.nominal"
@@ -65,7 +65,7 @@
 #                                 USED in the cross-slice computation, not just echoed
 #   scalar               M5 contract - plain values, no provenance anywhere
 #
-# RESULTS INVENTORY (the point of the zoo: data and flows must be VISIBLE, mds-plan "show the
+# RESULTS INVENTORY (the point of the zoo: data and flows must be VISIBLE, "show the
 # loaded data"):
 #   dataSetOverview      one row per slice (unchanged)
 #   dataPreview_<key>    THE LOADED DATA: per slice, every column's name AND first `rowsH` VALUES
@@ -599,7 +599,7 @@ crossSliceTable <- function(jaspResults, options, datasets) {
   if (!is.null(colA) && !is.null(colB)) {
     value <- if (length(colA$values) != length(colB$values))
       paste0("row lengths differ (", length(colA$values), " vs ", length(colB$values),
-             "): no join semantics (mds-plan D7 O3) - whole-column aggregates only")
+             "): no join semantics - whole-column aggregates only")
     else sprintf("mean of product %.3f", mean(colA$values * colB$values, na.rm = TRUE))
     rows <- addRow2("cross-host column product",
                     paste0(colA$column, " of ", label(colA$key), " x ", colB$column, " of ", label(colB$key)),

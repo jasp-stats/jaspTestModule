@@ -13,15 +13,15 @@
 # both available. Result strings are decoded back to the original names on the way to the GUI
 # (Engine::sendString and the rbridge callbacks, all consumers of the one global strict decode
 # table), so putting encoded names in tables/plots is not just allowed, it is how provenance
-# survives: THE PROVENANCE IS IN THE NAME (mds-plan C1/C8), never in a side channel. While such
+# survives: THE PROVENANCE IS IN THE NAME, never in a side channel. While such
 # a run is active, readDataSet* stops: one 'current dataset' is meaningless here.
 #
-# Options contract (mds-plan C8/C11, the Phase-3 flip): `options$.meta` is GENERATED at send
+# Options contract (the Phase-3 flip): `options$.meta` is GENERATED at send
 # time and carries no dataSetId/filterId; the transient `.filterIds` sidecar is stripped at the
 # engine boundary before R sees anything. metaDump() below echoes both facts as the
 # PROVENANCE_AUDIT marker the RPC verifier asserts on every run.
 #
-# Qualified column references (mds-plan plan §5, cards D8.1/D8.2/D8.4): a TERM option may
+# Qualified column references: a TERM option may
 # arrive with qualified surface forms ("Dataset"."Filter"."Column"("Type"), minimal per
 # context); the C++ appliers parse them into typed terms with filterIds before the run, so R
 # receives them as ordinary encoded names - no R-side grammar (C14). A STRING option (plain
@@ -32,7 +32,7 @@
 #
 # The two aware analyses here: multiDataSetFuncInternal (form testMultiDataSet.qml - two
 # per-list dataset selection options dataSetA/dataSetB, the D8.3 wrapper fixture) and
-# multiDataSetControlsInternal (the component zoo testMultiDataSetControls.qml, mds-plan
+# multiDataSetControlsInternal (the component zoo testMultiDataSetControls.qml,
 # D6.1/D6.2: assigned lists, row controls with same-name twins, interactions, factor levels
 # via encodeThis, a textarea host, a cross-host typed bindTo copy - each reports what it
 # received and where it resolved).
@@ -141,7 +141,7 @@ selectedVariablesTable <- function(jaspResults, options, datasets, dataset) {
 metaDump <- function(jaspResults, options) {
   meta <- options[[".meta"]]
   metaText <- jsonlite::toJSON(if (is.null(meta)) list() else meta, auto_unbox = TRUE, pretty = 2)
-  # mds-plan D3.3: R must never see provenance - the transient `.filterIds` sidecar is stripped
+  # R must never see provenance - the transient `.filterIds` sidecar is stripped
   # at the engine boundary (C11) and the send-time `.meta` carries no dataSetId/filterId (C8).
   # The audit markers echo exactly what arrived so the RPC verifier can assert the contract.
   provenanceKeys <- sum(lengths(regmatches(metaText, gregexpr("dataSetId|filterId", metaText))))
@@ -165,7 +165,7 @@ readDataSetGuardDemo <- function(jaspResults) {
 }
 
 # The non-aware counterpart (multiDataSetNonAwareInternal + Description entry) was removed by
-# mds-plan C4/M8: every other analysis here is already a plain single-dataset one, and the
+# every other analysis here is already a plain single-dataset one, and the
 # twin's generated wrapper had a stale qml pointer so its R entry point always errored. The
 # "Non-aware run." branch above stays: it renders whenever `datasets` never arrives (old
 # jaspBase, direct Internal calls).

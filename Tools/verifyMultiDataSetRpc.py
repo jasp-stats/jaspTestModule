@@ -16,7 +16,7 @@ global FilterMenuButton filter). Asserts:
     the engine-boundary strip (C11); per-form routing is proven at the VALUE level
     (each form's variable resolves against its own selection's slice: 12.50 vs 17.73)
   - no raw JASPColumn_* anywhere (decode on send)
-And the C3/VERIFY-live block (mds-plan C3/M5): switch one host's selection mid-session and
+And the live-verification block: switch one host's selection mid-session and
 assert the next run only shows the LIVE selections - no phantom slice for the abandoned filter,
 no provenance stamps on scalars or on the selection options themselves, column values restamped
 onto the new filter (there and back).
@@ -66,7 +66,7 @@ call = _rpc
 
 import sys, json, time, os, re as _re
 
-# Locations (mds-plan C4/S9): nothing machine-specific. The module dir is resolved as
+# Locations: nothing machine-specific. The module dir is resolved as
 # --module=<dir> (argv) > $JASP_TESTMODULE_DIR > the directory containing this script
 # (it lives in <module>/Tools/, so the default is self-locating).
 def _findModuleDir():
@@ -216,7 +216,7 @@ if sv:
 
 check("analysis references both datasets (dataSetIds in run response)", sorted(r2.get("dataSetIds", [])) == [1, 2], str(r2.get("dataSetIds")))
 
-# T3c (mds-plan D3.3 flip): provenance as R sees it - NONE. The generated Engine json keeps
+# Provenance as R sees it - NONE. The generated Engine json keeps
 # .meta provenance-free (C8) and the transient .filterIds sidecar is stripped at the engine
 # boundary (C11); the metaDump html (options$showMeta was on) audits exactly that. Per-form
 # provenance still routes the DATA (two same-named columns, two truths) - pinned value-level
@@ -234,7 +234,7 @@ check("R never sees .filterIds (C11 strip at the engine boundary)", audit2 == ("
 check("options$.meta as R received it carries no provenance keys (C8)", audit2[1] == "0", str(audit2))
 
 # ----------------------------------------------------------------------------
-# C3/VERIFY-live (mds-plan C3/M5): the phantom-slice class. Switch ONE HOST'S SELECTION
+# The phantom-slice class. Switch ONE HOST'S SELECTION
 # mid-session and check the NEXT run's data shows only the LIVE selections: no slice queued
 # for an abandoned filter, and the run's provenance still C8/C11-clean (the per-run audit).
 # Since the D3.3 flip the restamp moves the TYPED term filterIds (HostFilterSelection
@@ -273,7 +273,7 @@ check("run 3: no phantom slice - only DataSet 2 loaded", ids3 == ["2"], str(ids3
 check("run 3: dataSetIds not over-reported", sorted(r3.get("dataSetIds", [])) == [2], str(r3.get("dataSetIds")))
 audit3 = provenance_audit(res3)
 check("run 3: still no provenance reaches R after the switch (C8/C11)", audit3 == ("false", "0"), str(audit3))
-# (old stamp-window checks retired with the meta stamps, mds-plan D3.3: the C8 audit above
+# (old stamp-window checks retired with the meta stamps, the C8 audit above
 # covers scalars and selection options too - NO dataSetId/filterId key may appear ANYWHERE)
 
 sv3 = next((t for t in tables(res3.get("results", res3)).values() if t.get("title") == "Selected variables"), None)
@@ -306,13 +306,13 @@ if sv4:
 check("run 4: A:Score back on DataSet 1 (mean 12.50)", a4 and str(a4["dataSetId"]) == "1" and "12.50" in str(a4["values"]), json.dumps(a4))
 
 # ----------------------------------------------------------------------------
-# mds-plan D6.3 - the component zoo (jaspTestModule analysis multiDataSetControlsFunc /
+# the component zoo (jaspTestModule analysis multiDataSetControlsFunc /
 # testMultiDataSetControls.qml). Every control family echoes what it RECEIVED (encoded names,
 # decoded again on the way out), which slice index each value resolved in, and its row children,
 # so per-item provenance is asserted at the value level. The RPC workspace starts with one
 # default filter per dataset (ids 1 and 2) - exactly two distinct namespaces for the twin cases.
 # The zoo form BOOTSTRAPS a third filter on dataset 1 ("Filter 0", all-rows) at form load, because
-# the RPC has no filter-creation method and the mds-plan post zoo correction needs a THIRD pool
+# the RPC has no filter-creation method and the zoo correction needs a THIRD pool
 # hosted by it (the f3-origin namespace for the anchor scenario); its id is discovered below.
 # Checks per family:
 #   - same-name columns across two filters in the SAME list (twins) -> distinct encodings,
@@ -372,7 +372,7 @@ def zoo_full_opts(host_a="1", host_m3="", host_d="", host_f="", host_g="",
                   combo_a="", combo_i="", text_h="", rows_h=5, double_h=1.5, slider_h=0.5,
                   radio_h="mean", gate_h=False, gated_h=10.0, table_l=None,
                   plain_switch=False, show_meta=True):
-    # NB: dataSetB/dataSetC are GONE (mds-plan post zoo correction): Zoo B is REMOVED entirely (a
+    # NB: dataSetB/dataSetC are GONE (zoo correction): Zoo B is REMOVED entirely (a
     # bare assigned list - no source at all - is a malformed configuration, owner rule) and Zoo C
     # is a normal form over a default-provider pool now - neither has a host option to send.
     # dataSetM3 is Zoo M's extra-source pool (the THIRD filter of dataset 1, bootstrapped by the
@@ -420,7 +420,7 @@ zslices1 = zoo_slice_ids(zres1) or []
 check("zoo run 1: slice 1 queued (host A), nothing beyond the workspace's two slices",
       "1" in zslices1 and set(zslices1) <= {"1", "2"}, str(zslices1))
 
-# --- the zoo fixture's THIRD filter (mds-plan post zoo correction) --------------------------------
+# --- the zoo fixture's THIRD filter (zoo correction) --------------------------------
 # The zoo form bootstraps "Filter 0" on dataset 1 at form load (zoo run 1 forced the form to
 # load, so the bootstrap has run by now). Discover its id via data_info - the verifier must not
 # hardcode 3 (a re-run in a workspace that already had extra filters would shift it).
@@ -702,7 +702,7 @@ def no_raw_tokens(res, tag):
 #   assignedK Group+Age via host K(1) -> slice 1 (Group feeds the encodeThis demo, Age is the
 #   factor term's source) | pairsJ Score+Age via host J(1) -> slice 1
 #   interactionD Score:Age via host D(1) -> slice 1 | factorsK Age -> the per-factor sidecar
-#   (FactorsFormBase::createFilterIds, mds-plan post) transports the term's OWN filterId per
+# (FactorsFormBase::createFilterIds) transports the term's OWN filterId per
 #   factor and per term -> slice 1 (the term's stamp comes from its source host assignedK; the
 #   D3.2 hostless-panel deferral - analysis-level namespace, slice 2 - is CLOSED, pinned here)
 zr9, zres9 = zoo_run(zoo_full_opts(
@@ -1018,12 +1018,12 @@ check("zoo run 17: multiplier mean 2.00 x mean(Age@1)=38.00 -> scaled mean 76.00
       "scaled mean 76.000" in str(cs17.get("tableview multipliers", {}).get("value")), json.dumps(cs17))
 no_raw_tokens(zres17, "zoo run 17")
 
-# --- zoo run 18 (REGRESSION, mds-plan post): nominal factor term in a namespace lacking the column --
+# --- zoo run 18 (REGRESSION): nominal factor term in a namespace lacking the column --
 # Pre-fix this FATALed the whole run (rbridge_readDataSetRequested: "gets 'Group.nominal' but its
 # not a columnname at all"): the FactorsForm panel is hostless, its term stamped at the ANALYSIS
 # level (DataSet 2, which has no Group), and the collector queued a column that dataset does not
 # have. The collector now refuses to queue nonexistent columns. Since the per-factor sidecar
-# (FactorsFormBase::createFilterIds, mds-plan post) transports the term's OWN filterId, the term
+# (FactorsFormBase::createFilterIds) transports the term's OWN filterId, the term
 # no longer falls back to the analysis-level namespace at all: it encodes through its source
 # host's view (filter 1, DataSet 1, which HAS the nominal Group) and resolves in slice 1 - the
 # phantom-namespace route is gone. The run completes with a RESOLVED row and a clean audit; the
@@ -1047,7 +1047,7 @@ check("zoo run 18: PROVENANCE_AUDIT clean after the regression case", auditz18 =
 no_raw_tokens(zres18, "zoo run 18")
 
 # ----------------------------------------------------------------------------
-# mds-plan post zoo correction - the three pools, the ds1/f1 -> ds1/f3 ANCHOR and the
+# zoo correction - the three pools, the ds1/f1 -> ds1/f3 ANCHOR and the
 # derived pool. Zoo M holds three pools over the same test dataset: the hostless pool
 # (no host selection, participation key -1), Zoo A's pool on the existing selection
 # (dataSetA) and the EXTRA SOURCE zooPoolThree on the bootstrapped third filter

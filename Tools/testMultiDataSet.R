@@ -127,7 +127,7 @@ check(grepl("not available in multi-dataset aware analyses", raw1, fixed = TRUE)
 
 # ------------------------------------------------------------------ Bridge surface (C4) ----
 cat("\n== Bridge boundary: loadDataSets returns ids (informational); selections are TITLES ==\n")
-# mds-plan C4: the syntax surface of the dataset selection options is human strings ONLY -
+# the syntax surface of the dataset selection options is human strings ONLY -
 # the bare TITLE for a dataset's default filter, "title - filterName" for a saved named one.
 # The integer ids the loaders hand back stay useful for logging and for slicing results by,
 # but writing one into a selection option is now a hard error (M4: the old numeric-id
@@ -158,7 +158,7 @@ check(identical(as.character(msj$dataSetIds[[keyA]]), as.character(ids[[1]])),
 
 errId <- tryCatch({ parseSelection(as.integer(ids[[1]]), as.integer(ids[[2]])); "" }, error = function(e) conditionMessage(e))
 check(grepl("matches no dataset selection string", errId),
-      "integer dataset ids are rejected on the syntax surface (mds-plan C4/M4: no numeric-id acceptance anymore)")
+      "integer dataset ids are rejected on the syntax surface (no numeric-id acceptance anymore)")
 errBadTitle <- tryCatch({ parseSelection("NoSuchDataSet", "DataSetB"); "" }, error = function(e) conditionMessage(e))
 check(grepl("matches no dataset selection string", errBadTitle) && grepl("available:", errBadTitle),
       "an unknown title is rejected loudly and the error lists what IS selectable")
@@ -193,7 +193,7 @@ check(any(grepl("MULTIDATASET-WRAPPER-OK", status2, fixed = TRUE)), "wrapper sub
 cat("\n== Path 3: legacy non-aware run (single dataset, plain names) ==\n")
 # The aware analysis ALWAYS gets the bridge slice queue now (engine semantics: multiDataSetJson
 # is produced whenever the Description says aware), so the legacy dataset/readDataSet path runs
-# through a plain non-aware analysis instead of the removed twin (mds-plan C4/M8):
+# through a plain non-aware analysis instead of the removed twin:
 # testEncodingFunc has no preloadData, so its R body really calls .readDataSetToEnd() and
 # echoes the column values - a live witness that the readDataSet guard stays silent outside
 # aware runs and that data survives the bridge encode->decode round trip.

@@ -47,7 +47,7 @@ multiDataSetFunc <- function(
    options[["version"]] <- NULL
 
 
-   # mds-plan D8.3: `datasets` must be a named list of data.frames keyed by DATASET TITLE - the
+   # `datasets` must be a named list of data.frames keyed by DATASET TITLE - the
    # titles the dataset selection options of this form carry (e.g. list(Iris = iris, Sleep = sleep)).
    # No positional pin: the dataset that plays `data` (the frame the formula machinery evaluates
    # against) is the first selection option whose effective value names one of the loaded datasets,

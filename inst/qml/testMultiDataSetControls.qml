@@ -1,11 +1,11 @@
-// mds-plan D6.1/D6.2 - the component zoo under multi-source provenance.
+// the component zoo under multi-source provenance.
 //
 // Every control family a real analysis form uses, each exercising per-item provenance:
 //  Zoo A  plain lists: an AvailableVariablesList carrying its own dataset/filter selection
 //         (the D2.2 list-level pattern) feeding an AssignedVariablesList, plus a DropDown
 //         served by the same host (comboboxes stay PLAIN strings - never term objects -
 //         while their value still resolves through the host namespace).
-//  Zoo B  REMOVED (mds-plan post zoo correction, owner): a bare assigned list - an assigned
+// Zoo B REMOVED (zoo correction, owner): a bare assigned list - an assigned
 //         list with no source at all - is a malformed configuration, not a supported one:
 //         every real assigned list sits in a form with a pool. Its two real pins moved: the
 //         -1 analysis-fallback resolution is pinned on the default-provider pool's assigned
@@ -22,7 +22,7 @@
 //         key is -1, so the stamped twins are never swept by a universe reset: each twin
 //         follows only its own stamp.
 //  Zoo D  interaction terms: a VariablesList in Interaction mode - components of one
-//         combination term share the term-level filterId (mds-plan C9 uniform-carry rule).
+// combination term share the term-level filterId (uniform-carry rule).
 //  Zoo E  FactorLevelList: encodeThis -> extras-encoder roundtrip (factor/level names encode
 //         through the JaspExtraOptions_ namespace and must come back decoded and usable).
 //  Zoo F  TextArea with its OWN host: R-code text whose used columns encode through the
@@ -33,7 +33,7 @@
 //         UNQUALIFIED terms (D5.1 intake guard) and the restamp walk never touches foreign
 //         stamps (D3.5 owns-the-stamp), so the value must encode and resolve through the
 //         SOURCE's slice even though this list's own dropdown selects another one.
-//  Zoo M  THREE pools over the same test dataset (the mds-plan post zoo correction): a
+// Zoo M THREE pools over the same test dataset (the zoo correction): a
 //         hostless pool (no dataSetSelectionOption at all - the default-provider pool whose
 //         participation key is -1), Zoo A's pool hosted by the existing filter selection
 //         (dataSetA, filter 1), and the EXTRA SOURCE: a new AvailableVariablesList hosted by
@@ -362,7 +362,7 @@ Form
 	// FactorsList is one panel of a FactorsForm; the serialized shape is the form's: per factor
 	// {name, title, indicators}. Findings (pinned by the verifier):
 	// 1. The form's inner panels are NOT hosts, but the per-factor sidecar
-	//    (FactorsFormBase::createFilterIds, mds-plan post) transports each term's OWN filterId
+	// (FactorsFormBase::createFilterIds) transports each term's OWN filterId
 	//    per factor and per term: a term keeps the stamp its source list synced onto it
 	//    (assignedK -> filter 1) and encodes through THAT filter's view - resolved slice by
 	//    slice, no analysis-level fallback (the D3.2 hostless-panel deferral is CLOSED).
@@ -370,7 +370,7 @@ Form
 	//    silently dropped by the form's model sync, and a term the form keeps is RE-TYPED by the
 	//    form (Age arrived ordinal here although sent scale, so the engine slice receives it as an
 	//    R factor). A term whose column the resolved namespace lacks used to FATAL the run - the
-	//    mds-plan post existence guard in Common/columnencoder.cpp refuses to queue columns a
+	// existence guard in Common/columnencoder.cpp refuses to queue columns a
 	//    namespace does not have; with the per-factor sidecar the term resolves in its OWN
 	//    namespace instead (verifier run 18 pins the resolved row + clean audit).
 	Section {
@@ -428,7 +428,7 @@ Form
 	}
 
 	// ---- Zoo M: three pools over one dataset (hostless / f1 / f3) --------------------------------
-	// The mds-plan post zoo correction. The EXTRA SOURCE is zooPoolThree: an AvailableVariablesList
+	// The zoo correction. The EXTRA SOURCE is zooPoolThree: an AvailableVariablesList
 	// whose host selection is the THIRD filter of the same test dataset. A fresh RPC workspace has
 	// only the two default filters (data_load mints one per dataset; the RPC has no filter-creation
 	// method), so the form bootstraps the third filter itself, once, guarded: only when the
@@ -490,7 +490,7 @@ Form
 	// ---- Zoo N: derived pool (mixed sources) ------------------------------------------------------
 	// An AvailableVariablesList whose source is TWO assigned lists: its listed terms are
 	// references carrying each source term's OWN stamp (mixed provenance). Known limitation
-	// (documented in the mds-plan post): mixed-source refs do not follow a source-list host
+	// (documented in the): mixed-source refs do not follow a source-list host
 	// switch this pass - that is exactly why the reset signal carries the participation key
 	// instead of a `to` scalar.
 	Section {
