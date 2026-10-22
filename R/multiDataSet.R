@@ -1,5 +1,7 @@
 # Multi-dataset aware analyses (jasp-desktop branch dataSetAwareVarForm, jaspBase branch
-# multiDataSetAware). An analysis whose Description/Analysis entry sets multiDataSetAware gets
+# multiDataSetAware). An analysis whose form declares a dataset selection (dataSetSelectionOption
+# on a list/textarea - the Analysis finds out by itself, Description.qml no longer has a
+# multiDataSetAware property) gets
 # every dataset its options reference as `datasets`. Engine runs AND jaspTools::runAnalysis
 # handouts both key that list by SLICE id - the resolved filter id of each queued dataset+filter
 # pair (attrs "dataSetIds"/"dataSetNames" map a key back to its dataset) - so both are indexed

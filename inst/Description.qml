@@ -80,10 +80,11 @@ Description
 
 	GroupTitle { title: "Multi dataset" }
 
-	// multiDataSetAware: the analysis gets every dataset its options reference as the `datasets`
-	// argument (jaspBase >= the multiDataSetAware branch) and VariablesForm's dataSetSelection
-	// dropdown becomes live. It only kicks in combined with preloadData; without it the engine
-	// logs that the analysis gets its data like a non-aware one.
+	// multiDataSetAware is not declared any more: the Analysis finds out by itself once its form
+	// loads and a control registers a dataset selection (dataSetSelectionOption - see
+	// testMultiDataSet.qml). The analysis then gets every dataset its options reference as the
+	// `datasets` argument (jaspBase >= the multiDataSetAware branch) and its FilterSelect dropdowns
+	// become live. The expander's filter button selects the default (hostless) source.
 	Analysis
 	{
 		title:				"Test Multi-DataSet"
@@ -91,7 +92,6 @@ Description
 		func:				"multiDataSetFunc"
 		requiresData:		true
 		preloadData:		true
-		multiDataSetAware:	true
 		hasWrapper:			true
 	}
 
@@ -106,7 +106,6 @@ Description
 		func:				"multiDataSetControlsFunc"
 		requiresData:		true
 		preloadData:		true
-		multiDataSetAware:	true
 		hasWrapper:			true
 	}
 
