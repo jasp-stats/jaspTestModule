@@ -8,7 +8,7 @@
 # involved, so it works on a rolling-release system (Arch) with the R you have.
 #
 # Requires the tool library (jaspModuleTools + jaspModuleBundleManager + renv etc.), by default
-# ../.toolLib; see the bottom of this file for how it was created.
+# ../.toolLib; see the one-time setup instructions in this header below.
 #
 # Usage (from the jaspTestModule directory, or anywhere):
 #   Rscript Tools/buildBundle.R                      # bundle with local jaspBase
@@ -48,7 +48,7 @@ jaspVersion <- "development"
 for (a in args) if (grepl("^--jasp-version=", a)) jaspVersion <- sub("^--jasp-version=", "", a)
 
 if (!dir.exists(toolLib))
-	stop("Tool library not found at ", toolLib, " - see the setup instructions at the bottom of this script.")
+	stop("Tool library not found at ", toolLib, " - see the one-time setup instructions at the top of this script.")
 
 .libPaths(c(toolLib, .libPaths()))
 suppressPackageStartupMessages({ library(jsonlite) })
