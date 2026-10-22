@@ -15,6 +15,34 @@
 ---
 
 # jaspTestModule (development version)
+## Added
+* "Test Multi-DataSet": analysis + form to exercise multi-dataset aware analyses
+  (`multiDataSetAware` Description entries, the VariablesForm dataset/filter selection,
+  the `datasets` handout and encoded-name routing of jaspBase, the readDataSet() guard,
+  the `.meta` dataSetId/filterId provenance and the non-aware counterpart as controls).
+  The aware analysis is wrapped (`hasWrapper: true`): body in `multiDataSetFuncInternal`,
+  generated `multiDataSetFunc(datasets = ...)` wrapper for R syntax use.
+* `Tools/buildBundle.R`: builds an installable `bundles_out/jaspTestModule.JASPModule`
+  from this checkout with the local `jasp-desktop/Engine/jaspBase` (or any checkout via
+  `JASP_BASE_DIR`) packed into the bundle; no JASP cellar needed.
+* `Tools/testMultiDataSet.R` (+ `_wrapper.R`): full headless test of the analysis over
+  engine-style queued slices, the wrapper in a clean session and a legacy non-aware run.
+* `Tools/testdata/DataSetA.csv` / `DataSetB.csv`: two datasets with deliberately colliding
+  column names for the per-dataset routing test.
+
+## Changed
+* `renv.lock` re-resolved for R 4.6.1 (current CRAN, jaspBase/jaspGraphs from GitHub HEAD).
+* `hasWrappers: true` for the module: every analysis body now lives in `<func>Internal`
+  and has a generated `R/<func>Wrapper.R` (via jaspSyntax/SyntaxInterface) exposing the
+  plain `<func>(data = ..., ...)` entry point for R syntax use - 38 of 43; the four
+  entries pointing at removed qml files (test.qml, TestPlotStatus.qml) can't generate
+  one, and filteredDataEntry crashes the syntax bridge headlessly (Filter without
+  DataSet assertion in CommonData/filter.cpp - a real bridge bug to fix).
+* The non-aware twin (`multiDataSetNonAware` func/qml/wrapper) is removed again (mds-plan
+  C4/M8): its generated wrapper carried a stale qml pointer so its R entry point always
+  errored, and every other analysis in this module already is a plain single-dataset one.
+  Legacy path 3 of Tools/testMultiDataSet.R now runs through `testEncodingFunc` (whose R body
+  really calls `.readDataSetToEnd`).
 
 
 

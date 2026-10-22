@@ -1,5 +1,5 @@
 
-testTextArea <- function(jaspResults, dataset, options)
+testTextAreaInternal <- function(jaspResults, dataset, options)
 {
   tableOfOptions(jaspResults, options, dataset)
   

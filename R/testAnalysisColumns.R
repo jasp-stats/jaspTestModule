@@ -1,4 +1,4 @@
-testAnalysisColumnFunc <- function(jaspResults, dataset, options)
+testAnalysisColumnFuncInternal <- function(jaspResults, dataset, options)
 {   
   tableOfOptions(jaspResults, options, dataset)
 

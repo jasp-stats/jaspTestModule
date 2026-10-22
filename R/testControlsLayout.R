@@ -1,5 +1,5 @@
 
-testControlsLayoutFunc <- function(jaspResults, dataset, options)
+testControlsLayoutFuncInternal <- function(jaspResults, dataset, options)
 {
   tableOfOptions(jaspResults, options, dataset)
   

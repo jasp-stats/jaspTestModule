@@ -1,3 +1,4 @@
 exportPattern('^[[:alpha:]]+')
+  import('jaspBase');
   import('svglite');
   import('stringi');

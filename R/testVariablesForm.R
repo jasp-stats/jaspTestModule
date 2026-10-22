@@ -1,5 +1,5 @@
 
-testVariablesForm <- function(jaspResults, dataset, options)
+testVariablesFormInternal <- function(jaspResults, dataset, options)
 {
   tableOfOptions(jaspResults, options, dataset)
   
