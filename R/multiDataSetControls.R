@@ -14,12 +14,12 @@
 #                                 default-provider pool (every assigned list has >= 1 source -
 #                                 owner rule; the bare standalone list died with Zoo B):
 #                                 per-row term + keep + shift; same-name twin rows from two
-#                                 filters keep their OWN children (the D6.1 TermRowKey
+#                                 filters keep their OWN children (the TermRowKey
 #                                 re-keying); the pool's key is -1, so the stamped twins are
 #                                 never swept by any reset
 #   pool-hostless        Zoo M - the default-provider pool's companion (no host selection,
 #                                 participation key -1): sent-BARE terms resolve through the
-#                                 analysis-level fallback (the C13 use-time resolution),
+#                                 analysis-level fallback (the use-time resolution),
 #                                 sent-stamped terms keep their own stamp
 #   pool-f3              Zoo M - the EXTRA SOURCE's companion: the pool hosted by the THIRD
 #                                 filter of the same test dataset (f3-origin terms carry its
@@ -31,7 +31,7 @@
 #                                 they must come back decoded, no raw JaspExtraOptions_ leakage)
 #   textarea-host        Zoo F - R-code textarea: used columns encoded through its own host
 #   bindto-cross-host    Zoo G - typed copy bound across differently-selected hosts: keeps the
-#                                 SOURCE filterId, encodes through the SOURCE's view (D6.2)
+#                                 SOURCE filterId, encodes through the SOURCE's view
 #   dropdown-dependent   Zoo I - dependent dropdown: option LIST driven by assignedA's value; its
 #                                 value encodes through the SOURCE's host namespace (a dropdown
 #                                 with a source inherits the source's selection host)
@@ -45,7 +45,7 @@
 #                                 factor term carries the stamp of the host its source list synced
 #                                 it from (here assignedK -> filter 1) and encodes through THAT
 #                                 filter's view - resolved slice by slice, no analysis-level
-#                                 fallback (the D3.2 hostless-panel deferral is CLOSED; pinned
+#                                 fallback (the hostless-panel deferral is CLOSED; pinned
 #                                 here, not faked).
 # REGRESSION PINNED C++-SIDE: a factor term whose
 #                                 column the resolved namespace lacks (e.g. a NOMINAL Group term
@@ -63,7 +63,7 @@
 #   tableview            Zoo L - bound TableView (row count driven by Zoo H's integer); cells
 #                                 are plain values (no provenance - not a Terms option) and are
 #                                 USED in the cross-slice computation, not just echoed
-#   scalar               M5 contract - plain values, no provenance anywhere
+#   scalar               plain values, no provenance anywhere
 #
 # RESULTS INVENTORY (the point of the zoo: data and flows must be VISIBLE, "show the
 # loaded data"):
@@ -121,7 +121,7 @@ multiDataSetControlsFuncInternal <- function(jaspResults, dataset, options, data
 # ------------------------------------------------------------------ resolution helpers
 
 .resolveSlice <- function(token, datasets) {
-  # an aware option value IS the encoded column name of exactly one slice (C1/C3): index it
+  # an aware option value IS the encoded column name of exactly one slice: index it
   if (is.null(datasets) || !is.character(token) || length(token) != 1 || !nzchar(token))
     return(NULL)
   hits <- names(datasets)[vapply(names(datasets),
@@ -142,7 +142,7 @@ multiDataSetControlsFuncInternal <- function(jaspResults, dataset, options, data
   .fillDescription(list(n = NA_integer_, values = ""), datasets[[key]][[token]])
 }
 
-# scalar option readers: scalars are never provenanced (M5), so they arrive as plain values
+# scalar option readers: scalars are never provenanced, so they arrive as plain values
 .intOption <- function(x, default = NA_integer_) {
   if (is.null(x) || length(x) != 1 || is.na(x)) return(default)
   v <- suppressWarnings(as.integer(x))
@@ -424,9 +424,9 @@ controlsProvenanceTable <- function(jaspResults, options, datasets) {
     }
   }
 
-  # --- scalars (M5): plain values, no provenance anywhere ------------------------------------------
+  # --- scalars: plain values, no provenance anywhere ------------------------------------------
   rows <- addRow(rows, "scalar", "plainSwitch", as.character(isTRUE(options$plainSwitch)),
-                 rowChild = "no provenance (C11 scalars unstamped)")
+                 rowChild = "no provenance (scalars unstamped)")
   rows <- addRow(rows, "combobox-plain", "comboG", as.character(options$comboG),
                  rowChild = "plain string (combos never term-objectified)")
 
@@ -667,7 +667,7 @@ encodeDemoTable <- function(jaspResults, options, datasets) {
       fname  <- .decodeNameSafe(as.character(f$name))
       levels <- as.character(unlist(f$levels %||% list()))
       levels <- if (length(levels)) vapply(levels, .decodeNameSafe, character(1)) else levels
-      # The slice data.frames carry ENCODED column tokens (that is what R receives, C1) - the
+      # The slice data.frames carry ENCODED column tokens (that is what R receives) - the
       # decoded factor name must be matched against the DECODED column names, not the raw
       # colnames (the verifier caught the first version matching "Group" against tokens).
       hitKey <- NULL; hitTok <- NULL

@@ -125,12 +125,12 @@ check(!grepl("JASPColumn_", raw1), "no encoded tokens anywhere in the returned r
 check(grepl("not available in multi-dataset aware analyses", raw1, fixed = TRUE),
       "guard demo: readDataSet() hard-stopped during the aware run")
 
-# ------------------------------------------------------------------ Bridge surface (C4) ----
+# ------------------------------------------------------------------ Bridge surface ----
 cat("\n== Bridge boundary: loadDataSets returns ids (informational); selections are TITLES ==\n")
 # the syntax surface of the dataset selection options is human strings ONLY -
 # the bare TITLE for a dataset's default filter, "title - filterName" for a saved named one.
 # The integer ids the loaders hand back stay useful for logging and for slicing results by,
-# but writing one into a selection option is now a hard error (M4: the old numeric-id
+# but writing one into a selection option is now a hard error (the old numeric-id
 # acceptance let a title shadow an id and vice versa - gone).
 ids <- jaspSyntax::loadDataSets(list(DataSetA = csvA, DataSetB = csvB))
 check(is.integer(ids) && length(ids) == 2L && identical(names(ids), c("DataSetA", "DataSetB")) && all(ids > 0),

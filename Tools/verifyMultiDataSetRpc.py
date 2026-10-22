@@ -11,9 +11,9 @@ global FilterMenuButton filter). Asserts:
   - 'Datasets in this run' has 2 rows with titles + row/col counts
   - 'Selected variables' rows have n=10 and the right means (Score/Score land on DIFFERENT
     datasets: 12.50 vs 17.73 - no 'variable compared with itself')
-  - the metaDump echo audits the post-D3.3 provenance contract as R RECEIVED it:
-    options$.meta carries no dataSetId/filterId (C8) and no .filterIds sidecar survives
-    the engine-boundary strip (C11); per-form routing is proven at the VALUE level
+  - the metaDump echo audits the provenance contract as R RECEIVED it:
+    options$.meta carries no dataSetId/filterId and no .filterIds sidecar survives
+    the engine-boundary strip; per-form routing is proven at the VALUE level
     (each form's variable resolves against its own selection's slice: 12.50 vs 17.73)
   - no raw JASPColumn_* anywhere (decode on send)
 And the live-verification block: switch one host's selection mid-session and
@@ -217,8 +217,8 @@ if sv:
 check("analysis references both datasets (dataSetIds in run response)", sorted(r2.get("dataSetIds", [])) == [1, 2], str(r2.get("dataSetIds")))
 
 # Provenance as R sees it - NONE. The generated Engine json keeps
-# .meta provenance-free (C8) and the transient .filterIds sidecar is stripped at the engine
-# boundary (C11); the metaDump html (options$showMeta was on) audits exactly that. Per-form
+# .meta provenance-free and the transient .filterIds sidecar is stripped at the engine
+# boundary; the metaDump html (options$showMeta was on) audits exactly that. Per-form
 # provenance still routes the DATA (two same-named columns, two truths) - pinned value-level
 # above: A:Score 12.50 vs B:Score 17.73.
 meta_text = json.dumps(results).replace(chr(92)+chr(34), '"').replace("&quot;", '"').replace("&#34;", '"')
@@ -230,14 +230,14 @@ def provenance_audit(res):
     return (m.group(1), m.group(2)) if m else (None, None)
 audit2 = provenance_audit(results)
 check("metaDump ran (provenance audit present)", audit2[0] is not None, str(audit2))
-check("R never sees .filterIds (C11 strip at the engine boundary)", audit2 == ("false", audit2[1]), str(audit2))
-check("options$.meta as R received it carries no provenance keys (C8)", audit2[1] == "0", str(audit2))
+check("R never sees .filterIds (strip at the engine boundary)", audit2 == ("false", audit2[1]), str(audit2))
+check("options$.meta as R received it carries no provenance keys", audit2[1] == "0", str(audit2))
 
 # ----------------------------------------------------------------------------
 # The phantom-slice class. Switch ONE HOST'S SELECTION
 # mid-session and check the NEXT run's data shows only the LIVE selections: no slice queued
-# for an abandoned filter, and the run's provenance still C8/C11-clean (the per-run audit).
-# Since the D3.3 flip the restamp moves the TYPED term filterIds (HostFilterSelection
+# for an abandoned filter, and the run's provenance still clean (the per-run audit).
+# Since the sidecar flip the restamp moves the TYPED term filterIds (HostFilterSelection
 # ::restampValuesUnderHost -> ListModel::restampTermsFilterId -> generated `.filterIds`), the
 # .meta half is dead. This RPC workspace has one (default) filter per dataset, so the
 # mid-session switch here crosses datasets (form A: f1 -> f2 -> f1); the sharp same-dataset/
@@ -272,8 +272,8 @@ ids3, _ = overview_ids(res3)
 check("run 3: no phantom slice - only DataSet 2 loaded", ids3 == ["2"], str(ids3))
 check("run 3: dataSetIds not over-reported", sorted(r3.get("dataSetIds", [])) == [2], str(r3.get("dataSetIds")))
 audit3 = provenance_audit(res3)
-check("run 3: still no provenance reaches R after the switch (C8/C11)", audit3 == ("false", "0"), str(audit3))
-# (old stamp-window checks retired with the meta stamps, the C8 audit above
+check("run 3: still no provenance reaches R after the switch", audit3 == ("false", "0"), str(audit3))
+# (old stamp-window checks retired with the meta stamps, the provenance audit above
 # covers scalars and selection options too - NO dataSetId/filterId key may appear ANYWHERE)
 
 sv3 = next((t for t in tables(res3.get("results", res3)).values() if t.get("title") == "Selected variables"), None)
@@ -297,7 +297,7 @@ ids4, _ = overview_ids(res4)
 check("run 4: exactly one slice per dataset again", ids4 == ["1", "2"], str(ids4))
 check("run 4: dataSetIds reports both datasets", sorted(r4.get("dataSetIds", [])) == [1, 2], str(r4.get("dataSetIds")))
 audit4 = provenance_audit(res4)
-check("run 4: provenance contract held through the switch-back too (C8/C11)", audit4 == ("false", "0"), str(audit4))
+check("run 4: provenance contract held through the switch-back too", audit4 == ("false", "0"), str(audit4))
 a4 = None
 sv4 = next((t for t in tables(res4.get("results", res4)).values() if t.get("title") == "Selected variables"), None)
 if sv4:
@@ -318,13 +318,13 @@ check("run 4: A:Score back on DataSet 1 (mean 12.50)", a4 and str(a4["dataSetId"
 #   - same-name columns across two filters in the SAME list (twins) -> distinct encodings,
 #     correct per-slice values (the 12.50/17.73 trick per family)
 #   - per-row provenance in the TableFields-style row control (row-bearing variables list):
-#     twin rows keep their own keep/shift children (the D6.1 TermRowKey re-keying; pre-fix the
+#     twin rows keep their own keep/shift children (the TermRowKey re-keying; pre-fix the
 #     second row clobbered the first)
 #   - FactorLevelList encodeThis roundtrip: factor/level names arrive usable and NOTHING in the
 #     final results leaks a raw JaspExtraOptions_ or JASPColumn_ token
 #   - interaction terms resolve as one unit in a single slice (uniform term-level filterId)
 #   - textarea host: tokens encode through the textarea's own selection and resolve there
-#   - cross-host bindTo (D6.2): a typed copy carrying the SOURCE filterId resolves in the
+#   - cross-host bindTo: a typed copy carrying the SOURCE filterId resolves in the
 #     SOURCE's slice although the destination list selects the other one
 #   - scalars/combos stay plain; PROVENANCE_AUDIT clean on every zoo run
 # ----------------------------------------------------------------------------
@@ -415,7 +415,7 @@ a1 = find(z1, "assigned-list")
 check("zoo run 1: assignedA Score resolves in slice 1 (12.50)",
       len(a1) == 1 and str(a1[0]["slice"]) == "1" and "12.50" in str(a1[0]["values"]), json.dumps(a1))
 auditz1 = provenance_audit(zres1)
-check("zoo run 1: PROVENANCE_AUDIT clean (C8/C11)", auditz1 == ("false", "0"), str(auditz1))
+check("zoo run 1: PROVENANCE_AUDIT clean", auditz1 == ("false", "0"), str(auditz1))
 zslices1 = zoo_slice_ids(zres1) or []
 check("zoo run 1: slice 1 queued (host A), nothing beyond the workspace's two slices",
       "1" in zslices1 and set(zslices1) <= {"1", "2"}, str(zslices1))
@@ -434,11 +434,11 @@ check("zoo fixture: third filter id discovered", F3.isdigit() and F3 not in ("1"
 # --- zoo run 2: the whole zoo ---------------------------------------------------------------------
 # rowsC arrives in the STORAGE term-object shape: same-name twin rows 'Score' behind filter 1
 # (keep=true, shift=1) and filter 2 (keep=false, shift=7). The applier must keep BOTH rows' own
-# children (D6.1) and each token must encode/resolve through ITS filter's view.
+# children and each token must encode/resolve through ITS filter's view.
 # boundG receives a typed copy of a list on filter 1 (Score@1) while its OWN selection is filter 2:
-# the destination rule must not requalify the foreign stamp (D6.2) - it resolves in slice 1.
+# the destination rule must not requalify the foreign stamp - it resolves in slice 1.
 # codeF's host selects filter 1 while the workspace's SHOWN dataset is B (filter 2): the textarea's
-# bind-time encodeRScript must go through the HOST's view (C13 host-bound) - a Score token
+# bind-time encodeRScript must go through the HOST's view (host-bound) - a Score token
 # resolving in slice 1 (12.50) proves it; the analysis-level fallback would have yielded 17.73.
 zr2, zres2 = zoo_run(zoo_full_opts(
     host_a="1", host_d="1", host_f="1", host_g="2",
@@ -459,7 +459,7 @@ print("zoo run 2 rows:")
 for r in (z2 or []):
     print("   ", json.dumps(r))
 
-# components-rows: the D6.1 flagship - twins with OWN children, distinct slices + values
+# components-rows: the flagship - twins with OWN children, distinct slices + values
 rc = find(z2, "components-rows")
 rc1 = next((r for r in rc if str(r["slice"]) == "1"), None)
 rc2 = next((r for r in rc if str(r["slice"]) == "2"), None)
@@ -471,7 +471,7 @@ check("zoo run 2: twin row @2 carries its OWN children keep=false shift=7 (+ 17.
       rc2 and "keep=FALSE" in rc2["rowChild"] and "shift=7" in rc2["rowChild"] and "17.73" in rc2["values"], json.dumps(rc2))
 check("zoo run 2: decoded names, no raw JASPColumn_* in any row", "JASPColumn" not in dump2, dump2[:300])
 
-# cross-host bindTo (D6.2)
+# cross-host bindTo
 bg = find(z2, "bindto-cross-host")
 check("zoo run 2: boundG typed copy resolves in the SOURCE slice 1 (12.50) while its own host selects filter 2",
       len(bg) == 1 and str(bg[0]["slice"]) == "1" and "12.50" in str(bg[0]["values"]), json.dumps(bg))
@@ -482,7 +482,7 @@ ab = find(z2, "pool-hostless")
 check("zoo run 2: assignedDefault (bare) Condition resolves via the analysis fallback in slice 2 with its levels",
       len(ab) == 1 and str(ab[0]["slice"]) == "2" and ab[0]["values"].startswith("X"), json.dumps(ab))
 
-# combobox (Zoo A): plain string value. NB the namespace finding, UPDATED by the mds-zoo
+# combobox (Zoo A): plain string value. NB the namespace finding, UPDATED by the zoo
 # expansion: comboA's `source` used to be a broken QML binding (`source: zooVarsA` - a bare
 # identifier that does not exist; ReferenceError in the runtime log), so the dropdown silently
 # had no option list and its value encoded through the analysis-level namespace. With the source
@@ -517,7 +517,7 @@ check("zoo run 2: codeF host-1 tokens: Age resolves in slice 1",
 check("zoo run 2: codeF model text round-trips (decoded on the way out)",
       len(tf_texts) == 1 and tf_texts[0]["received"] == "Score + Age", json.dumps(tf_texts))
 
-# scalars stay plain (M5): echo rows exist with the plain values
+# scalars stay plain: echo rows exist with the plain values
 sc = find(z2, "scalar")
 cg = find(z2, "combobox-plain")
 check("zoo run 2: scalar plainSwitch echoes plain true (never provenanced)", len(sc) == 1 and sc[0]["received"].upper() == "TRUE", json.dumps(sc))
@@ -585,14 +585,14 @@ a6z = find(z6, "assigned-list")
 check("zoo run 6: switched back, Score resolves in slice 1 again (12.50)",
       len(a6z) == 1 and str(a6z[0]["slice"]) == "1" and "12.50" in a6z[0]["values"], json.dumps(a6z))
 
-# --- zoo runs 7/8 (D6.2): the cross-host typed copy against live host switches ---------------------
+# --- zoo runs 7/8: the cross-host typed copy against live host switches ---------------------
 # run 7: source host A on filter 2, destination host G on filter 1; assignedA binds unqualified
 # (intake stamps it @2) and boundG receives the typed copy Score@2. Both values must resolve in
 # slice 2 - the copy through its SOURCE stamp, not through its own host's filter 1.
 zr7, zres7 = zoo_run(zoo_full_opts(
     host_a="2", host_g="1",
     assigned_a={"types": ["scale"], "value": ["Score"]},
-    bound_g={"value": [{"name": "Score", "types": ["scale"], "filterId": 2}]}), "run 7 (D6.2: copy @2, dest host on 1)")
+    bound_g={"value": [{"name": "Score", "types": ["scale"], "filterId": 2}]}), "run 7 (copy @2, dest host on 1)")
 z7 = zoo_rows(zres7)
 a7z = find(z7, "assigned-list")
 bg7 = find(z7, "bindto-cross-host")
@@ -605,11 +605,11 @@ auditz7 = provenance_audit(zres7)
 check("zoo run 7: PROVENANCE_AUDIT clean", auditz7 == ("false", "0"), str(auditz7))
 
 # run 8: switch the SOURCE host A back to filter 1 (delta run: boundG is NOT re-sent, its typed
-# term state carries the foreign stamp 2). The owns-the-stamp rule (D3.5) must restamp ONLY the
+# term state carries the foreign stamp 2). The owns-the-stamp rule must restamp ONLY the
 # host-owned term: assignedA follows A to slice 1, boundG stays on the SOURCE stamp @2 - the copy
 # is a stable stamp, not a live reference; requalification to the (now matching) filter 1 would
 # show up as 12.50 and fail here.
-zr8, zres8 = zoo_run({"dataSetA": "1", "showMeta": True}, "run 8 (D6.2: source host switched, copy not re-sent)")
+zr8, zres8 = zoo_run({"dataSetA": "1", "showMeta": True}, "run 8 (source host switched, copy not re-sent)")
 z8 = zoo_rows(zres8)
 a8z = find(z8, "assigned-list")
 bg8 = find(z8, "bindto-cross-host")
@@ -621,7 +621,7 @@ auditz8 = provenance_audit(zres8)
 check("zoo run 8: PROVENANCE_AUDIT clean", auditz8 == ("false", "0"), str(auditz8))
 
 # ----------------------------------------------------------------------------
-# mds-zoo expansion - the NEW control families (Zoo H-L), the RESULTS side and
+# Zoo expansion - the NEW control families (Zoo H-L), the RESULTS side and
 # the option flows. The point of the expansion: data and flows must be VISIBLE
 # and the verifier must assert RESULTS-SIDE content, not just option roundtrips.
 #
@@ -704,7 +704,7 @@ def no_raw_tokens(res, tag):
 #   interactionD Score:Age via host D(1) -> slice 1 | factorsK Age -> the per-factor sidecar
 # (FactorsFormBase::createFilterIds) transports the term's OWN filterId per
 #   factor and per term -> slice 1 (the term's stamp comes from its source host assignedK; the
-#   D3.2 hostless-panel deferral - analysis-level namespace, slice 2 - is CLOSED, pinned here)
+#   the hostless-panel deferral - analysis-level namespace, slice 2 - is CLOSED, pinned here)
 zr9, zres9 = zoo_run(zoo_full_opts(
     host_a="1", host_d="1", host_f="1", host_g="2", host_j="1", host_k="1",
     assigned_a={"types": ["scale"], "value": ["Score"]},
@@ -771,7 +771,7 @@ fk = find(z9, "factors-form")
 check("zoo run 9: factorsK Fac1 received with title and var Age",
       len(fk) == 1 and fk[0]["received"] == "Fac1" and "title=Factor 1" in fk[0]["rowChild"]
       and "Age" in fk[0]["rowChild"], json.dumps(fk))
-check("zoo run 9: factorsK var Age resolves in ITS OWN term filter's namespace (slice 1) - the per-factor sidecar closed the D3.2 hostless-panel deferral",
+check("zoo run 9: factorsK var Age resolves in ITS OWN term filter's namespace (slice 1) - the per-factor sidecar closed the hostless-panel deferral",
       len(fk) == 1 and str(fk[0]["slice"]) == "1" and "slices: 1" in str(fk[0]["values"]), json.dumps(fk))
 check("zoo run 9: factorsK resolution is TERM-level inside the factor object (rowChild carries the per-term slice key 'Age(1)')",
       len(fk) == 1 and "vars: Age(1)" in str(fk[0]["rowChild"]), json.dumps(fk))
@@ -867,7 +867,7 @@ check("zoo run 9: gated Score@2 (factor-term Age arrives ordinal/factor, skipped
 
 check("zoo run 9: dataSetIds covers both datasets", sorted(zr9.get("dataSetIds", [])) == [1, 2], str(zr9.get("dataSetIds")))
 auditz9 = provenance_audit(zres9)
-check("zoo run 9: PROVENANCE_AUDIT clean (C8/C11)", auditz9 == ("false", "0"), str(auditz9))
+check("zoo run 9: PROVENANCE_AUDIT clean", auditz9 == ("false", "0"), str(auditz9))
 no_raw_tokens(zres9, "zoo run 9")
 
 # --- zoo run 10 (FLOW F1): the dependent dropdown follows its source -------------------------------

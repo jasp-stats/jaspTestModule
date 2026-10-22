@@ -2,7 +2,7 @@
 //
 // Every control family a real analysis form uses, each exercising per-item provenance:
 //  Zoo A  plain lists: an AvailableVariablesList carrying its own dataset/filter selection
-//         (the D2.2 list-level pattern) feeding an AssignedVariablesList, plus a DropDown
+//         (the list-level pattern) feeding an AssignedVariablesList, plus a DropDown
 //         served by the same host (comboboxes stay PLAIN strings - never term objects -
 //         while their value still resolves through the host namespace).
 // Zoo B REMOVED (zoo correction, owner): a bare assigned list - an assigned
@@ -15,8 +15,8 @@
 //         so this is the row family as TableFields actually is it: an AssignedVariablesList
 //         with a rowComponent (a keep checkbox and a shift integer), in its own form over a
 //         default-provider pool (every assigned list has >= 1 source - owner rule). Same-name
-//         twin rows behind DIFFERENT filters (the C9 twins, set by the RPC verifier through
-//         the Storage term-object shape) must keep their own children - the D6.1
+//         twin rows behind DIFFERENT filters (the same-name twins, set by the RPC verifier through
+//         the Storage term-object shape) must keep their own children - the
 //         RelatedValuesPerTerm/RowControls re-keying (TermRowKey = value + filterId) is what
 //         makes that work; pre-fix the second row silently clobbered the first. The pool's
 //         key is -1, so the stamped twins are never swept by a universe reset: each twin
@@ -26,12 +26,12 @@
 //  Zoo E  FactorLevelList: encodeThis -> extras-encoder roundtrip (factor/level names encode
 //         through the JaspExtraOptions_ namespace and must come back decoded and usable).
 //  Zoo F  TextArea with its OWN host: R-code text whose used columns encode through the
-//         selected filter's view (host-bound resolution, C13).
-//  Zoo G  CROSS-HOST bindTo (D6.2): a list with its own selection whose option is bound
+//         selected filter's view (host-bound resolution).
+//  Zoo G  CROSS-HOST bindTo: a list with its own selection whose option is bound
 //         (bindTo = the JSON->control applier) to a typed copy generated from Zoo A's list -
 //         the copy's terms carry the SOURCE filterId. The destination rule stamps only
-//         UNQUALIFIED terms (D5.1 intake guard) and the restamp walk never touches foreign
-//         stamps (D3.5 owns-the-stamp), so the value must encode and resolve through the
+//         UNQUALIFIED terms (the intake guard) and the restamp walk never touches foreign
+//         stamps (owns-the-stamp), so the value must encode and resolve through the
 //         SOURCE's slice even though this list's own dropdown selects another one.
 // Zoo M THREE pools over the same test dataset (the zoo correction): a
 //         hostless pool (no dataSetSelectionOption at all - the default-provider pool whose
@@ -94,10 +94,10 @@ Form
 			"The results panel shows the LOADED DATA per slice (head of every column, row count = Zoo H's " +
 			"integer), the per-family provenance echo, the scalar echoes, the flow demonstrations and the " +
 			"cross-slice computations." +
-			"'Show options .meta' adds the PROVENANCE_AUDIT (R must never see provenance: C8/C11)."
+			"'Show options .meta' adds the PROVENANCE_AUDIT (R must never see provenance)."
 	}
 
-	// ---- Zoo A: list-level selection (D2.2 pattern) + combobox ----------------------------------
+	// ---- Zoo A: list-level selection + combobox ----------------------------------
 	Section {
 		title: qsTr("Zoo A - plain lists, own selection")
 
@@ -138,7 +138,7 @@ Form
 	// with a rowComponent, in its own form over a default-provider pool (every assigned list has
 	// >= 1 source - owner rule; the bare standalone form died with Zoo B). Its pool's key is -1,
 	// so the stamped twin rows below are never swept by any reset - each twin follows only its
-	// own stamp, which is exactly the C9 case.
+	// own stamp, which is exactly the same-name-twins case.
 	Section {
 		title: qsTr("Zoo C - row controls: per-row term + per-row values (default-provider source)")
 
@@ -221,12 +221,12 @@ Form
 		}
 	}
 
-	// ---- Zoo G: cross-host bindTo (D6.2) ---------------------------------------------------------
+	// ---- Zoo G: cross-host bindTo ---------------------------------------------------------
 	// The selection lives on the POOL now (the per-list dataSetSelectionOption crutch is gone,
 	// same correction as B/C): boundG sits in a form over the pool hosted by dataSetG's filter,
 	// so every assigned list has its source. The cross-host pin is unchanged: the verifier binds
 	// a typed copy of a filter-1 term into boundG while the pool selects filter 2 - the copy
-	// keeps the SOURCE filterId and encodes through the SOURCE's slice (D6.2), origin
+	// keeps the SOURCE filterId and encodes through the SOURCE's slice, origin
 	// -authoritative: a stamp is born at Storage/bindTo and is not requalified by a destination.
 	Section {
 		title: qsTr("Zoo G - typed copy bound from Zoo A keeps the SOURCE filter")
@@ -337,7 +337,7 @@ Form
 	// The paired-list family: AssignedPairsVariablesList is a VariablesList preset (2 columns,
 	// drop-replace) whose model PAIRS its columns into 2-component terms (bound value
 	// [["Score","Age"]]). Served by the pool hosted on dataSetJ's filter, so the pair's
-	// components stamp together under that pool's filter (C9 uniform-carry); the R side echoes
+	// components stamp together under that pool's filter (uniform carry); the R side echoes
 	// each pair and computes per pair.
 	Section {
 		title: qsTr("Zoo J - paired variables list (pool on dataSetJ)")
@@ -365,7 +365,7 @@ Form
 	// (FactorsFormBase::createFilterIds) transports each term's OWN filterId
 	//    per factor and per term: a term keeps the stamp its source list synced onto it
 	//    (assignedK -> filter 1) and encodes through THAT filter's view - resolved slice by
-	//    slice, no analysis-level fallback (the D3.2 hostless-panel deferral is CLOSED).
+	//    slice, no analysis-level fallback (the hostless-panel deferral is CLOSED).
 	// 2. A factor term must be a member of the form's SOURCE list (assignedK): a term outside it is
 	//    silently dropped by the form's model sync, and a term the form keeps is RE-TYPED by the
 	//    form (Age arrived ordinal here although sent scale, so the engine slice receives it as an
@@ -511,7 +511,7 @@ Form
 		}
 	}
 
-	// ---- scalars (M5 contract: never provenanced, never term-objectified) ------------------------
+	// ---- scalars (never provenanced, never term-objectified) ------------------------
 	Section {
 		title: qsTr("Scalars")
 

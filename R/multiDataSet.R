@@ -24,16 +24,16 @@
 # Qualified column references: a TERM option may
 # arrive with qualified surface forms ("Dataset"."Filter"."Column"("Type"), minimal per
 # context); the C++ appliers parse them into typed terms with filterIds before the run, so R
-# receives them as ordinary encoded names - no R-side grammar (C14). A STRING option (plain
-# text input) receives the qualified form verbatim - the D8.4 v1 stance: it passes through and
+# receives them as ordinary encoded names - no R-side grammar. A STRING option (plain
+# text input) receives the qualified form verbatim - the v1 stance: it passes through and
 # modules slice on it or not, at their choice; module code that needs to interpret one uses
 # the echo pattern of multiDataSetControlsInternal (report what was received, then resolve on
 # demand) and never re-implements the token grammar.
 #
 # The two aware analyses here: multiDataSetFuncInternal (form testMultiDataSet.qml - two
-# per-list dataset selection options dataSetA/dataSetB, the D8.3 wrapper fixture) and
+# per-list dataset selection options dataSetA/dataSetB, the wrapper fixture) and
 # multiDataSetControlsInternal (the component zoo testMultiDataSetControls.qml,
-# D6.1/D6.2: assigned lists, row controls with same-name twins, interactions, factor levels
+# assigned lists, row controls with same-name twins, interactions, factor levels
 # via encodeThis, a textarea host, a cross-host typed bindTo copy - each reports what it
 # received and where it resolved).
 
@@ -142,7 +142,7 @@ metaDump <- function(jaspResults, options) {
   meta <- options[[".meta"]]
   metaText <- jsonlite::toJSON(if (is.null(meta)) list() else meta, auto_unbox = TRUE, pretty = 2)
   # R must never see provenance - the transient `.filterIds` sidecar is stripped
-  # at the engine boundary (C11) and the send-time `.meta` carries no dataSetId/filterId (C8).
+  # at the engine boundary and the send-time `.meta` carries no dataSetId/filterId.
   # The audit markers echo exactly what arrived so the RPC verifier can assert the contract.
   provenanceKeys <- sum(lengths(regmatches(metaText, gregexpr("dataSetId|filterId", metaText))))
   filterIdsSeen <- !is.null(options[[".filterIds"]])

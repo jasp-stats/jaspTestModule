@@ -113,7 +113,7 @@ Description
 	// The old non-aware twin entry (func multiDataSetNonAware / qml testMultiDataSetNonAware)
 	// is gone: it existed only to show that selection options stay inert
 	// without multiDataSetAware, but its generated wrapper pointed at the AWARE form and so its
-	// R entry point always errored (REPORT M8). The non-aware code path is covered by the other
+	// R entry point always errored. The non-aware code path is covered by the other
 	// (plain, single-dataset) analyses in this module.
 
 	Analysis
