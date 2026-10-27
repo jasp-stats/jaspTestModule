@@ -1,4 +1,4 @@
-testStateFunc <- function(jaspResults, dataset, options) {
+testStateFuncInternal <- function(jaspResults, dataset, options) {
   tableOfOptions(jaspResults, options, dataset)
   
 

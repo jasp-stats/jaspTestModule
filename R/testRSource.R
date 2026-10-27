@@ -1,4 +1,4 @@
-testRSourceFunc <- function(jaspResults, dataset, options)
+testRSourceFuncInternal <- function(jaspResults, dataset, options)
 {
   tableOfOptions(jaspResults, options, dataset)
   

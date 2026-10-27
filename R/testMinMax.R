@@ -1,5 +1,5 @@
 
-minMaxFunc <- function(jaspResults, dataset, options)
+minMaxFuncInternal <- function(jaspResults, dataset, options)
 {
   tableOfOptions(jaspResults, options, dataset)
   

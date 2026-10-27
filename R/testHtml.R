@@ -1,4 +1,4 @@
-testHtmlFunc <- function(jaspResults, dataset, options)
+testHtmlFuncInternal <- function(jaspResults, dataset, options)
 {
   tableOfOptions(jaspResults, options, dataset)
   

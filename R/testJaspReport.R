@@ -1,5 +1,5 @@
 #' @export
-JaspReportTest <- function(jaspResults, dataset, options)
+JaspReportTestInternal <- function(jaspResults, dataset, options)
 {
   tableOfOptions(jaspResults, options, dataset)
   

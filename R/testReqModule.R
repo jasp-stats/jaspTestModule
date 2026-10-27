@@ -1,4 +1,4 @@
-descriptivesLink <- function(jaspResults, dataset, options)
+descriptivesLinkInternal <- function(jaspResults, dataset, options)
 {
   tableOfOptions(jaspResults, options, dataset)
   

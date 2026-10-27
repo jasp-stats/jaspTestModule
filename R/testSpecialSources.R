@@ -1,4 +1,4 @@
-testSpecialSourcesFunc <- function(jaspResults, dataset, options)
+testSpecialSourcesFuncInternal <- function(jaspResults, dataset, options)
 {
   tableOfOptions(jaspResults, options, dataset)
   

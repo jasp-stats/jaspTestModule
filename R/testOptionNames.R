@@ -1,5 +1,5 @@
 
-testOptionNames <- function(jaspResults, dataset, options)
+testOptionNamesInternal <- function(jaspResults, dataset, options)
 {
   tableOfOptions(jaspResults, options, dataset)
   

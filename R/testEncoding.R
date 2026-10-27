@@ -1,4 +1,4 @@
-testEncodingFunc <- function(jaspResults, dataset, options)
+testEncodingFuncInternal <- function(jaspResults, dataset, options)
 {
   tableOfOptions(jaspResults, options, dataset)
   
@@ -8,7 +8,7 @@ testEncodingFunc <- function(jaspResults, dataset, options)
   showData(dataset, jaspResults, "variablesPairs", unlist(options$pairs), "Pairs Variables")
 }
 
-testEncodingPreloadDataFunc <- testEncodingFunc
+testEncodingPreloadDataFuncInternal <- testEncodingFuncInternal
 
 showData <- function(dataset, jaspResults, name, cols, title, filter = "")
 {
