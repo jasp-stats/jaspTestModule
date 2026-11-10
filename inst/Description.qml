@@ -258,6 +258,15 @@ Description
 
 	Analysis
 	{
+		title:			"Test Factors Form term specification"
+		qml:			"testFactorsFormSpecification.qml"
+		func:			"testFactorsFormSpecificationFunc"
+		requiresData:	true
+		preloadData:	true
+	}
+
+	Analysis
+	{
 		title:			"Test Controls layout"
 		qml:			"testControlsLayout.qml"
 		func:			"testControlsLayoutFunc"

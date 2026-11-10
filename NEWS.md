@@ -16,6 +16,10 @@
 
 # jaspTestModule (development version)
 ## Added
+* "Test Factors Form term specification": the term specification of the Factors Form (`advancedAvailable`,
+  jasp-stats/jasp-desktop#6404) in four forms (optional intercept with every specification and restrictions,
+  forced intercept on from the start, no intercept, and without the specification), with the formulas
+  `jaspBase::prepareModelTerms()` makes of each option and, given a dependent variable, the `lm()` fits.
 * "Test Multi-DataSet": analysis + form to exercise multi-dataset aware analyses
   (`multiDataSetAware` Description entries, the VariablesForm dataset/filter selection,
   the `datasets` handout and encoded-name routing of jaspBase, the readDataSet() guard,
